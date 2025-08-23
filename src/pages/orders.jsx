@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, CreditCard, Eye, Package, Truck, CheckCircle, Clock, XCircle } from 'lucide-react';
-
+import orderImage from "../assets/order.png"
 const OrdersManagementSystem = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -15,12 +15,12 @@ const OrdersManagementSystem = () => {
       paymentMethod: 'Paid with cash',
       items: 6,
       itemsData: [
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' }
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage }
       ],
       deliveryAddress: '📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001',
       timeline: [
@@ -37,12 +37,12 @@ const OrdersManagementSystem = () => {
       paymentMethod: 'From your card',
       items: 6,
       itemsData: [
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' }
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage }
       ],
       deliveryAddress: '📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001'
     },
@@ -54,12 +54,12 @@ const OrdersManagementSystem = () => {
       paymentMethod: 'Paid with cash',
       items: 6,
       itemsData: [
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' }
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage }
       ],
       deliveryAddress: '📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001'
     },
@@ -71,10 +71,10 @@ const OrdersManagementSystem = () => {
       paymentMethod: 'Paid with cash',
       items: 6,
       itemsData: [
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' },
-        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: '/api/placeholder/40/40' }
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage },
+        { name: 'Pink Ethnic lehanga', price: 140, quantity: 1, image: orderImage }
       ],
       deliveryAddress: '📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001',
       timeline: [
@@ -304,12 +304,13 @@ const OrdersManagementSystem = () => {
                 {/* Product Images */}
                 <div className="flex space-x-2 mb-4 sm:mb-0">
                   {order.itemsData.slice(0, 6).map((item, index) => (
-                    <div
-                      key={index}
-                      className="w-12 h-12 bg-pink-200 rounded-lg flex items-center justify-center flex-shrink-0"
-                    >
-                      <div className="w-8 h-8 bg-pink-400 rounded"></div>
-                    </div>
+                    // <div
+                    //   key={index}
+                    //   className="w-12 h-12 bg-pink-200 rounded-lg flex items-center justify-center flex-shrink-0"
+                    // >
+                    //   <div className="w-8 h-8 bg-pink-400 rounded"></div>
+                    // </div>
+                    <img src={item.image} alt="" className='w-20 h-14' />
                   ))}
                   {order.itemsData.length > 6 && (
                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-600 flex-shrink-0">

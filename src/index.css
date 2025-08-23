@@ -76,6 +76,10 @@ button:focus-visible {
   display: none;
 }
 
+body{
+  font-family: "Poppins";
+}
+
 /* Hide scrollbar for Firefox */
 
 /* html, body {

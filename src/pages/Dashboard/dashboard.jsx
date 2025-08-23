@@ -5,6 +5,7 @@ import dash_icon1 from '../../assets/dash_icon1.png';
 import dash_icon2 from '../../assets/dash_icon2.png';
 import dash_icon3 from '../../assets/dash_icon3.png';
 import dash_icon4 from '../../assets/dash_icon4.png';
+import { Link } from 'react-router-dom';
 
 const VendorDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('Monthly');
@@ -74,6 +75,7 @@ const VendorDashboard = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Products Card */}
+          <Link to={"/products"}>
           <div className="bg-white rounded-lg border-2 border-gray-200 p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-gray-700">Products</h3>
@@ -84,10 +86,12 @@ const VendorDashboard = () => {
                 </svg> */}
               </div>
             </div>
-            <div className="text-4xl md:text-5xl font-bold text-gray-800">0</div>
+            <div className="text-4xl text-start  md:text-5xl font-bold text-gray-800">0</div>
           </div>
+          </Link>
 
           {/* Inventory Card */}
+          <Link to={"/inventory"}>
           <div className="bg-white rounded-lg border-2 border-gray-200 p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-gray-700">Inventory</h3>
@@ -98,10 +102,12 @@ const VendorDashboard = () => {
                 </svg> */}
               </div>
             </div>
-            <div className="text-4xl md:text-5xl font-bold text-gray-800">0</div>
+            <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">0</div>
           </div>
+            </Link>
 
           {/* Total Revenue Card */}
+          <Link to={"/total-revenue"}>
           <div className="bg-white rounded-lg border-2 border-gray-200 p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-gray-700">Total Revenue</h3>
@@ -110,10 +116,12 @@ const VendorDashboard = () => {
              <img className='p-3' src={dash_icon3} alt="" />
               </div>
             </div>
-            <div className="text-4xl md:text-5xl font-bold text-gray-800">0</div>
+            <div className="text-4xl text-start  md:text-5xl font-bold text-gray-800">0</div>
           </div>
+          </Link>
 
           {/* Total Units Sold Card */}
+          <Link to={"/total-units"}>
           <div className="bg-white rounded-lg border-2 border-gray-200 p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-gray-700">Total Units sold</h3>
@@ -124,8 +132,9 @@ const VendorDashboard = () => {
                 <img src={dash_icon4} className='p-3' alt="" />
               </div>
             </div>
-            <div className="text-4xl md:text-5xl font-bold text-gray-800">0</div>
+            <div className="text-4xl text-start  md:text-5xl font-bold text-gray-800">0</div>
           </div>
+          </Link>
         </div>
 
         {/* Performance Section */}

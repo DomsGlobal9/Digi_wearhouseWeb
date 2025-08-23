@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Right_mark from "../../assets/right_mark.png"
-
+import Frame from "../../assets/Frame.png"
 // Mock data
 const mockCommissionData = {
   totalCommissionRate: 10,
@@ -16,21 +16,21 @@ const mockCommissionData = {
     {
       id: 1,
       name: "silk fashion top",
-      image: "/api/placeholder/40/40",
+      image: Frame,
       commission: 2325,
       commissionRate: "5% per sale"
     },
     {
       id: 2,
       name: "Kids suits",
-      image: "/api/placeholder/40/40",
+      image: Frame,
       commission: 3224,
       commissionRate: "8% per sale"
     },
     {
       id: 3,
       name: "Red saree",
-      image: "/api/placeholder/40/40",
+      image: Frame,
       commission: 1222.50,
       commissionRate: "6% per sale"
     },
@@ -185,8 +185,11 @@ const CommissionPage = () => {
             {commissionData.products.map((product) => (
               <div key={product.id} className="bg-white rounded-lg p-4 border border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-md flex-shrink-0 flex items-center justify-center">
+                  {/* <div className="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-md flex-shrink-0 flex items-center justify-center">
                     <div className="w-8 h-8 bg-white rounded-sm opacity-80"></div>
+                  </div> */}
+                  <div>
+                    <img src={product.image} alt="" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-medium text-gray-800 text-sm">{product.name}</h4>
@@ -233,7 +236,7 @@ const CommissionPage = () => {
       {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-md z-50">
           <div className="bg-white rounded-lg p-8 w-96 text-center shadow-lg">
-            <div className="text-green-500 text-6xl mb-4"><img src={Right_mark} className='' alt="rightmark"/></div>
+           <div className='flex items-center justify-center'><img src={Right_mark} className=' w-20 h-20' alt="rightmark"/></div>
             <h2 className="text-lg font-semibold text-gray-800">
               Your Commission Rate has been changed
             </h2>
