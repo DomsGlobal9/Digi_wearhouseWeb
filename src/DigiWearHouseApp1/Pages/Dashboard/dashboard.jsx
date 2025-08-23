@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import dash_cover from '../../assets/dash_cover.png';
-import dash_icon1 from '../../assets/dash_icon1.png';
-import dash_icon2 from '../../assets/dash_icon2.png';
-import dash_icon3 from '../../assets/dash_icon3.png';
-import dash_icon4 from '../../assets/dash_icon4.png';
+import dash_cover from '../../../assets/dash_cover.png';
+import dash_icon1 from '../../../assets/dash_icon1.png';
+import dash_icon2 from '../../../assets/dash_icon2.png';
+import dash_icon3 from '../../../assets/dash_icon3.png';
+import dash_icon4 from '../../../assets/dash_icon4.png';
 import { Link } from 'react-router-dom';
 
 const VendorDashboard = () => {

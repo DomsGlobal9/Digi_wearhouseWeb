@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import Right_mark from "../../assets/right_mark.png"
-import Frame from "../../assets/Frame.png"
+import Right_mark from "../../../assets/right_mark.png"
+import Frame from "../../../assets/Frame.png"
 // Mock data
 const mockCommissionData = {
   totalCommissionRate: 10,

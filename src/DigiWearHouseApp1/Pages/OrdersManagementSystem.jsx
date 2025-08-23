@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, MapPin, CreditCard, Eye, Package, Truck, CheckCircle, Clock, XCircle } from 'lucide-react';
-import orderImage from "../assets/order.png"
+import orderImage from "../../assets/order.png"
 const OrdersManagementSystem = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedOrder, setSelectedOrder] = useState(null);
