@@ -26,7 +26,7 @@
 //   // Login States
 //   const [email, setEmail] = useState("");
 //   const [otp, setOtp] = useState(["", "", "", "", "",""]);
-  
+
 //   // KYC OTP States
 //   const [kycOtp, setKycOtp] = useState(["", "", "", "", "",""]);
 
@@ -94,7 +94,7 @@
 //     try {
 //       // Check if it's for login (user exists) or registration
 //       const { exists } = await checkUserExists(email);
-      
+
 //       if (exists) {
 //         // User exists, send login OTP
 //         await sendLoginOTP(email);
@@ -117,7 +117,7 @@
 //       const newOtp = [...otp];
 //       newOtp[index] = value;
 //       setOtp(newOtp);
-      
+
 //       if (value && index < 4) {
 //         const nextInput = document.getElementById(otp-`${index + 1}`);
 //         if (nextInput) nextInput.focus();
@@ -130,7 +130,7 @@
 //       const newKycOtp = [...kycOtp];
 //       newKycOtp[index] = value;
 //       setKycOtp(newKycOtp);
-      
+
 //       if (value && index < 4) {
 //         const nextInput = document.getElementById(kyc-otp-`${index + 1}`);
 //         if (nextInput) nextInput.focus();
@@ -140,7 +140,7 @@
 
 //   const handleContinue = async () => {
 //     const otpCode = otp.join("");
-    
+
 //     if (!validateOTP(otpCode)) {
 //       setErrors({ otp: "Please enter a valid 5-digit OTP" });
 //       return;
@@ -163,7 +163,7 @@
 
 //   const handleKycOtpVerify = async () => {
 //     const otpCode = kycOtp.join("");
-    
+
 //     if (!validateOTP(otpCode)) {
 //       setErrors({ kycOtp: "Please enter a valid 5-digit OTP" });
 //       return;
@@ -217,7 +217,7 @@
 
 //   const handleRegisterSubmit = async () => {
 //     const validation = validateRegistrationForm(registerData);
-    
+
 //     if (!validation.isValid) {
 //       setErrors(validation.errors);
 //       return;
@@ -248,7 +248,7 @@
 
 //   const handleShopDetailsSubmit = () => {
 //     const validation = validateShopDetails(shopData);
-    
+
 //     if (!validation.isValid) {
 //       setErrors(validation.errors);
 //       return;
@@ -259,7 +259,7 @@
 
 //   const handleBankDetailsSubmit = () => {
 //     const validation = validateBankDetails(bankData);
-    
+
 //     if (!validation.isValid) {
 //       setErrors(validation.errors);
 //       return;
@@ -276,7 +276,7 @@
 //     try {
 //       // In a real app, you would upload KYC documents here
 //       console.log("KYC Documents would be uploaded here");
-      
+
 //       setCurrentStep("kycOtp");
 //       setSuccessMessage("KYC documents submitted. Please verify OTP to complete registration.");
 //     } catch (error) {
@@ -308,7 +308,7 @@
 //   const goBack = () => {
 //     setErrors({});
 //     clearError();
-    
+
 //     if (currentStep === "otp") setCurrentStep("login");
 //     else if (currentStep === "register") setCurrentStep("login");
 //     else if (currentStep === "shopDetails") setCurrentStep("register");
@@ -396,7 +396,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent an OTP to your Mobile</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {otp.map((digit, index) => (
 //             <input
@@ -412,11 +412,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.otp && <p className="text-red-500 text-xs text-center">{errors.otp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleGetOtp}
 //             disabled={isLoading}
 //             className="text-sm text-slate-600"
@@ -700,7 +700,7 @@
 //     <>
 //       <div className="space-y-4">
 //         <p className="text-sm font-medium text-slate-700 mb-4">Upload Your KYC Documents</p>
-        
+
 //         <div className="space-y-4">
 //           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all cursor-pointer">
 //             <p className="text-sm text-slate-600 mb-2">License Front</p>
@@ -758,7 +758,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent a verification OTP to complete your registration</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {kycOtp.map((digit, index) => (
 //             <input
@@ -774,11 +774,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.kycOtp && <p className="text-red-500 text-xs text-center">{errors.kycOtp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleKycSubmit}
 //             disabled={isLoading}
 //             className="text-sm text-slate-600"
@@ -843,10 +843,10 @@
 //     <div className="flex w-screen overflow-hidden min-h-screen">
 //       {/* Hidden reCAPTCHA container */}
 //       <div id="recaptcha-container"></div>
-      
+
 //       {/* Left Section - Dynamic Form */}
-//       <div className="flex-1 flex items-center justify-center bg-white 
-//                       px-6 sm:px-10 md:px-16 lg:px-20 
+//       <div className="flex-1 flex items-center justify-center bg-white
+//                       px-6 sm:px-10 md:px-16 lg:px-20
 //                       mb-6 sm:mb-8 ml-0 lg:ml-24">
 //         <div className="w-full max-w-sm sm:max-w-md lg:max-w-md">
 //           {/* Logo */}
@@ -897,7 +897,7 @@
 //                   </button>
 //                 </p>
 //               )}
-              
+
 //               {showLoginLink() && (
 //                 <p className="text-xs text-slate-500">
 //                   Already have Account?
@@ -945,7 +945,6 @@
 // };
 
 // export default DigiWarehouseRegistration;
-
 
 // import React, { useState, useEffect } from "react";
 // import { useApp } from "../context/Context"; // Update path to AppContext.js
@@ -1380,7 +1379,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent an OTP to your mobile</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {otp.map((digit, index) => (
 //             <input
@@ -1396,11 +1395,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.otp && <p className="text-red-500 text-xs text-center">{errors.otp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleGetOtp}
 //             disabled={isLoading}
 //             className="text-sm text-slate-600"
@@ -1686,7 +1685,7 @@
 //     <>
 //       <div className="space-y-4">
 //         <p className="text-sm font-medium text-slate-700 mb-4">Upload Your KYC Documents</p>
-        
+
 //         <div className="space-y-4">
 //           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all cursor-pointer">
 //             <p className="text-sm text-slate-600 mb-2">License Front</p>
@@ -1744,7 +1743,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent a verification OTP to complete your registration</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {kycOtp.map((digit, index) => (
 //             <input
@@ -1760,11 +1759,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.kycOtp && <p className="text-red-500 text-xs text-center">{errors.kycOtp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleKycSubmit}
 //             disabled={isLoading}
 //             className="text-sm text-slate-600"
@@ -1829,10 +1828,10 @@
 //     <div className="flex w-screen overflow-hidden min-h-screen">
 //       {/* Hidden reCAPTCHA container */}
 //       <div id="recaptcha-container"></div>
-      
+
 //       {/* Left Section - Dynamic Form */}
-//       <div className="flex-1 flex items-center justify-center bg-white 
-//                       px-6 sm:px-10 md:px-16 lg:px-20 
+//       <div className="flex-1 flex items-center justify-center bg-white
+//                       px-6 sm:px-10 md:px-16 lg:px-20
 //                       mb-6 sm:mb-8 ml-0 lg:ml-24">
 //         <div className="w-full max-w-sm sm:max-w-md lg:max-w-md">
 //           {/* Logo */}
@@ -1883,7 +1882,7 @@
 //                   </button>
 //                 </p>
 //               )}
-              
+
 //               {showLoginLink() && (
 //                 <p className="text-xs text-slate-500">
 //                   Already have Account?
@@ -2311,7 +2310,7 @@
 //     try {
 //       // Use a temporary userId (phone number) for storage path before auth
 //       const tempUserId = registerData.contactNumber.replace(/\D/g, "");
-      
+
 //       // Upload files to Firebase Storage
 //       const kycDocumentUrls = {
 //         licenseFrontUrl: await uploadKycFile(kycFiles.licenseFront, tempUserId, "license_front"),
@@ -2452,7 +2451,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent an OTP to your mobile</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {otp.map((digit, index) => (
 //             <input
@@ -2468,11 +2467,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.otp && <p className="text-red-500 text-xs text-center">{errors.otp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleGetOtp}
 //             disabled={isLoading || !resendAvailable}
 //             className={`text-sm text-slate-600 ${
@@ -2761,7 +2760,7 @@
 //     <>
 //       <div className="space-y-4">
 //         <p className="text-sm font-medium text-slate-700 mb-4">Upload Your KYC Documents</p>
-        
+
 //         <div className="space-y-4">
 //           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
 //             <label className="text-sm text-slate-600 mb-2 block">License Front (PNG/JPEG, max 5MB)</label>
@@ -2840,7 +2839,7 @@
 
 //       <div className="space-y-4">
 //         <p className="text-sm text-slate-600">We've sent a verification OTP to complete your registration</p>
-        
+
 //         <div className="flex justify-center space-x-3">
 //           {kycOtp.map((digit, index) => (
 //             <input
@@ -2856,11 +2855,11 @@
 //             />
 //           ))}
 //         </div>
-        
+
 //         {errors.kycOtp && <p className="text-red-500 text-xs text-center">{errors.kycOtp}</p>}
 
 //         <div className="text-center">
-//           <button 
+//           <button
 //             onClick={handleKycSubmit}
 //             disabled={isLoading || !resendAvailable}
 //             className={`text-sm text-slate-600 ${
@@ -2930,10 +2929,10 @@
 //     <div className="flex w-screen overflow-hidden min-h-screen">
 //       {/* Hidden reCAPTCHA container */}
 //       <div id="recaptcha-container"></div>
-      
+
 //       {/* Left Section - Dynamic Form */}
-//       <div className="flex-1 flex items-center justify-center bg-white 
-//                       px-6 sm:px-10 md:px-16 lg:px-20 
+//       <div className="flex-1 flex items-center justify-center bg-white
+//                       px-6 sm:px-10 md:px-16 lg:px-20
 //                       mb-6 sm:mb-8 ml-0 lg:ml-24">
 //         <div className="w-full max-w-sm sm:max-w-md lg:max-w-md">
 //           {/* Logo */}
@@ -2984,7 +2983,7 @@
 //                   </button>
 //                 </p>
 //               )}
-              
+
 //               {showLoginLink() && (
 //                 <p className="text-xs text-slate-500">
 //                   Already have Account?
@@ -3032,34 +3031,6 @@
 // };
 
 // export default DigiWarehouseRegistration;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import React, { useState, useEffect } from "react";
 import { useApp } from "../context/Context"; // Update path to AppContext.js
@@ -3188,7 +3159,8 @@ const DigiWarehouseRegistration = () => {
   const validateShopDetails = (data) => {
     const errors = {};
     if (!data.shopName.trim()) errors.shopName = "Shop name is required";
-    if (!data.shopAddress.trim()) errors.shopAddress = "Shop address is required";
+    if (!data.shopAddress.trim())
+      errors.shopAddress = "Shop address is required";
     if (!data.city.trim()) errors.city = "City is required";
     if (!data.state.trim()) errors.state = "State is required";
     if (!data.pincode || !/^\d{6}$/.test(data.pincode)) {
@@ -3201,7 +3173,8 @@ const DigiWarehouseRegistration = () => {
     const errors = {};
     if (!data.bankName) errors.bankName = "Bank name is required";
     if (!data.branchName.trim()) errors.branchName = "Branch name is required";
-    if (!data.accountHolder.trim()) errors.accountHolder = "Account holder name is required";
+    if (!data.accountHolder.trim())
+      errors.accountHolder = "Account holder name is required";
     if (!data.accountNumber || !/^\d+$/.test(data.accountNumber)) {
       errors.accountNumber = "Valid account number is required";
     }
@@ -3216,7 +3189,8 @@ const DigiWarehouseRegistration = () => {
 
   const validateKycFiles = () => {
     const errors = {};
-    if (!kycFiles.licenseFront) errors.licenseFront = "License Front is required";
+    if (!kycFiles.licenseFront)
+      errors.licenseFront = "License Front is required";
     if (!kycFiles.aadharFront) errors.aadharFront = "Aadhar Front is required";
     if (!kycFiles.aadharBack) errors.aadharBack = "Aadhar Back is required";
     return { isValid: Object.keys(errors).length === 0, errors };
@@ -3427,18 +3401,32 @@ const DigiWarehouseRegistration = () => {
 
     try {
       const tempUserId = registerData.contactNumber.replace(/\D/g, "");
-      
+
       const kycDocumentUrls = {
-        licenseFrontUrl: await uploadKycFile(kycFiles.licenseFront, tempUserId, "license_front"),
-        aadharFrontUrl: await uploadKycFile(kycFiles.aadharFront, tempUserId, "aadhar_front"),
-        aadharBackUrl: await uploadKycFile(kycFiles.aadharBack, tempUserId, "aadhar_back"),
+        licenseFrontUrl: await uploadKycFile(
+          kycFiles.licenseFront,
+          tempUserId,
+          "license_front"
+        ),
+        aadharFrontUrl: await uploadKycFile(
+          kycFiles.aadharFront,
+          tempUserId,
+          "aadhar_front"
+        ),
+        aadharBackUrl: await uploadKycFile(
+          kycFiles.aadharBack,
+          tempUserId,
+          "aadhar_back"
+        ),
       };
 
       window.kycDocumentUrls = kycDocumentUrls;
 
       await sendRegistrationOTP(registerData.contactNumber);
       setCurrentStep("kycOtp");
-      setSuccessMessage("KYC documents uploaded. OTP sent to complete registration.");
+      setSuccessMessage(
+        "KYC documents uploaded. OTP sent to complete registration."
+      );
       setResendCountdown(30);
       setResendAvailable(false);
     } catch (error) {
@@ -3487,7 +3475,10 @@ const DigiWarehouseRegistration = () => {
   const renderLoginForm = () => (
     <>
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-slate-600 mb-2">
+        <label
+          htmlFor="phone"
+          className="block text-sm font-medium text-slate-600 mb-2"
+        >
           Enter your Mobile number
         </label>
         <input
@@ -3500,10 +3491,14 @@ const DigiWarehouseRegistration = () => {
           }}
           placeholder="Mobile number (10 digits)"
           className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 text-slate-700 placeholder-slate-400 ${
-            errors.phone ? "border-red-300 bg-red-50" : "border-slate-200 bg-slate-50"
+            errors.phone
+              ? "border-red-300 bg-red-50"
+              : "border-slate-200 bg-slate-50"
           }`}
         />
-        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+        {errors.phone && (
+          <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+        )}
       </div>
 
       <button
@@ -3535,10 +3530,22 @@ const DigiWarehouseRegistration = () => {
         className="w-full bg-white hover:bg-slate-50 text-slate-700 font-medium py-3 px-4 rounded-xl border border-slate-200 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-3"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          <path
+            fill="#4285F4"
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+          />
         </svg>
         Sign in with <span className="text-blue-600 font-semibold">G</span>oogle
       </button>
@@ -3561,8 +3568,10 @@ const DigiWarehouseRegistration = () => {
       </div>
 
       <div className="space-y-4">
-        <p className="text-sm text-slate-600">We've sent an OTP to your mobile</p>
-        
+        <p className="text-sm text-slate-600">
+          We've sent an OTP to your mobile
+        </p>
+
         <div className="flex justify-center space-x-3">
           {otp.map((digit, index) => (
             <input
@@ -3578,15 +3587,19 @@ const DigiWarehouseRegistration = () => {
             />
           ))}
         </div>
-        
-        {errors.otp && <p className="text-red-500 text-xs text-center">{errors.otp}</p>}
+
+        {errors.otp && (
+          <p className="text-red-500 text-xs text-center">{errors.otp}</p>
+        )}
 
         <div className="text-center">
-          <button 
+          <button
             onClick={handleGetOtp}
             disabled={isLoading || !resendAvailable}
             className={`text-sm text-slate-600 ${
-              !resendAvailable ? "opacity-50 cursor-not-allowed" : "hover:underline"
+              !resendAvailable
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:underline"
             }`}
           >
             I didn't receive a code.{" "}
@@ -3630,12 +3643,16 @@ const DigiWarehouseRegistration = () => {
             errors.username ? "border-red-300" : "border-slate-200"
           }`}
         />
-        {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
+        {errors.username && (
+          <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-start text-slate-600 mb-2">User name</label>
+          <label className="block text-sm font-medium text-start text-slate-600 mb-2">
+            User name
+          </label>
           <input
             type="text"
             name="firstName"
@@ -3646,10 +3663,14 @@ const DigiWarehouseRegistration = () => {
               errors.firstName ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+          {errors.firstName && (
+            <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+          )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-start text-slate-600 mb-2">Contact Number</label>
+          <label className="block text-sm font-medium text-start text-slate-600 mb-2">
+            Contact Number
+          </label>
           <input
             type="tel"
             name="contactNumber"
@@ -3660,7 +3681,9 @@ const DigiWarehouseRegistration = () => {
               errors.contactNumber ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.contactNumber && <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>}
+          {errors.contactNumber && (
+            <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>
+          )}
         </div>
       </div>
 
@@ -3694,7 +3717,9 @@ const DigiWarehouseRegistration = () => {
             errors.shopName ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.shopName && <p className="text-red-500 text-xs mt-1">{errors.shopName}</p>}
+        {errors.shopName && (
+          <p className="text-red-500 text-xs mt-1">{errors.shopName}</p>
+        )}
       </div>
 
       <div>
@@ -3708,7 +3733,9 @@ const DigiWarehouseRegistration = () => {
             errors.shopAddress ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.shopAddress && <p className="text-red-500 text-xs mt-1">{errors.shopAddress}</p>}
+        {errors.shopAddress && (
+          <p className="text-red-500 text-xs mt-1">{errors.shopAddress}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -3723,7 +3750,9 @@ const DigiWarehouseRegistration = () => {
               errors.city ? "border-red-300" : "border-slate-300"
             }`}
           />
-          {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+          {errors.city && (
+            <p className="text-red-500 text-xs mt-1">{errors.city}</p>
+          )}
         </div>
         <div>
           <input
@@ -3736,7 +3765,9 @@ const DigiWarehouseRegistration = () => {
               errors.state ? "border-red-300" : "border-slate-300"
             }`}
           />
-          {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
+          {errors.state && (
+            <p className="text-red-500 text-xs mt-1">{errors.state}</p>
+          )}
         </div>
       </div>
 
@@ -3751,7 +3782,9 @@ const DigiWarehouseRegistration = () => {
             errors.pincode ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.pincode && <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>}
+        {errors.pincode && (
+          <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>
+        )}
       </div>
 
       <div className="flex justify-center mt-6">
@@ -3783,7 +3816,9 @@ const DigiWarehouseRegistration = () => {
           <option value="axis">Axis Bank</option>
           <option value="pnb">Punjab National Bank</option>
         </select>
-        {errors.bankName && <p className="text-red-500 text-xs mt-1">{errors.bankName}</p>}
+        {errors.bankName && (
+          <p className="text-red-500 text-xs mt-1">{errors.bankName}</p>
+        )}
       </div>
 
       <div>
@@ -3797,7 +3832,9 @@ const DigiWarehouseRegistration = () => {
             errors.branchName ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.branchName && <p className="text-red-500 text-xs mt-1">{errors.branchName}</p>}
+        {errors.branchName && (
+          <p className="text-red-500 text-xs mt-1">{errors.branchName}</p>
+        )}
       </div>
 
       <div>
@@ -3811,7 +3848,9 @@ const DigiWarehouseRegistration = () => {
             errors.accountHolder ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.accountHolder && <p className="text-red-500 text-xs mt-1">{errors.accountHolder}</p>}
+        {errors.accountHolder && (
+          <p className="text-red-500 text-xs mt-1">{errors.accountHolder}</p>
+        )}
       </div>
 
       <div>
@@ -3825,7 +3864,9 @@ const DigiWarehouseRegistration = () => {
             errors.accountNumber ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.accountNumber && <p className="text-red-500 text-xs mt-1">{errors.accountNumber}</p>}
+        {errors.accountNumber && (
+          <p className="text-red-500 text-xs mt-1">{errors.accountNumber}</p>
+        )}
       </div>
 
       <div>
@@ -3839,7 +3880,9 @@ const DigiWarehouseRegistration = () => {
             errors.reAccountNumber ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.reAccountNumber && <p className="text-red-500 text-xs mt-1">{errors.reAccountNumber}</p>}
+        {errors.reAccountNumber && (
+          <p className="text-red-500 text-xs mt-1">{errors.reAccountNumber}</p>
+        )}
       </div>
 
       <div>
@@ -3853,7 +3896,9 @@ const DigiWarehouseRegistration = () => {
             errors.ifscCode ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.ifscCode && <p className="text-red-500 text-xs mt-1">{errors.ifscCode}</p>}
+        {errors.ifscCode && (
+          <p className="text-red-500 text-xs mt-1">{errors.ifscCode}</p>
+        )}
       </div>
 
       <div className="flex justify-center mt-6">
@@ -3870,11 +3915,15 @@ const DigiWarehouseRegistration = () => {
   const renderKycForm = () => (
     <>
       <div className="space-y-4">
-        <p className="text-sm font-medium text-slate-700 mb-4">Upload Your KYC Documents</p>
-        
+        <p className="text-sm font-medium text-slate-700 mb-4">
+          Upload Your KYC Documents
+        </p>
+
         <div className="space-y-4">
           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">License Front (PNG/JPEG, max 5MB)</label>
+            <label className="text-sm text-slate-600 mb-2 block">
+              License Front (PNG/JPEG, max 5MB)
+            </label>
             <input
               type="file"
               accept="image/png,image/jpeg"
@@ -3882,13 +3931,19 @@ const DigiWarehouseRegistration = () => {
               className="text-sm text-slate-600"
             />
             {kycFiles.licenseFront && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.licenseFront.name}</p>
+              <p className="text-sm text-slate-500 mt-2">
+                Selected: {kycFiles.licenseFront.name}
+              </p>
             )}
-            {errors.licenseFront && <p className="text-red-500 text-xs mt-1">{errors.licenseFront}</p>}
+            {errors.licenseFront && (
+              <p className="text-red-500 text-xs mt-1">{errors.licenseFront}</p>
+            )}
           </div>
 
           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">Aadhar Front (PNG/JPEG, max 5MB)</label>
+            <label className="text-sm text-slate-600 mb-2 block">
+              Aadhar Front (PNG/JPEG, max 5MB)
+            </label>
             <input
               type="file"
               accept="image/png,image/jpeg"
@@ -3896,13 +3951,19 @@ const DigiWarehouseRegistration = () => {
               className="text-sm text-slate-600"
             />
             {kycFiles.aadharFront && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.aadharFront.name}</p>
+              <p className="text-sm text-slate-500 mt-2">
+                Selected: {kycFiles.aadharFront.name}
+              </p>
             )}
-            {errors.aadharFront && <p className="text-red-500 text-xs mt-1">{errors.aadharFront}</p>}
+            {errors.aadharFront && (
+              <p className="text-red-500 text-xs mt-1">{errors.aadharFront}</p>
+            )}
           </div>
 
           <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">Aadhar Back (PNG/JPEG, max 5MB)</label>
+            <label className="text-sm text-slate-600 mb-2 block">
+              Aadhar Back (PNG/JPEG, max 5MB)
+            </label>
             <input
               type="file"
               accept="image/png,image/jpeg"
@@ -3910,9 +3971,13 @@ const DigiWarehouseRegistration = () => {
               className="text-sm text-slate-600"
             />
             {kycFiles.aadharBack && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.aadharBack.name}</p>
+              <p className="text-sm text-slate-500 mt-2">
+                Selected: {kycFiles.aadharBack.name}
+              </p>
             )}
-            {errors.aadharBack && <p className="text-red-500 text-xs mt-1">{errors.aadharBack}</p>}
+            {errors.aadharBack && (
+              <p className="text-red-500 text-xs mt-1">{errors.aadharBack}</p>
+            )}
           </div>
         </div>
       </div>
@@ -3949,8 +4014,10 @@ const DigiWarehouseRegistration = () => {
       </div>
 
       <div className="space-y-4">
-        <p className="text-sm text-slate-600">We've sent a verification OTP to complete your registration</p>
-        
+        <p className="text-sm text-slate-600">
+          We've sent a verification OTP to complete your registration
+        </p>
+
         <div className="flex justify-center space-x-3">
           {kycOtp.map((digit, index) => (
             <input
@@ -3966,15 +4033,19 @@ const DigiWarehouseRegistration = () => {
             />
           ))}
         </div>
-        
-        {errors.kycOtp && <p className="text-red-500 text-xs text-center">{errors.kycOtp}</p>}
+
+        {errors.kycOtp && (
+          <p className="text-red-500 text-xs text-center">{errors.kycOtp}</p>
+        )}
 
         <div className="text-center">
-          <button 
+          <button
             onClick={handleKycSubmit}
             disabled={isLoading || !resendAvailable}
             className={`text-sm text-slate-600 ${
-              !resendAvailable ? "opacity-50 cursor-not-allowed" : "hover:underline"
+              !resendAvailable
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:underline"
             }`}
           >
             I didn't receive a code.{" "}
@@ -4004,27 +4075,43 @@ const DigiWarehouseRegistration = () => {
 
   const getFormTitle = () => {
     switch (currentStep) {
-      case "login": return "Log in";
-      case "otp": return "Log in";
-      case "register": return "Register";
-      case "shopDetails": return "Shop details";
-      case "bankDetails": return "Bank details";
-      case "kyc": return "KYC Verification";
-      case "kycOtp": return "Verify Registration";
-      default: return "Log in";
+      case "login":
+        return "Log in";
+      case "otp":
+        return "Log in";
+      case "register":
+        return "Register";
+      case "shopDetails":
+        return "Shop details";
+      case "bankDetails":
+        return "Bank details";
+      case "kyc":
+        return "KYC Verification";
+      case "kycOtp":
+        return "Verify Registration";
+      default:
+        return "Log in";
     }
   };
 
   const getCurrentForm = () => {
     switch (currentStep) {
-      case "login": return renderLoginForm();
-      case "otp": return renderOtpForm();
-      case "register": return renderRegisterForm();
-      case "shopDetails": return renderShopDetailsForm();
-      case "bankDetails": return renderBankDetailsForm();
-      case "kyc": return renderKycForm();
-      case "kycOtp": return renderKycOtpForm();
-      default: return renderLoginForm();
+      case "login":
+        return renderLoginForm();
+      case "otp":
+        return renderOtpForm();
+      case "register":
+        return renderRegisterForm();
+      case "shopDetails":
+        return renderShopDetailsForm();
+      case "bankDetails":
+        return renderBankDetailsForm();
+      case "kyc":
+        return renderKycForm();
+      case "kycOtp":
+        return renderKycOtpForm();
+      default:
+        return renderLoginForm();
     }
   };
 
@@ -4033,18 +4120,26 @@ const DigiWarehouseRegistration = () => {
   };
 
   const showLoginLink = () => {
-    return currentStep === "register" || currentStep === "shopDetails" || currentStep === "bankDetails" || currentStep === "kyc" || currentStep === "kycOtp";
+    return (
+      currentStep === "register" ||
+      currentStep === "shopDetails" ||
+      currentStep === "bankDetails" ||
+      currentStep === "kyc" ||
+      currentStep === "kycOtp"
+    );
   };
 
   return (
     <div className="flex w-screen overflow-hidden min-h-screen">
       {/* Hidden reCAPTCHA container - Moved to top-level to ensure it's always rendered */}
       <div id="recaptcha-container" style={{ display: "none" }}></div>
-      
+
       {/* Left Section - Dynamic Form */}
-      <div className="flex-1 flex items-center justify-center bg-white 
+      <div
+        className="flex-1 flex items-center justify-center bg-white 
                       px-6 sm:px-10 md:px-16 lg:px-20 
-                      mb-6 sm:mb-8 ml-0 lg:ml-24">
+                      mb-6 sm:mb-8 ml-0 lg:ml-24"
+      >
         <div className="w-full max-w-sm sm:max-w-md lg:max-w-md">
           {/* Logo */}
           <div className="text-center mb-6 sm:mb-8 lg:mr-64">
@@ -4072,13 +4167,13 @@ const DigiWarehouseRegistration = () => {
               {/* Error Message */}
               {(authError || errors.general) && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-700 text-sm">{authError || errors.general}</p>
+                  <p className="text-red-700 text-sm">
+                    {authError || errors.general}
+                  </p>
                 </div>
               )}
 
-              <div className="space-y-6">
-                {getCurrentForm()}
-              </div>
+              <div className="space-y-6">{getCurrentForm()}</div>
             </div>
 
             {/* Footer Links */}
@@ -4094,7 +4189,7 @@ const DigiWarehouseRegistration = () => {
                   </button>
                 </p>
               )}
-              
+
               {showLoginLink() && (
                 <p className="text-xs text-slate-500">
                   Already have Account?
@@ -4107,7 +4202,11 @@ const DigiWarehouseRegistration = () => {
                 </p>
               )}
 
-              {(currentStep === "otp" || currentStep === "shopDetails" || currentStep === "bankDetails" || currentStep === "kyc" || currentStep === "kycOtp") && (
+              {(currentStep === "otp" ||
+                currentStep === "shopDetails" ||
+                currentStep === "bankDetails" ||
+                currentStep === "kyc" ||
+                currentStep === "kycOtp") && (
                 <button
                   onClick={goBack}
                   className="text-xs text-slate-500 hover:text-slate-700"
@@ -4127,7 +4226,7 @@ const DigiWarehouseRegistration = () => {
         <div className="w-1/2 bg-[#95CDE2] relative"></div>
 
         {/* Center Image */}
-        <div className="absolute pt-10 flex items-center">
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="rounded-2xl overflow-hidden shadow-2xl w-[602px]">
             <img
               src={digiLogoPoster}
