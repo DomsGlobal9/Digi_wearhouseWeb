@@ -14,7 +14,8 @@ import RecentlyAddedProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/Rece
 import ProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/ProductPage.jsx';
 import UploadProducts from '../DigiWearHouseApp1/Pages/Products/Uploadproducts.jsx';
 import TryonPreview from '../DigiWearHouseApp1/Pages/Products/TryonPreviewpage.jsx';
-import { ProductProvider } from '../DigiWearHouseApp1/context/Context.jsx';
+import  { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
+
 
 function DigiwearHouse() {
    const location = useLocation();
@@ -26,10 +27,12 @@ function DigiwearHouse() {
 
     <>
          {!hideNavbar && <Navbar />}
-  <ProductProvider>
+  <AppProvider>
       <Routes>
         {/* Default route */}
         {/* <Route path="/login" element={< DigiWarehouseLogin/>} /> */}
+        {/* <Route path="/" element={<DigiwearHouse/>}/> */}
+        <Route path="/digiwearhouse" element={<DigiwearHouse/>} />
         <Route path = "/register" element={<DigiWarehouseRegistration/>} />
         <Route path = "/orders" element={<OrdersManagementSystem />} />
         <Route path = "/" element={<VendorDashboard />} />
@@ -47,7 +50,7 @@ function DigiwearHouse() {
         {/* Redirect to login if no route matches */}
 
       </Routes>
-      </ProductProvider>
+     </AppProvider>
    
 
     </>

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Package, Edit } from 'lucide-react';
-import { useProduct } from '../../context/Context'; // Adjust import path as needed
+import { useApp } from '../../context/Context'; // Adjust import path as needed
 
 export default function TryonPreview() {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [tryOnResult, setTryOnResult] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { productData } = useProduct();
+  const { productData } = useApp();
 
   // Static model image URL
   const staticModelImage = "https://res.cloudinary.com/doiezptnn/image/upload/v1754996630/qgxzm85zvkchgssliiww.png";

@@ -6,13 +6,7 @@ import DigiwearHouse from './Routes/DigiwearHouse';
 function App() {
 
   return (
-    <>
-    
-      <Routes>
-        <Route path="/" element={<DigiwearHouse/>}/>
-        <Route path="/digiwearhouse" element={<DigiwearHouse/>} />
-      </Routes>
-    </>
+   <DigiwearHouse/>
   );
 }
 export default App

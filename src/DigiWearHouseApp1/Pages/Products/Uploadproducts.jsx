@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useProduct } from '../../context/Context'; // Adjust import path as needed
+import { useApp } from '../../context/Context'; // Adjust import path as needed
 
 // Model - Data layer
 const ProductDataModel = {
@@ -674,7 +674,7 @@ const NavigationButtons = ({ onBack, onNext, isLastTab, onSubmit }) => (
 
 const AddProductForm = ({ onBack }) => {
   const navigate = useNavigate();
-  const { productData, updateProductData } = useProduct();
+  const { productData, updateProductData } = useApp();
   const [activeTab, setActiveTab] = useState('general');
   const [formData, setFormData] = useState(productData);
   

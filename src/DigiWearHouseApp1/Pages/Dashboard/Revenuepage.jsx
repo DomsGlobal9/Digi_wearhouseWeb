@@ -212,14 +212,14 @@ const TotalRevenueController = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Debug Toggle Button - Remove in production */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <button 
           onClick={toggleProductState}
           className="bg-purple-500 text-white px-4 py-2 rounded text-sm"
         >
           Toggle: {hasProducts ? 'Show Empty State' : 'Show Products'}
         </button>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Page Title */}
