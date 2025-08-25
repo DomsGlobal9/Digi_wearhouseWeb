@@ -421,7 +421,30 @@ export const AppProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-
+const [productData, setProductData] = useState({
+    title: '',
+    description: '',
+    productType: 'Ready to Wear',
+    chooseType: '',
+    dressType: '',
+    materialType: '',
+    designType: '',
+    price: '',
+    selectedSizes: ['XS'],
+    selectedColors: [],
+    units: {
+      S: 22,
+      M: 22,
+      L: 22,
+    },
+    images: [],
+  });
+  const updateProductData = (data) => {
+    setProductData((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
@@ -588,6 +611,9 @@ export const AppProvider = ({ children }) => {
         clearError,
         error,
         setError,
+        // Add product data to context value
+        productData,
+        updateProductData,
       }}
     >
       {children}

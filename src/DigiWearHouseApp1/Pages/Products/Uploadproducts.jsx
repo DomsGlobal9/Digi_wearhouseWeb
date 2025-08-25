@@ -220,67 +220,74 @@ const ProductTypeToggle = ({ value, onChange }) => (
   </div>
 );
 
-const GeneralTab = ({ formData, onChange, dressTypes, materialTypes, designTypes }) => (
-  <div className="space-y-6 md:space-y-8">
-    <div>
-      <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-6">Product Information</h3>
-      
-      <div className="space-y-6">
-        <FormInput
-          label="Product Title"
-          value={formData.title}
-          onChange={(e) => onChange('title', e.target.value)}
-          placeholder="Elegant Women in Pink Floral Traditional Indian Outfit..."
-        />
+const GeneralTab = ({ formData, onChange, dressTypes, materialTypes, designTypes }) => {
+  // Defensive check to prevent undefined errors
+  if (!formData) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-6 md:space-y-8">
+      <div>
+        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-6">Product Information</h3>
         
-        <FormInput
-          label="Product Description"
-          type="textarea"
-          value={formData.description}
-          onChange={(e) => onChange('description', e.target.value)}
-          placeholder="A stylish, beautiful pink floral lehenga with a matching dupatta, set against a pink background. The traditional Indian ensemble features intricate gold motifs, exuding elegance..."
-        />
-        
-        <FormSelect
-          label="Choose Type"
-          value={formData.chooseType}
-          onChange={(e) => onChange('chooseType', e.target.value)}
-          options={['Traditional Wear', 'Western Wear', 'Fusion Wear']}
-          placeholder="Choose Type"
-        />
-        
-        <ProductTypeToggle
-          value={formData.productType}
-          onChange={(value) => onChange('productType', value)}
-        />
-        
-        <FormSelect
-          label="Dress type"
-          value={formData.dressType}
-          onChange={(e) => onChange('dressType', e.target.value)}
-          options={dressTypes}
-          placeholder="Select Dress"
-        />
-        
-        <FormSelect
-          label="Material Type"
-          value={formData.materialType}
-          onChange={(e) => onChange('materialType', e.target.value)}
-          options={materialTypes}
-          placeholder="Select Material"
-        />
-        
-        <FormSelect
-          label="Design Type"
-          value={formData.designType}
-          onChange={(e) => onChange('designType', e.target.value)}
-          options={designTypes}
-          placeholder="Select Design"
-        />
+        <div className="space-y-6">
+          <FormInput
+            label="Product Title"
+            value={formData.title || ''}
+            onChange={(e) => onChange('title', e.target.value)}
+            placeholder="Elegant Women in Pink Floral Traditional Indian Outfit..."
+          />
+          
+          <FormInput
+            label="Product Description"
+            type="textarea"
+            value={formData.description || ''}
+            onChange={(e) => onChange('description', e.target.value)}
+            placeholder="A stylish, beautiful pink floral lehenga with a matching dupatta, set against a pink background. The traditional Indian ensemble features intricate gold motifs, exuding elegance..."
+          />
+          
+          <FormSelect
+            label="Choose Type"
+            value={formData.chooseType || ''}
+            onChange={(e) => onChange('chooseType', e.target.value)}
+            options={['Traditional Wear', 'Western Wear', 'Fusion Wear']}
+            placeholder="Choose Type"
+          />
+          
+          <ProductTypeToggle
+            value={formData.productType || 'Ready to Wear'}
+            onChange={(value) => onChange('productType', value)}
+          />
+          
+          <FormSelect
+            label="Dress type"
+            value={formData.dressType || ''}
+            onChange={(e) => onChange('dressType', e.target.value)}
+            options={dressTypes}
+            placeholder="Select Dress"
+          />
+          
+          <FormSelect
+            label="Material Type"
+            value={formData.materialType || ''}
+            onChange={(e) => onChange('materialType', e.target.value)}
+            options={materialTypes}
+            placeholder="Select Material"
+          />
+          
+          <FormSelect
+            label="Design Type"
+            value={formData.designType || ''}
+            onChange={(e) => onChange('designType', e.target.value)}
+            options={designTypes}
+            placeholder="Select Design"
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SizeSelector = ({ sizes, selectedSizes, onChange }) => (
   <div className="space-y-3">
@@ -676,8 +683,11 @@ const AddProductForm = ({ onBack }) => {
   const navigate = useNavigate();
   const { productData, updateProductData } = useApp();
   const [activeTab, setActiveTab] = useState('general');
-  const [formData, setFormData] = useState(productData);
-  
+  // const [formData, setFormData] = useState(productData);
+  const [formData, setFormData] = useState(() => {
+    const defaultData = ProductDataModel.getFormData();
+    return productData ? { ...defaultData, ...productData } : defaultData;
+  });
   const tabs = [
     { id: 'general', label: 'General' },
     { id: 'size-pricing', label: 'Size & Pricing' },
