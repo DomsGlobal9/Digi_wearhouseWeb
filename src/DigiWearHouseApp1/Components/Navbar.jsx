@@ -7,7 +7,7 @@ import accessoriesImage from "../../assets/accessories.png";
 import logo from "../../assets/digi_logo.svg";
 import notificationIcon from "../../assets/notification-icon.svg";
 import user_icon from "../../assets/user-circle.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -15,6 +15,7 @@ const Navbar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const location = useLocation();
 
   const notifRef = useRef(null);
   const categoriesRef = useRef(null);
@@ -212,6 +213,22 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Determine navigation items based on current route
+  const isHomeRoute = location.pathname === "/";
+  const navItems = isHomeRoute
+    ? [
+        { name: "Home", path: "/" },
+        { name: "About", path: "/about" },
+        { name: "FAQ", path: "/faq" },
+        { name: "Contact Us", path: "/contact" },
+      ]
+    : [
+        { name: "Dashboard", path: "/" },
+        { name: "Categories", path: "/categories" },
+        { name: "Orders", path: "/orders" },
+        { name: "Commissions", path: "/commission" },
+      ];
+
   return (
     <>
       {/* Main Navbar */}
@@ -224,9 +241,9 @@ const Navbar = () => {
 
             {/* Centered Logo */}
             <Link to={"/"}> 
-            <div className="flex cursor-pointer items-center justify-center flex-1 lg:flex-none">
-              <img src={logo} alt="DVYB Logo" className="h-10" />
-            </div>
+              <div className="flex cursor-pointer items-center justify-center flex-1 lg:flex-none">
+                <img src={logo} alt="DVYB Logo" className="h-10" />
+              </div>
             </Link>
 
             {/* Right side icons */}
@@ -288,16 +305,16 @@ const Navbar = () => {
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
                     <div className="py-1">
                       <Link to={"/profile"}>
-                      <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                        <Settings size={18} className="mr-3" />
-                        <span>Settings</span>
-                      </button>
+                        <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <Settings size={18} className="mr-3" />
+                          <span>Settings</span>
+                        </button>
                       </Link>
                       <Link to={"/register"}>
-                      <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                        <LogOut size={18} className="mr-3" />
-                        <span>Logout</span>
-                      </button>
+                        <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                          <LogOut size={18} className="mr-3" />
+                          <span>Logout</span>
+                        </button>
                       </Link>
                     </div>
                   </div>
@@ -326,171 +343,157 @@ const Navbar = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Desktop Navigation Links - Centered */}
             <div className="hidden lg:flex items-center justify-center space-x-8 py-4">
-              <Link to={"/dashboard"}>
-              <span
-                className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-              >
-                Dashboard
-              </span>
-              </Link>
-
-              {/* Categories Dropdown */}
-              <div className="relative" ref={categoriesRef}>
-                <button
-                  onMouseEnter={() => setIsCategoriesOpen(true)}
-                  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                >
-                  <span>Categories</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      isCategoriesOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {isCategoriesOpen && (
-                  <div
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
-                    onMouseLeave={() => {
-                      setIsCategoriesOpen(false);
-                      setSelectedCategory(null);
-                    }}
-                    style={{
-                      width: "100vw",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      maxHeight: "80vh",
-                      overflowY: "auto",
-                    }}
+              {navItems.map((item) => (
+                <Link key={item.name} to={item.path}>
+                  <span
+                    className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                   >
-                    {/* Arrow pointing up */}
-                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
 
-                    <div className="p-8">
-                      {!selectedCategory ? (
-                        // Main categories view
-                        <div className="max-w-6xl mx-auto">
-                          <div className="grid grid-cols-4 gap-8 justify-center">
-                            {categories.map((category) => (
-                              <div
-                                key={category.id}
-                                className="flex flex-col items-center cursor-pointer group"
-                                // onClick={() => setSelectedCategory(category)}
-                                // onMouseEnter={() =>
-                                //   setSelectedCategory(category)
-                                // }
-                              >
-                                {/* Category Image Circle */}
+              {/* Categories Dropdown (only for non-home route) */}
+              {!isHomeRoute && (
+                <div className="relative" ref={categoriesRef}>
+                  <button
+                    onMouseEnter={() => setIsCategoriesOpen(true)}
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  >
+                    <span>Categories</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isCategoriesOpen && (
+                    <div
+                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
+                      onMouseLeave={() => {
+                        setIsCategoriesOpen(false);
+                        setSelectedCategory(null);
+                      }}
+                      style={{
+                        width: "100vw",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        maxHeight: "80vh",
+                        overflowY: "auto",
+                      }}
+                    >
+                      {/* Arrow pointing up */}
+                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
+
+                      <div className="p-8">
+                        {!selectedCategory ? (
+                          // Main categories view
+                          <div className="max-w-6xl mx-auto">
+                            <div className="grid grid-cols-4 gap-8 justify-center">
+                              {categories.map((category) => (
                                 <div
-                                  className="w-24 cursor-pointer h-24 rounded-full mb-4 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-200 shadow-lg"
-                                  style={{
-                                    backgroundColor: category.backgroundColor,
-                                  }}
+                                  key={category.id}
+                                  className="flex flex-col items-center cursor-pointer group"
+                                  onClick={() => setSelectedCategory(category)}
+                                  onMouseEnter={() =>
+                                    setSelectedCategory(category)
+                                  }
                                 >
-                                  <img
-                                    src={category.image}
-                                    alt={category.name}
-                                    className="w-full h-full object-cover"
-                                     onClick={() => setSelectedCategory(category)}
-                                onMouseEnter={() =>
-                                  setSelectedCategory(category)
-                                }
-                                  />
-                                </div>
-
-                                {/* Category Name */}
-                                <span className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
-                                  {category.name}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ) : (
-                        // Subcategories view
-                        <div className="max-w-7xl mx-auto">
-                          {/* Header with back button and category name */}
-                          <div className="flex items-center justify-between mb-8">
-                            <button
-                              onClick={() => setSelectedCategory(null)}
-                              className="flex items-center transition-colors cursor-pointer"
-                              style={{color: "rgba(152, 192, 217, 1)"}}
-                            >
-                              <svg
-                                className="w-5 h-5 mr-2"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 19l-7-7 7-7"
-                                />
-                              </svg>
-                              Back to Categories
-                            </button>
-                            <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
-                              {selectedCategory.name}
-                            </h2>
-                            <div></div>
-                          </div>
-
-                          {/* Subcategories Grid */}
-                          <div className="grid grid-cols-6 gap-8">
-                            {Object.entries(selectedCategory.subcategories).map(
-                              ([subcategoryName, items]) => (
-                                <div
-                                  key={subcategoryName}
-                                  className="space-y-4"
-                                >
-                                  {/* Subcategory Header */}
-                                  <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2" style={{color: "rgba(152, 192, 217, 1)"}}>
-                                    {subcategoryName}
-                                  </h3>
-
-                                  {/* Subcategory Items */}
-                                  <div className="space-y-2">
-                                    {items.map((item, index) => (
-                                      <a
-                                        key={index}
-                                        href="#"
-                                        className="block text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
-                                        onClick={() => {
-                                          setIsCategoriesOpen(false);
-                                          setSelectedCategory(null);
-                                        }}
-                                      >
-                                        {item}
-                                      </a>
-                                    ))}
+                                  {/* Category Image Circle */}
+                                  <div
+                                    className="w-24 h-24 rounded-full mb-4 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-200 shadow-lg"
+                                    style={{
+                                      backgroundColor: category.backgroundColor,
+                                    }}
+                                  >
+                                    <img
+                                      src={category.image}
+                                      alt={category.name}
+                                      className="w-full h-full object-cover"
+                                    />
                                   </div>
+
+                                  {/* Category Name */}
+                                  <span className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
+                                    {category.name}
+                                  </span>
                                 </div>
-                              )
-                            )}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          // Subcategories view
+                          <div className="max-w-7xl mx-auto">
+                            {/* Header with back button and category name */}
+                            <div className="flex items-center justify-between mb-8">
+                              <button
+                                onClick={() => setSelectedCategory(null)}
+                                className="flex items-center transition-colors cursor-pointer"
+                                style={{ color: "rgba(152, 192, 217, 1)" }}
+                              >
+                                <svg
+                                  className="w-5 h-5 mr-2"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 19l-7-7 7-7"
+                                  />
+                                </svg>
+                                Back to Categories
+                              </button>
+                              <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
+                                {selectedCategory.name}
+                              </h2>
+                              <div></div>
+                            </div>
+
+                            {/* Subcategories Grid */}
+                            <div className="grid grid-cols-6 gap-8">
+                              {Object.entries(selectedCategory.subcategories).map(
+                                ([subcategoryName, items]) => (
+                                  <div
+                                    key={subcategoryName}
+                                    className="space-y-4"
+                                  >
+                                    {/* Subcategory Header */}
+                                    <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2" style={{ color: "rgba(152, 192, 217, 1)" }}>
+                                      {subcategoryName}
+                                    </h3>
+
+                                    {/* Subcategory Items */}
+                                    <div className="space-y-2">
+                                      {items.map((item, index) => (
+                                        <a
+                                          key={index}
+                                          href="#"
+                                          className="block text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
+                                          onClick={() => {
+                                            setIsCategoriesOpen(false);
+                                            setSelectedCategory(null);
+                                          }}
+                                        >
+                                          {item}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-             <Link to="/orders">
-              <span
-                className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-              >
-                Orders
-              </span>
-              </Link>
-             <Link to={"/commission"}>
-              <span
-                className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-              >
-                Commissions
-              </span>
-               </Link>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -499,65 +502,56 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 bg-white">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <a
-                href="#"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
-              >
-                Dashboard
-              </a>
+              {navItems.map((item) => (
+                <Link key={item.name} to={item.path}>
+                  <a
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                </Link>
+              ))}
 
-              {/* Mobile Categories */}
-              <div className="px-3 py-2">
-                <button
-                  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                  className="flex items-center justify-between w-full text-base font-medium text-gray-700 hover:text-blue-600"
-                >
-                  <span>Categories</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      isCategoriesOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
+              {/* Mobile Categories (only for non-home route) */}
+              {!isHomeRoute && (
+                <div className="px-3 py-2">
+                  <button
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                    className="flex items-center justify-between w-full text-base font-medium text-gray-700 hover:text-blue-600"
+                  >
+                    <span>Categories</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-                {isCategoriesOpen && (
-                  <div className="mt-2 pl-4 space-y-2">
-                    {categories.map((category) => (
-                      <a
-                        key={category.id}
-                        href="#"
-                        className="flex items-center space-x-3 py-2 text-sm text-gray-600 hover:text-blue-600"
-                      >
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: category.backgroundColor }}
+                  {isCategoriesOpen && (
+                    <div className="mt-2 pl-4 space-y-2">
+                      {categories.map((category) => (
+                        <a
+                          key={category.id}
+                          href="#"
+                          className="flex items-center space-x-3 py-2 text-sm text-gray-600 hover:text-blue-600"
                         >
-                          <img
-                            src={category.image}
-                            alt={category.name}
-                            className="w-full h-full object-cover rounded-full"
-                          />
-                        </div>
-                        <span>{category.name}</span>
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-             <Link to="/orders">
-              <a
-                href="#"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
-              >
-                Orders
-              </a>
-              </Link>
-              <a
-                href="#"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
-              >
-                Commissions
-              </a>
+                          <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center"
+                            style={{ backgroundColor: category.backgroundColor }}
+                          >
+                            <img
+                              src={category.image}
+                              alt={category.name}
+                              className="w-full h-full object-cover rounded-full"
+                            />
+                          </div>
+                          <span>{category.name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
