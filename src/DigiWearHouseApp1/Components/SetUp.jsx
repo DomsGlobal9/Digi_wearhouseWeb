@@ -280,8 +280,8 @@ function SetUp() {
               <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-8 py-3 rounded-lg font-semibold transition-all duration-200">
                 Setup takes only 3 Steps
               </button>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
-                LOG IN
+              <button  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
+                <a href="/register">LOG IN</a>
               </button>
             </div>
           </div>
