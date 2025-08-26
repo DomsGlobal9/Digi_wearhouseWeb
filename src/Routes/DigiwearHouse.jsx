@@ -41,7 +41,7 @@ function DigiwearHouse() {
         <Route path = "/orders" element={<OrdersManagementSystem />} />
         <Route path = "/dashboard" element={<VendorDashboard />} />
         <Route path = "/profile" element={<Profilepage />} />
-        <Route path = "/recently-added" element={<UserProductsList />} />
+        <Route path = "/recenltyproducts" element={<UserProductsList />} />
         <Route path = "/total-units" element={<TotalUnitsSoldController />} />
         <Route path = "/total-revenue" element={<TotalRevenueController />} />
         <Route path = "/inventory" element={<InventoryController />} />

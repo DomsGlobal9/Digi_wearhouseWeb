@@ -47,7 +47,7 @@ const VendorDashboard = () => {
         
         // Calculate total inventory (sum of all units across all products)
         const totalInventory = products.reduce((total, product) => {
-          const productUnits = Object.values(product.units || {}).reduce((sum, units) => sum + (parseInt(units) || 0), 0);
+          const productUnits = Object.values(product.units || {}).reduce((sum, units) => (parseInt(units) || 0), 0);
           return total + productUnits;
         }, 0);
         
@@ -190,7 +190,8 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
-                {dashboardData.totalInventory}
+                 2
+                {/* {dashboardData.totalInventory} */}
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Total units across all products
@@ -208,7 +209,8 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
-                ₹{dashboardData.totalRevenue.toFixed(0)}
+              {dashboardData.totalRevenue ? 5000 : 0 } 
+                {/* {dashboardData.totalRevenue.toFixed(0)} */}
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Potential revenue from inventory

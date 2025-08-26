@@ -257,7 +257,7 @@ export default function UserProductsList() {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xl font-bold text-gray-900">
-                      ${product.price || '0'}
+                      ₹{product.price || '0'}
                     </span>
                     <div className="text-xs text-gray-500">
                       {product.imageUrls?.length || 0} image{product.imageUrls?.length !== 1 ? 's' : ''}
