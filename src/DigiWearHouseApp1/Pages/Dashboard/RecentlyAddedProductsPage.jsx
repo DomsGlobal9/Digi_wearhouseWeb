@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../Components/ProductCard.jsx";
 import firebaseService from '../../../SERVICES/firebaseService';
 
 const RecentlyAddedProductsPage = () => {
