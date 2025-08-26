@@ -214,13 +214,13 @@ const Navbar = () => {
   }, []);
 
   // Determine navigation items based on current route
-  const isHomeRoute = location.pathname === "/";
+  const isHomeRoute = location.pathname === "/" || location.pathname === "/who-we-are" || location.pathname === "/privacy-policy" || location.pathname === "/contact-us";
   const navItems = isHomeRoute
     ? [
         { name: "Home", path: "/" },
-        { name: "About", path: "/about" },
-        { name: "FAQ", path: "/faq" },
-        { name: "Contact Us", path: "/contact" },
+        { name: "About", path: "/who-we-are" },
+        { name: "FAQ", path: "/privacy-policy" },
+        { name: "Contact Us", path: "/contact-us" },
       ]
     : [
         { name: "Dashboard", path: "/dashboard" },
@@ -228,6 +228,12 @@ const Navbar = () => {
         { name: "Orders", path: "/orders" },
         { name: "Commissions", path: "/commission" },
       ];
+
+      
+              //           <Route path = "/contact-us" element={<ContactUs />} /> 
+              //         <Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
+              // {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
+              // <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
 
   return (
     <>

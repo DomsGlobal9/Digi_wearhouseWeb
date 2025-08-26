@@ -18,6 +18,9 @@ import  { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
 import UserProductsList from '../DigiWearHouseApp1/Pages/Products/productList.jsx';
 import HomePage from '../DigiWearHouseApp1/Pages/HomePage.jsx';
 import Whoweare from '../DigiWearHouseApp1/Pages/Whoweare.jsx';
+import ContactUs from '../DigiWearHouseApp1/Pages/contactus.jsx';
+import TermsAndConditions from '../DigiWearHouseApp1/Pages/TermsAndConditions.jsx';
+import PrivacyAndPolicy from '../DigiWearHouseApp1/Pages/PrivacyPolicy.jsx';
 
 function DigiwearHouse() {
    const location = useLocation();
@@ -35,13 +38,18 @@ function DigiwearHouse() {
         {/* <Route path="/login" element={< DigiWarehouseLogin/>} /> */}
         {/* <Route path="/" element={<DigiwearHouse/>}/> */}
                 <Route path = "/register" element={<DigiWarehouseRegistration/>} />
+                 <Route path="/" element={<HomePage />} />
+                  <Route path = "/contact-us" element={<ContactUs />} /> 
+                <Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
         {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
+       
         <Route path="/who-we-are" element={<Whoweare />} />
         <Route path = "/orders" element={<OrdersManagementSystem />} />
         <Route path = "/dashboard" element={<VendorDashboard />} />
         <Route path = "/profile" element={<Profilepage />} />
         <Route path = "/recenltyproducts" element={<UserProductsList />} />
+       
         <Route path = "/total-units" element={<TotalUnitsSoldController />} />
         <Route path = "/total-revenue" element={<TotalRevenueController />} />
         <Route path = "/inventory" element={<InventoryController />} />
