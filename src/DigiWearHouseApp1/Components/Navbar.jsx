@@ -223,7 +223,7 @@ const Navbar = () => {
         { name: "Contact Us", path: "/contact" },
       ]
     : [
-        { name: "Dashboard", path: "/" },
+        { name: "Dashboard", path: "/dashboard" },
         { name: "Categories", path: "/categories" },
         { name: "Orders", path: "/orders" },
         { name: "Commissions", path: "/commission" },
