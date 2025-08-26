@@ -11,7 +11,7 @@ import Tailor4 from "../../assets/tailor4.png"
 import Service1 from "../../assets/service1.png"
 import Service2 from "../../assets/service2.png"
 import Service3 from "../../assets/service3.png"
-
+import Footer from "../Components/Footer.jsx";
 function Whoweare (){
 
 
@@ -71,6 +71,8 @@ function Whoweare (){
         <img src={Service3} alt="" />
     </div>
 </div>
+
+<Footer/>
     </>
 
 

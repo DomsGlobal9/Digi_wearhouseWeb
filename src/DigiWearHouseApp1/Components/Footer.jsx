@@ -1,5 +1,8 @@
 import React from 'react';
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import Footerlog1 from '../../assets/footerlog1.png';
+import Footerlog2 from '../../assets/footerlog2.png';
+import Footerlog3 from '../../assets/footerlog3.png';
 
 const Footer = () => {
   return (
@@ -50,11 +53,11 @@ const Footer = () => {
         </div>
 
         {/* Logos and copyright */}
-        <div className="border-t border-gray-200 mt-12 pt-6 flex flex-col md:flex-row md:items-center md:justify-between space-y-6 md:space-y-0">
-          <div className="flex justify-center md:justify-start space-x-6">
-            <img src="https://dummyimage.com/100x40/000/fff&text=DVYB" alt="DVYB" className="h-10" />
-            <img src="https://dummyimage.com/100x40/000/fff&text=DVYB+DIGI+WAREHOUSE" alt="DVYB DIGI WAREHOUSE" className="h-10" />
-            <img src="https://dummyimage.com/100x40/000/fff&text=DVYB+WHOLESALE" alt="DVYB WHOLESALE" className="h-10" />
+        <div className="border-t border-gray-200 mt-12 pt-6 flex flex-col items-center md:flex-row md:items-center md:justify-between space-y-6 md:space-y-0">
+          <div className="flex justify-center md:justify-start items-center  pl-96 space-x-6">
+            <img src={Footerlog1} alt="DVYB" className="h-10" />
+            <img src={Footerlog2} alt="DVYB DIGI WAREHOUSE" className="h-10" />
+            <img src={Footerlog3} alt="DVYB WHOLESALE" className="h-6" />
           </div>
           <p className="text-center text-gray-500 text-sm">
             COPYRIGHT © 2025
