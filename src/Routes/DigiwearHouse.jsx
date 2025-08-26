@@ -15,7 +15,8 @@ import ProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/ProductPage.jsx';
 import UploadProducts from '../DigiWearHouseApp1/Pages/Products/Uploadproducts.jsx';
 import TryonPreview from '../DigiWearHouseApp1/Pages/Products/TryonPreviewpage.jsx';
 import  { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
-
+import UserProductsList from '../DigiWearHouseApp1/Pages/Products/productList.jsx';
+import HomePage from '../DigiWearHouseApp1/Pages/HomePage.jsx';
 
 function DigiwearHouse() {
    const location = useLocation();
@@ -32,11 +33,13 @@ function DigiwearHouse() {
         {/* Default route */}
         {/* <Route path="/login" element={< DigiWarehouseLogin/>} /> */}
         {/* <Route path="/" element={<DigiwearHouse/>}/> */}
-        <Route path="/digiwearhouse" element={<DigiwearHouse/>} />
-        <Route path = "/register" element={<DigiWarehouseRegistration/>} />
+                <Route path = "/register" element={<DigiWarehouseRegistration/>} />
+        {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
+        <Route path="/" element={<HomePage />} />
         <Route path = "/orders" element={<OrdersManagementSystem />} />
-        <Route path = "/" element={<VendorDashboard />} />
+        <Route path = "/dashboard" element={<VendorDashboard />} />
         <Route path = "/profile" element={<Profilepage />} />
+        <Route path = "/recently-added" element={<UserProductsList />} />
         <Route path = "/total-units" element={<TotalUnitsSoldController />} />
         <Route path = "/total-revenue" element={<TotalRevenueController />} />
         <Route path = "/inventory" element={<InventoryController />} />

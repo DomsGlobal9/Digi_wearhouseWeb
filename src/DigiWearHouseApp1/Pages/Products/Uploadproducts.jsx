@@ -251,7 +251,7 @@ const GeneralTab = ({ formData, onChange, dressTypes, materialTypes, designTypes
             label="Choose Type"
             value={formData.chooseType || ''}
             onChange={(e) => onChange('chooseType', e.target.value)}
-            options={['Traditional Wear', 'Western Wear', 'Fusion Wear']}
+            options={['Men', 'Women', 'Kids']}
             placeholder="Choose Type"
           />
           
