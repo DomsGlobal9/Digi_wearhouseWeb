@@ -401,37 +401,79 @@ const UnitsSection = ({ units, onChange }) => (
   </div>
 );
 
-const SizePricingTab = ({ formData, onChange, sizes, colors }) => (
-  <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
-    <SizeSelector
-      sizes={sizes}
-      selectedSizes={formData.selectedSizes}
-      onChange={(sizes) => onChange('selectedSizes', sizes)}
-    />
+// const SizePricingTab = ({ formData, onChange, sizes, colors }) => (
+  
+//   <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
+//     <SizeSelector
+//       sizes={sizes}
+//       selectedSizes={formData.selectedSizes}
+//       onChange={(sizes) => onChange('selectedSizes', sizes)}
+//     />
     
-    <FormInput
-      label="Price"
-      type="number"
-      value={formData.price}
-      onChange={(e) => onChange('price', e.target.value)}
-      placeholder="Ex. 12,000"
-    />
+//     <FormInput
+//       label="Price"
+//       type="number"
+//       value={formData.price}
+//       onChange={(e) => onChange('price', e.target.value)}
+//       placeholder="Ex. 12,000"
+//     />
     
-    <ColorSelector
-      colors={colors}
-      selectedColors={formData.selectedColors}
-      onChange={(colors) => onChange('selectedColors', colors)}
-    />
+//     <ColorSelector
+//       colors={colors}
+//       selectedColors={formData.selectedColors}
+//       onChange={(colors) => onChange('selectedColors', colors)}
+//     />
     
-    <UnitsSection
-      units={formData.units}
-      onChange={(units) => onChange('units', units)}
-    />
-  </div>
-);
+//     <UnitsSection
+//       units={formData.units}
+//       onChange={(units) => onChange('units', units)}
+//     />
+//   </div>
+// );
 
 // Cloudinary upload function
 // Improved Cloudinary upload function with better error handling
+
+const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
+  // Check if the product is a Saree
+  const isSaree = formData?.dressType?.toLowerCase().includes("saree");
+
+  return (
+    <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
+      {/* Only show size selector if not a saree */}
+      {!isSaree && (
+        <SizeSelector
+          sizes={sizes}
+          selectedSizes={formData.selectedSizes}
+          onChange={(sizes) => onChange('selectedSizes', sizes)}
+        />
+      )}
+      
+      <FormInput
+        label="Price"
+        type="number"
+        value={formData.price}
+        onChange={(e) => onChange('price', e.target.value)}
+        placeholder="Ex. 12,000"
+      />
+      
+      <ColorSelector
+        colors={colors}
+        selectedColors={formData.selectedColors}
+        onChange={(colors) => onChange('selectedColors', colors)}
+      />
+      
+      {/* Only show Units section if not a saree */}
+      {!isSaree && (
+        <UnitsSection
+          units={formData.units}
+          onChange={(units) => onChange('units', units)}
+        />
+      )}
+    </div>
+  );
+};
+
 const uploadToCloudinary = async (file) => {
   // Validate file
   if (!file) {
