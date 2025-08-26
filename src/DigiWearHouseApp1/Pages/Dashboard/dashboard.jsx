@@ -154,25 +154,7 @@ const VendorDashboard = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/50 to-gray-800/30"></div>
             
-            {/* Real-time stats overlay */}
-            <div className="absolute top-4 left-4 md:left-8">
-              <div className="bg-blue-500 text-white px-3 py-2 rounded text-sm font-bold">
-                {dashboardData.totalProducts} Products
-              </div>
-            </div>
             
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="bg-blue-600 text-white px-6 py-4 rounded-lg text-center">
-                <div className="text-3xl md:text-4xl font-bold">{dashboardData.totalInventory}</div>
-                <div className="text-lg md:text-xl mt-1">Total Units</div>
-              </div>
-            </div>
-            
-            <div className="absolute top-4 right-4 md:right-8">
-              <div className="bg-green-500 text-white px-3 py-2 rounded text-sm font-bold">
-                ${dashboardData.totalRevenue.toFixed(0)}
-              </div>
-            </div>
           </div>
         </div>
 
@@ -226,7 +208,7 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
-                ${dashboardData.totalRevenue.toFixed(0)}
+                ₹{dashboardData.totalRevenue.toFixed(0)}
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Potential revenue from inventory
@@ -295,7 +277,7 @@ const VendorDashboard = () => {
                       </p>
                       <div className="flex items-center justify-between mt-2">
                         <span className="text-lg font-bold text-gray-900">
-                          ${product.price || '0'}
+                          ₹{product.price || '0'}
                         </span>
                         <span className={`px-2 py-1 text-xs rounded-full font-medium ${
                           product.isPublished 
@@ -354,13 +336,13 @@ const VendorDashboard = () => {
             <div>
               <span className="text-sm text-gray-900 md:text-base">High:</span>
               <span className="font-semibold text-gray-600 ml-1">
-                DEC - ${Math.max(...chartData.map(d => d.value))}
+                DEC - ₹{Math.max(...chartData.map(d => d.value))}
               </span>
             </div>
             <div>
               <span className="text-gray-900 text-sm md:text-base">Low:</span>
               <span className="font-semibold text-gray-600 ml-1">
-                JUN - $0
+                JUN - ₹0
               </span>
             </div>
           </div>
@@ -372,7 +354,7 @@ const VendorDashboard = () => {
                 <div key={index} className="flex flex-col items-center flex-1">
                   <div className="relative w-full flex justify-center mb-2">
                     <span className="text-xs md:text-sm text-gray-600">
-                      {item.value > 0 ? `$${item.value.toFixed(0)}` : '0'}
+                      {item.value > 0 ? `₹${item.value.toFixed(0)}` : '0'}
                     </span>
                   </div>
                   <div 

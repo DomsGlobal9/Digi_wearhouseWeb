@@ -17,6 +17,7 @@ import TryonPreview from '../DigiWearHouseApp1/Pages/Products/TryonPreviewpage.j
 import  { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
 import UserProductsList from '../DigiWearHouseApp1/Pages/Products/productList.jsx';
 import HomePage from '../DigiWearHouseApp1/Pages/HomePage.jsx';
+import Whoweare from '../DigiWearHouseApp1/Pages/Whoweare.jsx';
 
 function DigiwearHouse() {
    const location = useLocation();
@@ -36,6 +37,7 @@ function DigiwearHouse() {
                 <Route path = "/register" element={<DigiWarehouseRegistration/>} />
         {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/who-we-are" element={<Whoweare />} />
         <Route path = "/orders" element={<OrdersManagementSystem />} />
         <Route path = "/dashboard" element={<VendorDashboard />} />
         <Route path = "/profile" element={<Profilepage />} />

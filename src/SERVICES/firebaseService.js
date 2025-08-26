@@ -223,6 +223,9 @@ class FirebaseService {
     }
   }
 
+
+  
+
   // Update existing product in user's subcollection
   async updateProduct(productId, userId, formData, imageFiles = null) {
     try {
