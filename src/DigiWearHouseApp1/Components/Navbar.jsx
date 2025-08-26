@@ -224,7 +224,7 @@ const Navbar = () => {
       ]
     : [
         { name: "Dashboard", path: "/dashboard" },
-        { name: "Categories", path: "/categories" },
+        // { name: "Categories", path: "/categories" },
         { name: "Orders", path: "/orders" },
         { name: "Commissions", path: "/commission" },
       ];
@@ -262,7 +262,7 @@ const Navbar = () => {
                 </button>
 
                 {isNotificationOpen && (
-                  <div className="absolute right-0 mt-3 w-80 bg-white backdrop-blur-lg rounded-2xl shadow-xl p-6 text-center z-50 border border-gray-100">
+                  <div className="absolute right-0  w-80 bg-white backdrop-blur-lg rounded-2xl shadow-xl  text-center z-50 border border-gray-100">
                     {/* Arrow */}
                     <div className="absolute -top-2 right-5 w-4 h-4 bg-white rotate-45 shadow-md border-l border-t border-gray-100"></div>
 
@@ -356,34 +356,28 @@ const Navbar = () => {
               {/* Categories Dropdown (only for non-home route) */}
               {!isHomeRoute && (
                 <div className="relative" ref={categoriesRef}>
-                  <button
-                    onMouseEnter={() => setIsCategoriesOpen(true)}
-                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                  >
-                    <span>Categories</span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        isCategoriesOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {isCategoriesOpen && (
-                    <div
-                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
-                      onMouseLeave={() => {
-                        setIsCategoriesOpen(false);
-                        setSelectedCategory(null);
-                      }}
-                      style={{
-                        width: "100vw",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        maxHeight: "80vh",
-                        overflowY: "auto",
-                      }}
-                    >
+                <button
+  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+>
+  <span>Categories</span>
+  <ChevronDown
+    className={`w-4 h-4 transition-transform duration-200 ${
+      isCategoriesOpen ? "rotate-180" : ""
+    }`}
+  />
+</button>
+{isCategoriesOpen && (
+  <div
+    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
+    ref={categoriesRef}   // 👈 wrap this container with ref
+    style={{
+      width: "100vw",
+      transform: "translateX(-60%)",
+      maxHeight: "80vh",
+      overflowY: "auto",
+    }}
+  >
                       {/* Arrow pointing up */}
                       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
 
