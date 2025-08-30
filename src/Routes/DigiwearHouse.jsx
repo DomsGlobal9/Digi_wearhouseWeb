@@ -9,7 +9,7 @@ import Profilepage from '../DigiWearHouseApp1/Pages/Profile/Profilepage.jsx';
 import TotalUnitsSoldController from '../DigiWearHouseApp1/Pages/Dashboard/TotalUnits.jsx';
 import InventoryController from '../DigiWearHouseApp1/Pages/Dashboard/Inventorypage.jsx';
 import TotalRevenueController from '../DigiWearHouseApp1/Pages/Dashboard/Revenuepage.jsx';
-import CommissionPage from '../DigiWearHouseApp1/Pages/Dashboard/CommissionPage.jsx';
+// import CommissionPage from '../DigiWearHouseApp1/Pages/Dashboard/CommissionPage.jsx';
 import RecentlyAddedProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/RecentlyAddedProductsPage.jsx';
 import ProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/ProductPage.jsx';
 import UploadProducts from '../DigiWearHouseApp1/Pages/Products/Uploadproducts.jsx';
@@ -53,7 +53,7 @@ function DigiwearHouse() {
         <Route path = "/total-units" element={<TotalUnitsSoldController />} />
         <Route path = "/total-revenue" element={<TotalRevenueController />} />
         <Route path = "/inventory" element={<InventoryController />} />
-        <Route path="/commission" element={<CommissionPage/>} />
+        {/* <Route path="/commission" element={<CommissionPage/>} /> */}
          <Route path='/products' element={<ProductsPage/>}/>
         <Route path='/recenltyproducts' element={<RecentlyAddedProductsPage/>}/>
         <Route path="/upload-products" element={<UploadProducts/>} />

@@ -226,7 +226,7 @@ const Navbar = () => {
         { name: "Dashboard", path: "/dashboard" },
         // { name: "Categories", path: "/categories" },
         { name: "Orders", path: "/orders" },
-        { name: "Commissions", path: "/commission" },
+        // { name: "Commissions", path: "/commission" },
       ];
 
       

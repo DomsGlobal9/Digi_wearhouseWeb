@@ -579,11 +579,15 @@ const UploadTab = ({ formData, onChange }) => {
         </p>
         
         {/* Upload Area */}
+        
+      
         <div className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
           canUpload 
             ? 'border-gray-300 hover:border-blue-400 cursor-pointer' 
             : 'border-gray-200 bg-gray-50'
         }`}>
+          {canUpload ? (
+                <>
           <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
             <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -591,10 +595,10 @@ const UploadTab = ({ formData, onChange }) => {
             </svg>
           </div>
           
-          {canUpload ? (
+          
             <label className="cursor-pointer">
               <span className="text-gray-700 font-medium hover:text-gray-900">
-                {uploading ? 'Uploading...' : 'Click to add photos'}
+                {uploading ? 'Uploading...' : 'Click to add photos up to 5 MB'}
               </span>
               <input
                 type="file"
@@ -605,6 +609,7 @@ const UploadTab = ({ formData, onChange }) => {
                 disabled={uploading}
               />
             </label>
+            </>
           ) : (
             <div className="text-gray-500">
               {uploading ? 'Uploading...' : 'Maximum 4 images reached'}
@@ -615,7 +620,7 @@ const UploadTab = ({ formData, onChange }) => {
         {/* Upload Instructions */}
         <div className="mt-4 text-sm text-gray-500 text-center">
           <p>• Accepted formats: JPG, PNG, GIF</p>
-          <p>• Maximum file size: 10MB per image</p>
+          <p>• Maximum file size: up to 5MB</p>
           <p>• You can select multiple images at once</p>
         </div>
 

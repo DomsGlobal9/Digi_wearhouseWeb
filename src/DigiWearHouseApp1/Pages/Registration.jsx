@@ -15,7 +15,7 @@ const DigiWarehouseRegistration = () => {
     registerUser,
     loginUser,
     checkUserExists,
-    uploadKycFile,
+    uploadKycDetails,
     signOut,
     clearError,
     error: authError,
@@ -64,11 +64,11 @@ const DigiWarehouseRegistration = () => {
   });
 
   // KYC File States
-  const [kycFiles, setKycFiles] = useState({
-    licenseFront: null,
-    aadharFront: null,
-    aadharBack: null,
-  });
+  const [kycDetails, setKycDetails] = useState({
+  panNumber: '',
+  gstinNumber: '',
+  aadharNumber: '',
+});
 
   // Clear messages after 5 seconds
   useEffect(() => {
@@ -155,13 +155,45 @@ const DigiWarehouseRegistration = () => {
     return { isValid: Object.keys(errors).length === 0, errors };
   };
 
-  const validateKycFiles = () => {
-    const errors = {};
-    if (!kycFiles.licenseFront) errors.licenseFront = "License Front is required";
-    if (!kycFiles.aadharFront) errors.aadharFront = "Aadhar Front is required";
-    if (!kycFiles.aadharBack) errors.aadharBack = "Aadhar Back is required";
-    return { isValid: Object.keys(errors).length === 0, errors };
-  };
+  const validatePAN = (pan) => {
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  return panRegex.test(pan);
+};
+
+const validateGSTIN = (gstin) => {
+  const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+  return gstinRegex.test(gstin);
+};
+
+const validateAadhar = (aadhar) => {
+  const aadharRegex = /^[0-9]{12}$/;
+  return aadharRegex.test(aadhar);
+};
+
+// 3. Update validateKycDetails function (replace existing)
+const validateKycDetails = () => {
+  const errors = {};
+  
+  if (!kycDetails.panNumber.trim()) {
+    errors.panNumber = "PAN number is required";
+  } else if (!validatePAN(kycDetails.panNumber)) {
+    errors.panNumber = "Invalid PAN format (e.g., ABCDE1234F)";
+  }
+  
+  if (!kycDetails.gstinNumber.trim()) {
+    errors.gstinNumber = "GSTIN number is required";
+  } else if (!validateGSTIN(kycDetails.gstinNumber)) {
+    errors.gstinNumber = "Invalid GSTIN format (15 characters)";
+  }
+  
+  if (!kycDetails.aadharNumber.trim()) {
+    errors.aadharNumber = "Aadhar number is required";
+  } else if (!validateAadhar(kycDetails.aadharNumber)) {
+    errors.aadharNumber = "Invalid Aadhar format (12 digits)";
+  }
+  
+  return { isValid: Object.keys(errors).length === 0, errors };
+};
 
   // Event Handlers
   const handleLogin = async () => {
@@ -220,13 +252,31 @@ try {
     }
   };
 
-  const handleKycFileChange = (e, fileType) => {
-    const file = e.target.files[0];
-    setKycFiles(prev => ({ ...prev, [fileType]: file }));
-    if (errors[fileType]) {
-      setErrors(prev => ({ ...prev, [fileType]: "" }));
-    }
-  };
+ // 4. Add KYC input change handler
+const handleKycInputChange = (e) => {
+  const { name, value } = e.target;
+  
+  // Auto-format inputs
+  let formattedValue = value;
+  if (name === 'panNumber' || name === 'gstinNumber') {
+    formattedValue = value.toUpperCase();
+  } else if (name === 'aadharNumber') {
+    formattedValue = value.replace(/\D/g, ''); // Only allow digits
+  }
+  
+  setKycDetails(prev => ({
+    ...prev,
+    [name]: formattedValue
+  }));
+  
+  // Clear specific field error when user starts typing
+  if (errors[name]) {
+    setErrors(prev => ({
+      ...prev,
+      [name]: ""
+    }));
+  }
+};
 
   const handleRegisterSubmit = async () => {
     const validation = validateRegistrationForm(registerData);
@@ -277,67 +327,45 @@ try {
     setCurrentStep("kyc");
   };
 
-  const handleKycSubmit = async () => {
-    const validation = validateKycFiles();
+ // 5. Updated handleKycSubmit function (replace existing)
+const handleKycSubmit = async () => {
+  const validation = validateKycDetails();
 
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      return;
-    }
+  if (!validation.isValid) {
+    setErrors(validation.errors);
+    return;
+  }
 
-    setIsLoading(true);
-    setErrors({});
-    clearError();
+  setIsLoading(true);
+  setErrors({});
+  clearError();
 
-    try {
-      // Upload KYC files first
-      const kycDocumentUrls = {};
-      
-      if (kycFiles.licenseFront) {
-        kycDocumentUrls.licenseFrontUrl = await uploadKycFile(
-          kycFiles.licenseFront,
-          registerData.email.replace(/[@.]/g, '_'), // Use email as temp ID
-          "license_front"
-        );
-      }
-      
-      if (kycFiles.aadharFront) {
-        kycDocumentUrls.aadharFrontUrl = await uploadKycFile(
-          kycFiles.aadharFront,
-          registerData.email.replace(/[@.]/g, '_'),
-          "aadhar_front"
-        );
-      }
-      
-      if (kycFiles.aadharBack) {
-        kycDocumentUrls.aadharBackUrl = await uploadKycFile(
-          kycFiles.aadharBack,
-          registerData.email.replace(/[@.]/g, '_'),
-          "aadhar_back"
-        );
-      }
+  try {
+    // Register user with all data including KYC numbers (no file uploads)
+    const completeUserData = {
+      username: registerData.username,
+      firstName: registerData.firstName,
+      contactNumber: registerData.contactNumber,
+      shopDetails: shopData,
+      bankDetails: bankData,
+      kycDetails: kycDetails, // Send the numbers instead of file URLs
+    };
 
-      // Register user with all data
-      const completeUserData = {
-        username: registerData.username,
-        firstName: registerData.firstName,
-        contactNumber: registerData.contactNumber,
-        shopDetails: shopData,
-        bankDetails: bankData,
-        kycDocuments: kycDocumentUrls,
-      };
-
-      await registerUser(registerData.email, registerData.password, completeUserData);
-      setSuccessMessage("Registration completed successfully!");
-      
-      // Clear form data
-      setKycFiles({ licenseFront: null, aadharFront: null, aadharBack: null });
-    } catch (error) {
-      setErrors({ general: error.message });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    await registerUser(registerData.email, registerData.password, completeUserData);
+    setSuccessMessage("Registration completed successfully!");
+    
+    // Clear form data
+    setKycDetails({
+      panNumber: '',
+      gstinNumber: '',
+      aadharNumber: '',
+    });
+  } catch (error) {
+    setErrors({ general: error.message });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleGoogleSignIn = () => {
     console.log("Google Sign-In clicked");
@@ -363,7 +391,7 @@ try {
       confirmPassword: "",
       contactNumber: "",
     });
-    setKycFiles({ licenseFront: null, aadharFront: null, aadharBack: null });
+    // setKycFiles({ licenseFront: null, aadharFront: null, aadharBack: null });
   };
 
   const goBack = () => {
@@ -754,71 +782,84 @@ try {
   );
 
   const renderKycForm = () => (
-    <>
-      <div className="space-y-4">
-        <p className="text-sm font-medium text-slate-700 mb-4">Upload Your KYC Documents</p>
+  <>
+    <div className="space-y-4">
+      <p className="text-sm font-medium text-slate-700 mb-4">Upload Your Details</p>
+      <p className="text-xs text-slate-500 mb-6">
+        To complete your vendor verification, please provide the information for the following documents. 
+        Ensure all details are clear and match your registered information.
+      </p>
 
-        <div className="space-y-4">
-          <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">License Front (PNG/JPEG, max 5MB)</label>
-            <input
-              type="file"
-              accept="image/png,image/jpeg"
-              onChange={(e) => handleKycFileChange(e, "licenseFront")}
-              className="text-sm text-slate-600"
-            />
-            {kycFiles.licenseFront && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.licenseFront.name}</p>
-            )}
-            {errors.licenseFront && <p className="text-red-500 text-xs mt-1">{errors.licenseFront}</p>}
-          </div>
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-2">PAN Number</label>
+          <input
+            type="text"
+            name="panNumber"
+            value={kycDetails.panNumber}
+            onChange={handleKycInputChange}
+            placeholder="For Eg. JPY54658K"
+            maxLength={10}
+            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+              errors.panNumber ? "border-red-300" : "border-slate-300"
+            }`}
+          />
+          {errors.panNumber && <p className="text-red-500 text-xs mt-1">{errors.panNumber}</p>}
+        </div>
 
-          <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">Aadhar Front (PNG/JPEG, max 5MB)</label>
-            <input
-              type="file"
-              accept="image/png,image/jpeg"
-              onChange={(e) => handleKycFileChange(e, "aadharFront")}
-              className="text-sm text-slate-600"
-            />
-            {kycFiles.aadharFront && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.aadharFront.name}</p>
-            )}
-            {errors.aadharFront && <p className="text-red-500 text-xs mt-1">{errors.aadharFront}</p>}
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-2">GSTIN Number</label>
+          <input
+            type="text"
+            name="gstinNumber"
+            value={kycDetails.gstinNumber}
+            onChange={handleKycInputChange}
+            placeholder="For Eg. 22AAAAA0000A1Z5"
+            maxLength={15}
+            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+              errors.gstinNumber ? "border-red-300" : "border-slate-300"
+            }`}
+          />
+          {errors.gstinNumber && <p className="text-red-500 text-xs mt-1">{errors.gstinNumber}</p>}
+        </div>
 
-          <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-cyan-500 transition-all">
-            <label className="text-sm text-slate-600 mb-2 block">Aadhar Back (PNG/JPEG, max 5MB)</label>
-            <input
-              type="file"
-              accept="image/png,image/jpeg"
-              onChange={(e) => handleKycFileChange(e, "aadharBack")}
-              className="text-sm text-slate-600"
-            />
-            {kycFiles.aadharBack && (
-              <p className="text-sm text-slate-500 mt-2">Selected: {kycFiles.aadharBack.name}</p>
-            )}
-            {errors.aadharBack && <p className="text-red-500 text-xs mt-1">{errors.aadharBack}</p>}
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-2">Aadhar Number</label>
+          <input
+            type="text"
+            name="aadharNumber"
+            value={kycDetails.aadharNumber}
+            onChange={handleKycInputChange}
+            placeholder="For Eg. 123456789012"
+            maxLength={12}
+            pattern="[0-9]*"
+            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+              errors.aadharNumber ? "border-red-300" : "border-slate-300"
+            }`}
+          />
+          {errors.aadharNumber && <p className="text-red-500 text-xs mt-1">{errors.aadharNumber}</p>}
         </div>
       </div>
+    </div>
 
+    <div className="flex justify-end mt-6">
       <button
         onClick={handleKycSubmit}
         disabled={isLoading}
-        className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-            Completing Registration...
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+            Next
           </div>
         ) : (
-          "Complete Registration"
+          "Next →"
         )}
       </button>
-    </>
-  );
+    </div>
+  </>
+);
 
   const getFormTitle = () => {
     switch (currentStep) {
