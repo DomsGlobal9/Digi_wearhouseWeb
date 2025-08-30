@@ -523,14 +523,416 @@ const uploadToCloudinary = async (file) => {
   }
 };
 
-const UploadTab = ({ formData, onChange }) => {
+const SuccessNotification = ({ show, onClose, message }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 text-center">
+        <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Success!</h3>
+        <p className="text-gray-600 mb-6">{message}</p>
+        <button
+          onClick={onClose}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Bulk Upload interface component
+const BulkUploadInterface = ({ onBack, onSuccess }) => {
   const [uploading, setUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+const { currentUser } = useApp();
 
   const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    // Check if adding these files would exceed the limit
+    // Validate file types
+    const validTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+      'application/vnd.ms-excel', // .xls
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+      'application/msword', // .doc
+    ];
+
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    if (invalidFiles.length > 0) {
+      alert('Please upload only Excel (.xlsx, .xls) or Word (.docx, .doc) files.');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      // Simulate file processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const newFiles = files.map(file => ({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        uploadedAt: new Date().toISOString()
+      }));
+
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+      onSuccess(`Successfully uploaded ${files.length} file(s) for bulk processing.`);
+      
+    } catch (error) {
+      alert(`Upload failed: ${error.message}`);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const removeFile = (index) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const getFileIcon = (type) => {
+    if (type.includes('sheet') || type.includes('excel')) {
+      return (
+        <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center">
+          <span className="text-xs font-bold text-green-700">XLS</span>
+        </div>
+      );
+    } else if (type.includes('word')) {
+      return (
+        <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+          <span className="text-xs font-bold text-blue-700">DOC</span>
+        </div>
+      );
+    }
+    return (
+      <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+        <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
+        </svg>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
+      {/* Header with back button */}
+      <div className="flex items-center space-x-4">
+        <button
+          onClick={onBack}
+          className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Back</span>
+        </button>
+        <h3 className="text-lg md:text-xl font-semibold text-gray-900">Upload File</h3>
+      </div>
+
+      <p className="text-sm text-gray-600">Add files of your product</p>
+      
+      {/* Upload Area */}
+      <div 
+        className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
+          uploading 
+            ? 'border-gray-200 bg-gray-50' 
+            : 'border-gray-300 hover:border-blue-400 cursor-pointer'
+        }`} 
+        onClick={() => !uploading && document.getElementById('bulk-file-input').click()}
+      >
+        <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+          <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        </div>
+        
+        <div className="text-gray-700 font-medium mb-2">
+          {uploading ? 'Processing files...' : 'Browse and choose the file you want to upload from your computer'}
+        </div>
+        
+        {!uploading && (
+          <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+            Upload
+          </button>
+        )}
+      </div>
+
+      {/* Hidden file input */}
+      <input
+        id="bulk-file-input"
+        type="file"
+        multiple
+        accept=".xlsx,.xls,.docx,.doc"
+        onChange={handleFileUpload}
+        className="hidden"
+        disabled={uploading}
+      />
+
+      {/* Upload Instructions */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-base md:text-lg font-medium text-gray-900">Upload Instructions</h4>
+          <button className="text-blue-500 text-sm hover:text-blue-600 flex items-center space-x-1">
+            <span>View</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+        
+        <ul className="space-y-3 text-sm md:text-base text-gray-600">
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Use our template file as the basis for bulk upload</span>
+          </li>
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Supported formats: Excel (.xlsx, .xls) and Word (.docx, .doc)</span>
+          </li>
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Maximum file size: 10MB per file</span>
+          </li>
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Ensure all required fields are filled in the template</span>
+          </li>
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Include product images URLs in the designated columns</span>
+          </li>
+          <li className="flex items-start space-x-2">
+            <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+            <span>Review data before uploading to avoid errors</span>
+          </li>
+        </ul>
+      </div>
+
+      {/* Uploaded Files */}
+      {uploadedFiles.length > 0 && (
+        <div className="mt-6">
+          <h4 className="text-sm font-medium text-gray-700 mb-3">
+            Uploaded Files ({uploadedFiles.length})
+          </h4>
+          <div className="space-y-3">
+            {uploadedFiles.map((file, index) => (
+              <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                {getFileIcon(file.type)}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-gray-900 truncate">
+                    {file.name}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {formatFileSize(file.size)} • Uploaded {new Date(file.uploadedAt).toLocaleTimeString()}
+                  </div>
+                </div>
+                <button
+                  onClick={() => removeFile(index)}
+                  className="text-red-500 hover:text-red-700 p-1"
+                  title="Remove file"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Bulk Upload Notification Component
+const BulkUploadNotification = ({ show, onClose, onProceed }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="text-center">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Please follow the below format to add documents</h3>
+          
+          {/* Document format information */}
+          <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">Required Fields:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Product Name</li>
+                  <li>• Product Description</li>
+                  <li>• Category</li>
+                  <li>• Price</li>
+                  <li>• Available Sizes</li>
+                  <li>• Colors Available</li>
+                  <li>• Material Type</li>
+                  <li>• Design Type</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-2">File Requirements:</h4>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• Excel format (.xlsx, .xls)</li>
+                  <li>• Word format (.docx, .doc)</li>
+                  <li>• Maximum file size: 10MB</li>
+                  <li>• Include product image URLs</li>
+                  <li>• Use our template format</li>
+                  <li>• Fill all mandatory fields</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional instructions */}
+          <div className="text-left mb-6">
+            <h4 className="font-semibold text-gray-800 mb-3">Important Notes:</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li className="flex items-start space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span>Download our template file to ensure proper formatting</span>
+              </li>
+              <li className="flex items-start space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span>Each row should represent one product with complete information</span>
+              </li>
+              <li className="flex items-start space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span>Image URLs should be publicly accessible and high quality</span>
+              </li>
+              <li className="flex items-start space-x-2">
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                <span>Review your data before uploading to avoid processing errors</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onProceed}
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Upload Tab Component
+const UploadTab = ({ formData, onChange }) => {
+  const [uploading, setUploading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [uploadMode, setUploadMode] = useState('single'); // 'single' or 'bulk'
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showBulkNotification, setShowBulkNotification] = useState(false);
+
+  // Cloudinary upload function (from original code)
+  const uploadToCloudinary = async (file) => {
+    if (!file) {
+      throw new Error("No file provided");
+    }
+    
+    if (file.size > 10 * 1024 * 1024) {
+      throw new Error("File size must be less than 10MB");
+    }
+    
+    if (!file.type.startsWith('image/')) {
+      throw new Error("File must be an image");
+    }
+    
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "tryon_unsigned");
+    data.append("cloud_name", "doiezptnn");
+    
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/doiezptnn/image/upload", {
+        method: "POST",
+        body: data,
+      });
+      
+      const json = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(`Cloudinary API error: ${json.error?.message || 'Unknown error'}`);
+      }
+      
+      if (!json.secure_url) {
+        throw new Error("No secure URL returned from Cloudinary");
+      }
+      
+      return json.secure_url;
+      
+    } catch (error) {
+      throw new Error(`Upload failed: ${error.message}`);
+    }
+  };
+
+  const handleUploadClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalChoice = (choice) => {
+    setShowModal(false);
+    
+    if (choice === 'single') {
+      setUploadMode('single');
+      document.getElementById('file-input').click();
+    } else if (choice === 'bulk') {
+      // Show the bulk upload notification first
+      setShowBulkNotification(true);
+    }
+  };
+
+  const handleBulkNotificationProceed = () => {
+    setShowBulkNotification(false);
+    setUploadMode('bulk');
+  };
+
+  const handleBulkNotificationClose = () => {
+    setShowBulkNotification(false);
+  };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
     if (formData.images.length + files.length > 4) {
       alert(`You can only upload ${4 - formData.images.length} more images. Maximum 4 images allowed.`);
       return;
@@ -538,26 +940,22 @@ const UploadTab = ({ formData, onChange }) => {
 
     setUploading(true);
     try {
-      // Upload files one by one to handle errors better
       const uploadedUrls = [];
       for (const file of files) {
-        console.log('Uploading file:', file.name);
         const url = await uploadToCloudinary(file);
         uploadedUrls.push(url);
-        console.log('Uploaded successfully:', url);
       }
       
-      // Update the images array
       const newImages = [...formData.images, ...uploadedUrls];
       onChange('images', newImages);
-      console.log('Updated images array:', newImages);
+      
+      setSuccessMessage(`Successfully uploaded ${files.length} image(s)`);
+      setShowSuccess(true);
       
     } catch (error) {
-      console.error('Upload failed:', error);
       alert(`Upload failed: ${error.message}. Please try again.`);
     } finally {
       setUploading(false);
-      // Reset the file input
       e.target.value = '';
     }
   };
@@ -565,8 +963,33 @@ const UploadTab = ({ formData, onChange }) => {
   const removeImage = (index) => {
     const newImages = formData.images.filter((_, i) => i !== index);
     onChange('images', newImages);
-    console.log('Removed image at index:', index, 'New images:', newImages);
   };
+
+  const handleBackToSingle = () => {
+    setUploadMode('single');
+  };
+
+  const handleBulkSuccess = (message) => {
+    setSuccessMessage(message);
+    setShowSuccess(true);
+  };
+
+  // If bulk mode is selected, show bulk upload interface
+  if (uploadMode === 'bulk') {
+    return (
+      <>
+        <BulkUploadInterface 
+          onBack={handleBackToSingle}
+          onSuccess={handleBulkSuccess}
+        />
+        <SuccessNotification
+          show={showSuccess}
+          onClose={() => setShowSuccess(false)}
+          message={successMessage}
+        />
+      </>
+    );
+  }
 
   const canUpload = !uploading && formData.images.length < 4;
 
@@ -579,15 +1002,11 @@ const UploadTab = ({ formData, onChange }) => {
         </p>
         
         {/* Upload Area */}
-        
-      
         <div className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
           canUpload 
             ? 'border-gray-300 hover:border-blue-400 cursor-pointer' 
             : 'border-gray-200 bg-gray-50'
-        }`}>
-          {canUpload ? (
-                <>
+        }`} onClick={canUpload ? handleUploadClick : undefined}>
           <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
             <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -595,21 +1014,10 @@ const UploadTab = ({ formData, onChange }) => {
             </svg>
           </div>
           
-          
-            <label className="cursor-pointer">
-              <span className="text-gray-700 font-medium hover:text-gray-900">
-                {uploading ? 'Uploading...' : 'Click to add photos up to 5 MB'}
-              </span>
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
-                disabled={uploading}
-              />
-            </label>
-            </>
+          {canUpload ? (
+            <div className="text-gray-700 font-medium hover:text-gray-900">
+              {uploading ? 'Uploading...' : 'Click to add photos'}
+            </div>
           ) : (
             <div className="text-gray-500">
               {uploading ? 'Uploading...' : 'Maximum 4 images reached'}
@@ -617,10 +1025,21 @@ const UploadTab = ({ formData, onChange }) => {
           )}
         </div>
 
+        {/* Hidden file input */}
+        <input
+          id="file-input"
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleFileUpload}
+          className="hidden"
+          disabled={uploading}
+        />
+
         {/* Upload Instructions */}
         <div className="mt-4 text-sm text-gray-500 text-center">
           <p>• Accepted formats: JPG, PNG, GIF</p>
-          <p>• Maximum file size: up to 5MB</p>
+          <p>• Maximum file size: 10MB per image</p>
           <p>• You can select multiple images at once</p>
         </div>
 
@@ -637,8 +1056,6 @@ const UploadTab = ({ formData, onChange }) => {
                     src={imageUrl}
                     alt={`Product ${index + 1}`}
                     className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                    onLoad={() => console.log(`Image ${index + 1} loaded successfully`)}
-                    onError={() => console.error(`Failed to load image ${index + 1}:`, imageUrl)}
                   />
                   <button
                     onClick={() => removeImage(index)}
@@ -696,9 +1113,80 @@ const UploadTab = ({ formData, onChange }) => {
           </li>
         </ul>
       </div>
+
+      {/* Modal Popup */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Select one</h3>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => handleModalChoice('single')}
+                  className="flex flex-col items-center p-6 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                >
+                  <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-3">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Add One Product</span>
+                </button>
+
+                <button
+                  onClick={() => handleModalChoice('bulk')}
+                  className="flex flex-col items-center p-6 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                >
+                  <div className="w-12 h-12 bg-gray-400 rounded-lg flex items-center justify-center mb-3">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Add Bulk Products</span>
+                </button>
+              </div>
+
+              <div className="mt-6 text-center">
+                <a href="#" className="text-sm text-blue-500 hover:text-blue-600 flex items-center justify-center space-x-1">
+                  <span>Need help</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Upload Notification */}
+      <BulkUploadNotification
+        show={showBulkNotification}
+        onClose={handleBulkNotificationClose}
+        onProceed={handleBulkNotificationProceed}
+      />
+
+      {/* Success Notification */}
+      <SuccessNotification
+        show={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        message={successMessage}
+      />
     </div>
   );
 };
+
+// export default EnhancedUploadTab;
 
 const NavigationButtons = ({ onBack, onNext, isLastTab, onSubmit }) => (
   <div className="flex justify-between pt-6 md:pt-8 border-t border-gray-200">

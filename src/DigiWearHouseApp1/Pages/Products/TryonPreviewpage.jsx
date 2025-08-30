@@ -115,12 +115,12 @@ const TestFirebaseButton = () => {
       return;
     }
 
-    if (!productData.images || productData.images.length === 0) {
-      setSubmitStatus('error');
-      setSubmitMessage('At least one product image is required');
-      setTimeout(() => setSubmitStatus(null), 5000);
-      return;
-    }
+    // if (!productData.images || productData.images.length === 0) {
+    //   setSubmitStatus('error');
+    //   setSubmitMessage('At least one product image is required');
+    //   setTimeout(() => setSubmitStatus(null), 5000);
+    //   return;
+    // }
 
     if (!currentUser) {
       setSubmitStatus('error');
@@ -272,7 +272,7 @@ const TestFirebaseButton = () => {
                       <span className="text-sm text-gray-700">No colors selected</span>
                     </div>
                     <span className="text-sm text-gray-500">0 pcs</span>
-                    <button className='bg-red-600'  > <a href="/recently-added">click</a> </button> 
+                    {/* <button className='bg-red-600'  > <a href="/recently-added">click</a> </button>  */}
                   </div>
                 )}
               </div>
@@ -283,7 +283,7 @@ const TestFirebaseButton = () => {
           <div className="space-y-6">
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="text-3xl font-bold text-gray-900 mb-1">
-                $ {productData.price || '0'}
+                ₹ {productData.price || '0'}
               </div>
               <div className="text-sm text-gray-500">Base Price</div>
             </div>
@@ -356,7 +356,7 @@ const TestFirebaseButton = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-gray-900">
-                    {productData.price ? `$${productData.price}` : '0'}
+                    {productData.price ? `₹${productData.price}` : '0'}
                   </div>
                   <div className="text-xs text-gray-500">Est. Value</div>
                 </div>
@@ -589,7 +589,7 @@ const TestFirebaseButton = () => {
 
   return (
   <div>
-    <TestFirebaseButton  />
+    {/* <TestFirebaseButton  /> */}
     {isPreviewMode ? <ProductPreviewPage /> : <ProductOverviewPage />}
   </div>
 );
