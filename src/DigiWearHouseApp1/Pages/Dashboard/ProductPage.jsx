@@ -194,14 +194,14 @@ const ProductsPage = () => {
           <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl p-6 text-white relative overflow-hidden">
             <Link to={"/recenltyproducts"}>
               <div className="relative z-10">
-                <h2 className="text-lg md:text-xl font-semibold mb-2">Total Products</h2>
+                <h2 className="text-lg md:text-xl font-semibold mb-2">Total Products </h2>
                 <div className="mb-4">
                   <p className="text-sm opacity-90">Last added</p>
                   <p className="text-sm opacity-90">{productStats.lastAdded || 'No products yet'}</p>
                 </div>
                 <div className="text-5xl md:text-6xl font-bold mb-4">
                   {productStats.totalProducts}
-                </div>
+                </div> 
               </div>
             </Link>
           </div>
