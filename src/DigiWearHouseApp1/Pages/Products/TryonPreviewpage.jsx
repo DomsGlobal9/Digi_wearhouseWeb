@@ -67,16 +67,14 @@ const TestFirebaseButton = () => {
     setTryOnResult(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/tryon", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          modelImage: staticModelImage,
-          garmentImage: productData.images[index],
-        }),
-      });
+const response = await fetch("/api/tryon", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    modelImage: staticModelImage,
+    garmentImage: productData.images[index],
+  }),
+});
 
       if (!response.ok) {
         throw new Error(`Backend error: ${response.status}`);
