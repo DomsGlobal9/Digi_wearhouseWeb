@@ -172,11 +172,14 @@ const VendorDashboard = () => {
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
                 {dashboardData.totalProducts}
               </div>
-              {dashboardData.products.length > 0 && (
+              <div className="text-xs text-gray-500 mt-2">
+                Total units 
+              </div>
+              {/* {dashboardData.products.length > 0 && (
                 <div className="text-xs text-gray-500 mt-2">
                   Latest: {dashboardData.products[0].title?.substring(0, 20)}...
                 </div>
-              )}
+              )} */}
             </div>
           </Link>
 
@@ -190,8 +193,9 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
-                 2
+                 
                 {/* {dashboardData.totalInventory} */}
+                {dashboardData.totalProducts}
               </div>
               <div className="text-xs text-gray-500 mt-2">
                 Total units across all products

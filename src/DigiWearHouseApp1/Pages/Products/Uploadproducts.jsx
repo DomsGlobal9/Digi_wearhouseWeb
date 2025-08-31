@@ -325,60 +325,87 @@ const SizeSelector = ({ sizes, selectedSizes, onChange }) => (
   </div>
 );
 
-const ColorSelector = ({ colors, selectedColors, onChange }) => (
-  <div className="space-y-4">
-    <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">Select colors</h3>
-    
-    <FormSelect
-      label="Color"
-      value=""
-      onChange={() => {}}
-      options={colors.map(c => c.name)}
-      placeholder="Select color"
-    />
-    
-    <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
-      {colors.map((color) => (
-        <button
-          key={color.code}
-          type="button"
-          onClick={() => {
-            if (selectedColors.includes(color.code)) {
-              onChange(selectedColors.filter(c => c !== color.code));
-            } else {
-              onChange([...selectedColors, color.code]);
-            }
-          }}
-          className="relative group"
-        >
-          <div 
-            className={`w-8 h-8 rounded-full border-2 transition-all ${
-              selectedColors.includes(color.code)
-                ? 'border-gray-800 scale-110'
-                : 'border-gray-300 hover:scale-105'
-            }`}
-            style={{ backgroundColor: color.value }}
-          />
-          <div className="text-xs text-center mt-1 text-gray-600">{color.name}</div>
-        </button>
-      ))}
-    </div>
-    
-    {/* Color swatches */}
-    <div className="flex justify-center space-x-2 mt-4">
-      {selectedColors.map((colorCode) => {
-        const color = colors.find(c => c.code === colorCode);
-        return (
-          <div
-            key={colorCode}
-            className="w-6 h-6 rounded-full border border-gray-300"
-            style={{ backgroundColor: color?.value }}
-          />
-        );
-      })}
-    </div>
-  </div>
-);
+// const ColorSelector = ({ colors, selectedColors, onChange,myselectedColor }) => {
+//   // Handle dropdown selection
+//   const handleDropdownChange = (colorName) => {
+//     if (colorName) {
+//       const selectedColor = colors.find(c => c.name === colorName);
+//       if (selectedColor && !selectedColors.includes(selectedColor.code)) {
+//         onChange([...selectedColors, selectedColor.code]);
+//       }
+//     }
+//   };
+
+//   // Get display value for dropdown
+//   const getDropdownValue = () => {
+//     if (selectedColors.length === 0) return "";
+//     if (selectedColors.length === 1) {
+//       const color = colors.find(c => c.code === selectedColors[0]);
+//       return color?.name || "";
+//     }
+//     return `${selectedColors.length} colors selected`;
+//   };
+
+//   return (
+//     <div className="space-y-4">
+//       <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">Select colors</h3>
+      
+//       <FormSelect
+//         label="Color"
+//         value={getDropdownValue()}
+//         onChange={handleDropdownChange}
+//         options={colors.map(c => c.name)}
+//         placeholder={ myselectedColor}
+//       />
+      
+//       <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+//         {colors.map((color) => (
+//           <button
+//             key={color.code}
+//             type="button"
+//             onClick={() => {
+//               if (selectedColors.includes(color.code)) {
+//                 onChange(selectedColors.filter(c => c !== color.code));
+//                 // setMyselectedColor(selectedColors)
+//               } else {
+//                 onChange([...selectedColors, color.code]);
+//               }
+//             }}
+//             className="relative group"
+//           >
+//             <div 
+//               className={`w-8 h-8 rounded-full border-2 transition-all ${
+//                 selectedColors.includes(color.code)
+//                   ? 'border-gray-800 scale-110'
+//                   : 'border-gray-300 hover:scale-105'
+//               }`}
+//               style={{ backgroundColor: color.value }}
+//             />
+//             <div className="text-xs text-center mt-1 text-gray-600">{color.name}</div>
+//           </button>
+//         ))}
+//       </div>
+      
+//       {/* Color swatches */}
+//       {selectedColors.length > 0 && (
+//         <div className="flex justify-center space-x-2 mt-4">
+//           {selectedColors.map((colorCode) => {
+//             const color = colors.find(c => c.code === colorCode);
+//             return (
+//               <div
+//                 key={colorCode}
+//                 className="w-6 h-6 rounded-full border border-gray-300"
+//                 style={{ backgroundColor: color?.value }}
+//               />
+//             );
+//           })}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+
 
 const UnitsSection = ({ units, onChange }) => (
   <div className="space-y-4">
@@ -401,40 +428,8 @@ const UnitsSection = ({ units, onChange }) => (
   </div>
 );
 
-// const SizePricingTab = ({ formData, onChange, sizes, colors }) => (
-  
-//   <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
-//     <SizeSelector
-//       sizes={sizes}
-//       selectedSizes={formData.selectedSizes}
-//       onChange={(sizes) => onChange('selectedSizes', sizes)}
-//     />
-    
-//     <FormInput
-//       label="Price"
-//       type="number"
-//       value={formData.price}
-//       onChange={(e) => onChange('price', e.target.value)}
-//       placeholder="Ex. 12,000"
-//     />
-    
-//     <ColorSelector
-//       colors={colors}
-//       selectedColors={formData.selectedColors}
-//       onChange={(colors) => onChange('selectedColors', colors)}
-//     />
-    
-//     <UnitsSection
-//       units={formData.units}
-//       onChange={(units) => onChange('units', units)}
-//     />
-//   </div>
-// );
 
-// Cloudinary upload function
-// Improved Cloudinary upload function with better error handling
-
-const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
+const SizePricingTab = ({ formData, onChange, sizes, colors, myselectedColor }) => {
   // Check if the product is a Saree
   const isSaree = formData?.dressType?.toLowerCase().includes("saree");
 
@@ -461,6 +456,7 @@ const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
         colors={colors}
         selectedColors={formData.selectedColors}
         onChange={(colors) => onChange('selectedColors', colors)}
+        myselectedColor={myselectedColor}
       />
       
       {/* Only show Units section if not a saree */}
@@ -473,6 +469,96 @@ const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
     </div>
   );
 };
+
+const ColorSelector = ({ colors, selectedColors, onChange, myselectedColor }) => {
+  // const [dropdownValue, setDropdownValue] = useState("");
+
+  // // Handle dropdown selection
+  // const handleDropdownChange = (colorName) => {
+  //   if (colorName) {
+  //     const selectedColor = colors.find(c => c.name === colorName);
+  //     if (selectedColor && !selectedColors.includes(selectedColor.code)) {
+  //       onChange([...selectedColors, selectedColor.code]);
+  //     }
+  //     // Reset dropdown to empty after selection
+  //     setDropdownValue("");
+  //   }
+  // };
+
+  // Get dynamic placeholder text
+  const getPlaceholder = () => {
+    if (selectedColors.length === 0) {
+      return myselectedColor || "Select color";
+    }
+    if (selectedColors.length === 1) {
+      const color = colors.find(c => c.code === selectedColors[0]);
+      return `Selected: ${color?.name || "Unknown"}`;
+    }
+    return `${selectedColors.length} colors selected`;
+    // const color = colors.find(c => c.code === selectedColors[0]);
+    // return `${color?.name}`
+  };
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">Select colors</h3>
+      
+      {/* <FormSelect
+        label="Color"
+        // value={dropdownValue}
+        onChange={handleDropdownChange}
+        options={colors.map(c => c.name)}
+        placeholder={getPlaceholder()}
+      /> */}
+      
+      <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+        {colors.map((color) => (
+          <button
+            key={color.code}
+            type="button"
+            onClick={() => {
+              if (selectedColors.includes(color.code)) {
+                onChange(selectedColors.filter(c => c !== color.code));
+              } else {
+                onChange([...selectedColors, color.code]);
+              }
+            }}
+            className="relative group"
+          >
+            <div 
+              className={`w-8 h-8 rounded-full border-2 transition-all ${
+                selectedColors.includes(color.code)
+                  ? 'border-gray-800 scale-110'
+                  : 'border-gray-300 hover:scale-105'
+              }`}
+              style={{ backgroundColor: color.value }}
+            />
+            <div className="text-xs text-center mt-1 text-gray-600">{color.name}</div>
+          </button>
+        ))}
+      </div>
+      
+      {/* Color swatches */}
+      {selectedColors.length > 0 && (
+        <div className="flex justify-center space-x-2 mt-4">
+          {selectedColors.map((colorCode) => {
+            const color = colors.find(c => c.code === colorCode);
+            return (
+              <div
+                key={colorCode}
+                className="w-6 h-6 rounded-full border border-gray-300"
+                style={{ backgroundColor: color?.value }}
+                title={color?.name}
+              />
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 
 const uploadToCloudinary = async (file) => {
   // Validate file
@@ -707,7 +793,7 @@ const { currentUser } = useApp();
           </li>
           <li className="flex items-start space-x-2">
             <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
-            <span>Maximum file size: 10MB per file</span>
+            <span>Maximum file size: 5MB per </span>
           </li>
           <li className="flex items-start space-x-2">
             <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
@@ -800,7 +886,7 @@ const BulkUploadNotification = ({ show, onClose, onProceed }) => {
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• Excel format (.xlsx, .xls)</li>
                   <li>• Word format (.docx, .doc)</li>
-                  <li>• Maximum file size: 10MB</li>
+                  <li>• Maximum file size: 5MB</li>
                   <li>• Include product image URLs</li>
                   <li>• Use our template format</li>
                   <li>• Fill all mandatory fields</li>
@@ -861,7 +947,8 @@ const UploadTab = ({ formData, onChange }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showBulkNotification, setShowBulkNotification] = useState(false);
-
+  
+  
   // Cloudinary upload function (from original code)
   const uploadToCloudinary = async (file) => {
     if (!file) {
@@ -1039,7 +1126,7 @@ const UploadTab = ({ formData, onChange }) => {
         {/* Upload Instructions */}
         <div className="mt-4 text-sm text-gray-500 text-center">
           <p>• Accepted formats: JPG, PNG, GIF</p>
-          <p>• Maximum file size: 10MB per image</p>
+          <p>• Maximum file size: 5MB per image</p>
           <p>• You can select multiple images at once</p>
         </div>
 
@@ -1228,6 +1315,7 @@ const AddProductForm = ({ onBack }) => {
     { id: 'size-pricing', label: 'Size & Pricing' },
     { id: 'upload', label: 'Upload' }
   ];
+  const [myselectedColor, setMyselectedColor] = useState("select color")
   
   const dressTypes = ProductDataModel.getDressTypes();
   const materialTypes = ProductDataModel.getMaterialTypes();
@@ -1286,6 +1374,7 @@ const AddProductForm = ({ onBack }) => {
             onChange={handleFormChange}
             sizes={sizes}
             colors={colors}
+            myselectedColor = {myselectedColor}
           />
         );
       case 'upload':

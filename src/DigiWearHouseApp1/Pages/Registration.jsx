@@ -15,7 +15,6 @@ const DigiWarehouseRegistration = () => {
     registerUser,
     loginUser,
     checkUserExists,
-    uploadKycDetails,
     signOut,
     clearError,
     error: authError,
@@ -180,10 +179,10 @@ const validateKycDetails = () => {
     errors.panNumber = "Invalid PAN format (e.g., ABCDE1234F)";
   }
   
-  if (!kycDetails.gstinNumber.trim()) {
-    errors.gstinNumber = "GSTIN number is required";
-  } else if (!validateGSTIN(kycDetails.gstinNumber)) {
-    errors.gstinNumber = "Invalid GSTIN format (15 characters)";
+    if (kycDetails.gstinNumber.trim()) {
+    if (!validateGSTIN(kycDetails.gstinNumber)) {
+      errors.gstinNumber = "Invalid GSTIN format (15 characters)";
+    }
   }
   
   if (!kycDetails.aadharNumber.trim()) {
@@ -814,7 +813,7 @@ const handleKycSubmit = async () => {
             name="gstinNumber"
             value={kycDetails.gstinNumber}
             onChange={handleKycInputChange}
-            placeholder="For Eg. 22AAAAA0000A1Z5"
+            placeholder="optional or Eg. 22AAAAA0000A1Z5"
             maxLength={15}
             className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
               errors.gstinNumber ? "border-red-300" : "border-slate-300"

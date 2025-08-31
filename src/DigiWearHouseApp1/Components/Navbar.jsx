@@ -446,7 +446,7 @@ const Navbar = () => {
                                     d="M15 19l-7-7 7-7"
                                   />
                                 </svg>
-                                Back to Categories
+                                Back 
                               </button>
                               <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
                                 {selectedCategory.name}

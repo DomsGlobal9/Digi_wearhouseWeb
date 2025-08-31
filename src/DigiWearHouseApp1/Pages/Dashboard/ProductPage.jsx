@@ -204,13 +204,6 @@ const ProductsPage = () => {
                 </div>
               </div>
             </Link>
-            
-            {/* Family Image */}
-            <div className="absolute bottom-0 right-0 w-32 h-32 md:w-40 md:h-40 opacity-80">
-              <div className="w-full h-full bg-gradient-to-t from-white/20 to-transparent rounded-tl-full flex items-end justify-center pb-2">
-                <div className="text-4xl">👨‍👩‍👧‍👦</div>
-              </div>
-            </div>
           </div>
 
           {/* Category Breakdown */}
