@@ -67,7 +67,7 @@ const Navbar = () => {
           "Jumpsuits",
           "Rompers",
         ],
-        "Sleepwear": [
+        Sleepwear: [
           "Night Suits",
           "Nighties",
           "Pyjamas",
@@ -214,7 +214,11 @@ const Navbar = () => {
   }, []);
 
   // Determine navigation items based on current route
-  const isHomeRoute = location.pathname === "/" || location.pathname === "/who-we-are" || location.pathname === "/privacy-policy" || location.pathname === "/contact-us";
+  const isHomeRoute =
+    location.pathname === "/" ||
+    location.pathname === "/who-we-are" ||
+    location.pathname === "/privacy-policy" ||
+    location.pathname === "/contact-us";
   const navItems = isHomeRoute
     ? [
         { name: "Home", path: "/" },
@@ -229,11 +233,10 @@ const Navbar = () => {
         // { name: "Commissions", path: "/commission" },
       ];
 
-      
-              //           <Route path = "/contact-us" element={<ContactUs />} /> 
-              //         <Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
-              // {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
-              // <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
+  //           <Route path = "/contact-us" element={<ContactUs />} />
+  //         <Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
+  // {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
+  // <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
 
   return (
     <>
@@ -246,8 +249,8 @@ const Navbar = () => {
             <div className="flex-1 lg:flex-none"></div>
 
             {/* Centered Logo */}
-            <Link to={"/"}> 
-              <div className="flex cursor-pointer items-center justify-center flex-1 lg:flex-none">
+            <Link to={"/"}>
+              <div className="flex cursor-pointer items-center justify-center flex-1 lg:flex-none ps-28">
                 <img src={logo} alt="DVYB Logo" className="h-10" />
               </div>
             </Link>
@@ -351,9 +354,7 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center justify-center space-x-8 py-4">
               {navItems.map((item) => (
                 <Link key={item.name} to={item.path}>
-                  <span
-                    className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
-                  >
+                  <span className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
                     {item.name}
                   </span>
                 </Link>
@@ -362,28 +363,28 @@ const Navbar = () => {
               {/* Categories Dropdown (only for non-home route) */}
               {!isHomeRoute && (
                 <div className="relative" ref={categoriesRef}>
-                <button
-  onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
-  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
->
-  <span>Categories</span>
-  <ChevronDown
-    className={`w-4 h-4 transition-transform duration-200 ${
-      isCategoriesOpen ? "rotate-180" : ""
-    }`}
-  />
-</button>
-{isCategoriesOpen && (
-  <div
-    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
-    ref={categoriesRef}   // 👈 wrap this container with ref
-    style={{
-      width: "100vw",
-      transform: "translateX(-60%)",
-      maxHeight: "80vh",
-      overflowY: "auto",
-    }}
-  >
+                  <button
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  >
+                    <span>Categories</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {isCategoriesOpen && (
+                    <div
+                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
+                      ref={categoriesRef} // 👈 wrap this container with ref
+                      style={{
+                        width: "100vw",
+                        transform: "translateX(-60%)",
+                        maxHeight: "80vh",
+                        overflowY: "auto",
+                      }}
+                    >
                       {/* Arrow pointing up */}
                       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
 
@@ -397,9 +398,9 @@ const Navbar = () => {
                                   key={category.id}
                                   className="flex flex-col items-center cursor-pointer group"
                                   onClick={() => setSelectedCategory(category)}
-                                  onMouseEnter={() =>
-                                    setSelectedCategory(category)
-                                  }
+                                  // onMouseEnter={() =>
+                                  //   setSelectedCategory(category)
+                                  // }
                                 >
                                   {/* Category Image Circle */}
                                   <div
@@ -416,7 +417,7 @@ const Navbar = () => {
                                   </div>
 
                                   {/* Category Name */}
-                                  <span className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-200">
+                                  <span className="text-lg font-semibold text-gray-800  transition-colors duration-200">
                                     {category.name}
                                   </span>
                                 </div>
@@ -446,7 +447,7 @@ const Navbar = () => {
                                     d="M15 19l-7-7 7-7"
                                   />
                                 </svg>
-                                Back 
+                                Back
                               </button>
                               <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide">
                                 {selectedCategory.name}
@@ -456,36 +457,39 @@ const Navbar = () => {
 
                             {/* Subcategories Grid */}
                             <div className="grid grid-cols-6 gap-8">
-                              {Object.entries(selectedCategory.subcategories).map(
-                                ([subcategoryName, items]) => (
-                                  <div
-                                    key={subcategoryName}
-                                    className="space-y-4"
+                              {Object.entries(
+                                selectedCategory.subcategories
+                              ).map(([subcategoryName, items]) => (
+                                <div
+                                  key={subcategoryName}
+                                  className="space-y-4"
+                                >
+                                  {/* Subcategory Header */}
+                                  <h3
+                                    className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2"
+                                    style={{ color: "rgba(152, 192, 217, 1)" }}
                                   >
-                                    {/* Subcategory Header */}
-                                    <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2" style={{ color: "rgba(152, 192, 217, 1)" }}>
-                                      {subcategoryName}
-                                    </h3>
+                                    {subcategoryName}
+                                  </h3>
 
-                                    {/* Subcategory Items */}
-                                    <div className="space-y-2">
-                                      {items.map((item, index) => (
-                                        <a
-                                          key={index}
-                                          href="#"
-                                          className="block text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
-                                          onClick={() => {
-                                            setIsCategoriesOpen(false);
-                                            setSelectedCategory(null);
-                                          }}
-                                        >
-                                          {item}
-                                        </a>
-                                      ))}
-                                    </div>
+                                  {/* Subcategory Items */}
+                                  <div className="space-y-2">
+                                    {items.map((item, index) => (
+                                      <a
+                                        key={index}
+                                        href="#"
+                                        className="block text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
+                                        onClick={() => {
+                                          setIsCategoriesOpen(false);
+                                          setSelectedCategory(null);
+                                        }}
+                                      >
+                                        {item}
+                                      </a>
+                                    ))}
                                   </div>
-                                )
-                              )}
+                                </div>
+                              ))}
                             </div>
                           </div>
                         )}
@@ -504,9 +508,7 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <Link key={item.name} to={item.path}>
-                  <a
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
-                  >
+                  <a className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
                     {item.name}
                   </a>
                 </Link>
@@ -537,7 +539,9 @@ const Navbar = () => {
                         >
                           <div
                             className="w-8 h-8 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: category.backgroundColor }}
+                            style={{
+                              backgroundColor: category.backgroundColor,
+                            }}
                           >
                             <img
                               src={category.image}

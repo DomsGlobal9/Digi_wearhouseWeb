@@ -2,7 +2,7 @@ import React from 'react';
 import {  Routes, Route,  useLocation } from "react-router-dom";
 // import otpPage from './pages/DigiOtp.jsx'
 import Navbar from '../DigiWearHouseApp1/Components/Navbar.jsx';
-import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
+// import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
 import DigiWarehouseRegistration from '../DigiWearHouseApp1/Pages/Registration.jsx'
 import VendorDashboard from '../DigiWearHouseApp1/Pages/Dashboard/dashboard.jsx';
 import Profilepage from '../DigiWearHouseApp1/Pages/Profile/Profilepage.jsx';
@@ -21,6 +21,7 @@ import Whoweare from '../DigiWearHouseApp1/Pages/Whoweare.jsx';
 import ContactUs from '../DigiWearHouseApp1/Pages/contactus.jsx';
 import TermsAndConditions from '../DigiWearHouseApp1/Pages/TermsAndConditions.jsx';
 import PrivacyAndPolicy from '../DigiWearHouseApp1/Pages/PrivacyPolicy.jsx';
+import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
 
 function DigiwearHouse() {
    const location = useLocation();
