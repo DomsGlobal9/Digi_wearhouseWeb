@@ -59,7 +59,7 @@ const Navbar = () => {
           "Ethnic Jackets",
           "Gowns",
         ],
-        "Dresses & Jumpsuits": [
+        "Jumpsuits": [
           "Maxi Dresses",
           "Midi Dresses",
           "Bodycon Dresses",
@@ -376,17 +376,16 @@ const Navbar = () => {
                   </button>
                   {isCategoriesOpen && (
                     <div
-                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
-                      ref={categoriesRef} // 👈 wrap this container with ref
+                      className="absolute top-full left-[-55px]  transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden"
                       style={{
-                        width: "100vw",
-                        transform: "translateX(-60%)",
+                        width: "100vw", // keeps it wide like a mega menu
+                        // maxWidth: "1400px", // optional, max width for large screens
                         maxHeight: "80vh",
                         overflowY: "auto",
                       }}
                     >
                       {/* Arrow pointing up */}
-                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
+                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-100"></div>
 
                       <div className="p-8">
                         {!selectedCategory ? (
@@ -478,7 +477,7 @@ const Navbar = () => {
                                       <a
                                         key={index}
                                         href="#"
-                                        className="block text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
+                                        className="block text-start ps-8 text-sm text-gray-600 hover:text-blue-600 hover:underline transition-colors duration-200 py-1"
                                         onClick={() => {
                                           setIsCategoriesOpen(false);
                                           setSelectedCategory(null);

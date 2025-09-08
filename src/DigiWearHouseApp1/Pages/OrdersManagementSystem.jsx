@@ -174,6 +174,15 @@ const OrdersManagementSystem = () => {
       ],
       deliveryAddress:
         "📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001",
+        timeline: [
+        { status: "Order Placed", date: "Apr 6, 2024, 9:07 AM", active: false },
+        { status: "Order Shipped", date: "Apr 6, 2024, 9:07 AM", active: true },
+        {
+          status: "Order Delivered",
+          date: "Apr 6, 2024, 9:07 AM",
+          active: false,
+        },
+      ],
     },
     {
       id: 4,
@@ -303,6 +312,8 @@ const OrdersManagementSystem = () => {
                       : selectedOrder.status === "shipped"
                       ? "Shipped"
                       : selectedOrder.status === "cancelled"
+                      ? "Pending"
+                      : selectedOrder.status === "Pending"
                       ? "Cancelled"
                       : "Placed"}
                   </h2>
@@ -369,7 +380,7 @@ const OrdersManagementSystem = () => {
                 </div>
 
                 <div className="mt-4">
-                  <button className="w-full sm:w-auto px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                  <button className="w-full cursor-pointer sm:w-auto px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                     Cancel Order
                   </button>
                 </div>
