@@ -175,8 +175,8 @@ const OrdersManagementSystem = () => {
       deliveryAddress:
         "📍 Shop No-07, Top Floor, Rangpur Electronics Bazar-800001",
         timeline: [
-        { status: "Order Placed", date: "Apr 6, 2024, 9:07 AM", active: false },
-        { status: "Order Shipped", date: "Apr 6, 2024, 9:07 AM", active: true },
+        { status: "Order Placed", date: "Apr 6, 2024, 9:07 AM", active: true },
+        { status: "Order Shipped", date: "Apr 6, 2024, 9:07 AM", active: false },
         {
           status: "Order Delivered",
           date: "Apr 6, 2024, 9:07 AM",
@@ -512,7 +512,10 @@ const OrdersManagementSystem = () => {
                     // >
                     //   <div className="w-8 h-8 bg-pink-400 rounded"></div>
                     // </div>
-                    <img src={item.image} alt="" className="w-20 h-14" />
+                    <div key={index}>
+                      <img src={item.image} alt="" className="w-20 h-14" />
+                    </div>
+
                   ))}
                   {order.itemsData.length > 6 && (
                     <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-600 flex-shrink-0">

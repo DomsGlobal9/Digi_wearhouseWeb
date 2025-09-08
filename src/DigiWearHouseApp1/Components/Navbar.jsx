@@ -502,7 +502,134 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 bg-white">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              {navItems.map((item) => (
+                <Link key={item.name} to={item.path}>
+                  <span 
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors cursor-pointer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+
+              {/* Mobile Categories (only for non-home route) */}
+              {!isHomeRoute && (
+                <div className="px-3 py-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsCategoriesOpen(!isCategoriesOpen);
+                    }}
+                    className="flex items-center justify-between w-full text-base font-medium text-gray-700 hover:text-blue-600"
+                  >
+                    <span>Categories</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {isCategoriesOpen && (
+                    <div className="mt-2 pl-4 space-y-2">
+                      {!selectedCategory ? (
+                        // Main categories view for mobile
+                        categories.map((category) => (
+                          <button
+                            key={category.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedCategory(category);
+                            }}
+                            className="flex items-center space-x-3 py-2 text-sm text-gray-600 hover:text-blue-600 w-full text-left"
+                          >
+                            <div
+                              className="w-8 h-8 rounded-full flex items-center justify-center"
+                              style={{
+                                backgroundColor: category.backgroundColor,
+                              }}
+                            >
+                              <img
+                                src={category.image}
+                                alt={category.name}
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            </div>
+                            <span>{category.name}</span>
+                          </button>
+                        ))
+                      ) : (
+                        // Subcategories view for mobile
+                        <div className="space-y-3">
+                          {/* Back button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedCategory(null);
+                            }}
+                            className="flex items-center text-sm text-blue-600 hover:text-blue-800 mb-3"
+                          >
+                            <svg
+                              className="w-4 h-4 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                            Back to Categories
+                          </button>
+
+                          {/* Category name */}
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                            {selectedCategory.name}
+                          </h3>
+
+                          {/* Subcategories */}
+                          {Object.entries(selectedCategory.subcategories).map(
+                            ([subcategoryName, items]) => (
+                              <div key={subcategoryName} className="space-y-2">
+                                <h4 className="text-sm font-medium text-blue-600 border-b border-gray-200 pb-1">
+                                  {subcategoryName}
+                                </h4>
+                                <div className="space-y-1 pl-3">
+                                  {items.map((item, index) => (
+                                    <button
+                                      key={index}
+                                      className="block text-xs text-gray-600 hover:text-blue-600 py-1 w-full text-left"
+                                      onClick={() => {
+                                        setIsCategoriesOpen(false);
+                                        setSelectedCategory(null);
+                                        setIsMobileMenuOpen(false);
+                                      }}
+                                    >
+                                      {item}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {/* {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 bg-white">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
@@ -513,7 +640,7 @@ const Navbar = () => {
                 </Link>
               ))}
 
-              {/* Mobile Categories (only for non-home route) */}
+            
               {!isHomeRoute && (
                 <div className="px-3 py-2">
                   <button
@@ -530,34 +657,92 @@ const Navbar = () => {
 
                   {isCategoriesOpen && (
                     <div className="mt-2 pl-4 space-y-2">
-                      {categories.map((category) => (
-                        <a
-                          key={category.id}
-                          href="#"
-                          className="flex items-center space-x-3 py-2 text-sm text-gray-600 hover:text-blue-600"
-                        >
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center"
-                            style={{
-                              backgroundColor: category.backgroundColor,
-                            }}
+                      {!selectedCategory ? (
+                        // Main categories view for mobile
+                        categories.map((category) => (
+                          <button
+                            key={category.id}
+                            onClick={() => setSelectedCategory(category)}
+                            className="flex items-center space-x-3 py-2 text-sm text-gray-600 hover:text-blue-600 w-full text-left"
                           >
-                            <img
-                              src={category.image}
-                              alt={category.name}
-                              className="w-full h-full object-cover rounded-full"
-                            />
-                          </div>
-                          <span>{category.name}</span>
-                        </a>
-                      ))}
+                            <div
+                              className="w-8 h-8 rounded-full flex items-center justify-center"
+                              style={{
+                                backgroundColor: category.backgroundColor,
+                              }}
+                            >
+                              <img
+                                src={category.image}
+                                alt={category.name}
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            </div>
+                            <span>{category.name}</span>
+                          </button>
+                        ))
+                      ) : (
+                        // Subcategories view for mobile
+                        <div className="space-y-3">
+                         
+                          <button
+                            onClick={() => setSelectedCategory(null)}
+                            className="flex items-center text-sm text-blue-600 hover:text-blue-800 mb-3"
+                          >
+                            <svg
+                              className="w-4 h-4 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                            Back to Categories
+                          </button>
+
+                          
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                            {selectedCategory.name}
+                          </h3>
+
+                        
+                          {Object.entries(selectedCategory.subcategories).map(
+                            ([subcategoryName, items]) => (
+                              <div key={subcategoryName} className="space-y-2">
+                                <h4 className="text-sm font-medium text-blue-600 border-b border-gray-200 pb-1">
+                                  {subcategoryName}
+                                </h4>
+                                <div className="space-y-1 pl-3">
+                                  {items.map((item, index) => (
+                                    <button
+                                      key={index}
+                                      className="block text-xs text-gray-600 hover:text-blue-600 py-1 w-full text-left"
+                                      onClick={() => {
+                                        setIsCategoriesOpen(false);
+                                        setSelectedCategory(null);
+                                        setIsMobileMenuOpen(false);
+                                      }}
+                                    >
+                                      {item}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               )}
             </div>
           </div>
-        )}
+        )} */}
       </nav>
     </>
   );

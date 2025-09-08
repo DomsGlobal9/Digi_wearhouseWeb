@@ -470,93 +470,275 @@ const SizePricingTab = ({ formData, onChange, sizes, colors, myselectedColor }) 
   );
 };
 
-const ColorSelector = ({ colors, selectedColors, onChange, myselectedColor }) => {
-  // const [dropdownValue, setDropdownValue] = useState("");
+// const ColorSelector = ({ colors, selectedColors, onChange, myselectedColor }) => {
+//   // Get dynamic placeholder text
+//   const getPlaceholder = () => {
+//     if (selectedColors.length === 0) {
+//       return myselectedColor || "Select color";
+//     }
+//     if (selectedColors.length === 1) {
+//       const color = colors.find(c => c.code === selectedColors[0]);
+//       return `Selected: ${color?.name || "Unknown"}`;
+//     }
+//     return `${selectedColors.length} colors selected`;
+//     // const color = colors.find(c => c.code === selectedColors[0]);
+//     // return `${color?.name}`
+//   };
 
-  // // Handle dropdown selection
-  // const handleDropdownChange = (colorName) => {
-  //   if (colorName) {
-  //     const selectedColor = colors.find(c => c.name === colorName);
-  //     if (selectedColor && !selectedColors.includes(selectedColor.code)) {
-  //       onChange([...selectedColors, selectedColor.code]);
-  //     }
-  //     // Reset dropdown to empty after selection
-  //     setDropdownValue("");
-  //   }
-  // };
+//   return (
+//     <div className="space-y-4">
+//       <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">Select colors</h3>
+      
+//       {/* <FormSelect
+//         label="Color"
+//         // value={dropdownValue}
+//         onChange={handleDropdownChange}
+//         options={colors.map(c => c.name)}
+//         placeholder={getPlaceholder()}
+//       /> */}
+      
+//       <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+//         {colors.map((color) => (
+//           <button
+//             key={color.code}
+//             type="button"
+//             onClick={() => {
+//               if (selectedColors.includes(color.code)) {
+//                 onChange(selectedColors.filter(c => c !== color.code));
+//               } else {
+//                 onChange([...selectedColors, color.code]);
+//               }
+//             }}
+//             className="relative group"
+//           >
+//             <div 
+//               className={`w-8 h-8 rounded-full border-2 transition-all ${
+//                 selectedColors.includes(color.code)
+//                   ? 'border-gray-800 scale-110'
+//                   : 'border-gray-300 hover:scale-105'
+//               }`}
+//               style={{ backgroundColor: color.value }}
+//             />
+//             <div className="text-xs text-center mt-1 text-gray-600">{color.name}</div>
+//           </button>
+//         ))}
+//       </div>
+      
+//       {/* Color swatches */}
+//       {selectedColors.length > 0 && (
+//         <div className="flex justify-center space-x-2 mt-4">
+//           {selectedColors.map((colorCode) => {
+//             const color = colors.find(c => c.code === colorCode);
+//             return (
+//               <div
+//                 key={colorCode}
+//                 className="w-6 h-6 rounded-full border border-gray-300"
+//                 style={{ backgroundColor: color?.value }}
+//                 title={color?.name}
+//               />
+//             );
+//           })}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
-  // Get dynamic placeholder text
-  const getPlaceholder = () => {
-    if (selectedColors.length === 0) {
-      return myselectedColor || "Select color";
-    }
-    if (selectedColors.length === 1) {
-      const color = colors.find(c => c.code === selectedColors[0]);
-      return `Selected: ${color?.name || "Unknown"}`;
-    }
-    return `${selectedColors.length} colors selected`;
-    // const color = colors.find(c => c.code === selectedColors[0]);
-    // return `${color?.name}`
-  };
+
+
+const ColorSelector = ({ onShadeSelect }) => {
+  const [selectedColor, setSelectedColor] = useState(null); // main color
+  const [selectedShade, setSelectedShade] = useState(null); // shade
+
+  // All main colors with their related palettes
+ const colors = [
+  {
+    code: "red",
+    name: "Red",
+    value: "#FF0000",
+    shades: [
+      "#8B0000", // Dark Red
+      "#B22222", // Firebrick
+      "#DC143C", // Crimson
+      "#FF0000", // Pure Red
+      "#FF4500", // Orange Red
+      "#FF6347", // Tomato
+      "#FF7F7F", // Light Red
+      "#FFB6B6", // Pastel Red
+    ],
+  },
+  {
+    code: "pink",
+    name: "Pink",
+    value: "#FF69B4",
+    shades: [
+      "#C71585", // Dark Magenta
+      "#DB7093", // Pale Violet Red
+      "#FF1493", // Deep Pink
+      "#FF69B4", // Hot Pink
+      "#FFB6C1", // Light Pink
+      "#FFC0CB", // Pink
+      "#FFD6E7", // Pastel Pink
+    ],
+  },
+  {
+    code: "blue",
+    name: "Blue",
+    value: "#0000FF",
+    shades: [
+      "#00008B", // Dark Blue
+      "#0000CD", // Medium Blue
+      "#1E90FF", // Dodger Blue
+      "#4169E1", // Royal Blue
+      "#4682B4", // Steel Blue
+      "#87CEEB", // Sky Blue
+      "#B0E0E6", // Powder Blue
+    ],
+  },
+  {
+    code: "green",
+    name: "Green",
+    value: "#008000",
+    shades: [
+      "#006400", // Dark Green
+      "#228B22", // Forest Green
+      "#008000", // Green
+      "#32CD32", // Lime Green
+      "#00FF7F", // Spring Green
+      "#90EE90", // Light Green
+      "#C1E1C1", // Pastel Green
+    ],
+  },
+  {
+    code: "orange",
+    name: "Orange",
+    value: "#FFA500",
+    shades: [
+      "#FF8C00", // Dark Orange
+      "#FF7F50", // Coral
+      "#FF6347", // Tomato Orange
+      "#FFA500", // Pure Orange
+      "#FFA07A", // Light Salmon
+      "#FFDAB9", // Peach Puff
+      "#FFE4B5", // Moccasin
+      "#FFF5E1", // Pastel Orange
+    ],
+  },
+  {
+    code: "purple",
+    name: "Purple",
+    value: "#800080",
+    shades: [
+      "#4B0082", // Indigo
+      "#6A0DAD", // Dark Purple
+      "#800080", // Purple
+      "#8A2BE2", // Blue Violet
+      "#9370DB", // Medium Purple
+      "#BA55D3", // Medium Orchid
+      "#D8BFD8", // Thistle
+      "#E6E6FA", // Lavender
+    ],
+  },
+  {
+    code: "black",
+    name: "Black",
+    value: "#000000",
+    shades: [
+      "#000000", // Black
+      "#2F2F2F", // Very Dark Gray
+      "#555555", // Dark Gray
+      "#808080", // Gray
+      "#A9A9A9", // Dark Silver
+      "#C0C0C0", // Silver
+      "#E0E0E0", // Light Gray
+      "#F5F5F5", // Almost White
+    ],
+  },
+];
+
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">Select colors</h3>
-      
-      {/* <FormSelect
-        label="Color"
-        // value={dropdownValue}
-        onChange={handleDropdownChange}
-        options={colors.map(c => c.name)}
-        placeholder={getPlaceholder()}
-      /> */}
-      
-      <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+    <div className="space-y-6">
+      <h3 className="text-lg md:text-xl font-semibold text-gray-900 text-center">
+        Select Color
+      </h3>
+
+      {/* Main colors */}
+      <div className="grid grid-cols-7  gap-3 max-w-md mx-auto">
         {colors.map((color) => (
           <button
             key={color.code}
             type="button"
             onClick={() => {
-              if (selectedColors.includes(color.code)) {
-                onChange(selectedColors.filter(c => c !== color.code));
-              } else {
-                onChange([...selectedColors, color.code]);
-              }
+              setSelectedColor(color);
+              setSelectedShade(null);
             }}
-            className="relative group"
+            className="relative group border border-gray-300 rounded-lg p-2 shadow-sm hover:shadow-md transition-all"
           >
-            <div 
-              className={`w-8 h-8 rounded-full border-2 transition-all ${
-                selectedColors.includes(color.code)
-                  ? 'border-gray-800 scale-110'
-                  : 'border-gray-300 hover:scale-105'
+            <div
+              className={`w-8 h-8 rounded-full border-2 transition-all  ${
+                selectedColor?.code === color.code
+                  ? "border-gray-800 scale-110"
+                  : "border-gray-300 hover:scale-105"
               }`}
               style={{ backgroundColor: color.value }}
             />
-            <div className="text-xs text-center mt-1 text-gray-600">{color.name}</div>
+            <div className="text-xs text-center mt-1 text-gray-600 pe-2">
+              {color.name}
+            </div>
           </button>
         ))}
       </div>
-      
-      {/* Color swatches */}
-      {selectedColors.length > 0 && (
-        <div className="flex justify-center space-x-2 mt-4">
-          {selectedColors.map((colorCode) => {
-            const color = colors.find(c => c.code === colorCode);
-            return (
-              <div
-                key={colorCode}
-                className="w-6 h-6 rounded-full border border-gray-300"
-                style={{ backgroundColor: color?.value }}
-                title={color?.name}
+
+      {/* Palette */}
+      {selectedColor && (
+        <div className="mt-4">
+          <h4 className="text-sm font-medium text-gray-700 mb-2 text-center">
+            Choose a shade of {selectedColor.name}
+          </h4>
+          <div className="flex justify-center flex-wrap gap-2">
+            {selectedColor.shades.map((shade, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  setSelectedShade(shade);
+                  if (onShadeSelect) {
+                    onShadeSelect({
+                      main: selectedColor,
+                      shade,
+                    });
+                  }
+                }}
+                className={`w-8 h-8 rounded-full border-2 transition-all ${
+                  selectedShade === shade
+                    ? "border-gray-800 scale-110"
+                    : "border-gray-300 hover:scale-105"
+                }`}
+                style={{ backgroundColor: shade }}
+                title={shade}
               />
-            );
-          })}
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Selected shade preview */}
+      {selectedShade && (
+        <div className="text-center mt-4">
+          <p className="text-sm text-gray-700">
+            Selected Shade:{" "}
+            <span
+              className="inline-block w-6 h-6 rounded-full border ml-2 align-middle"
+              style={{ backgroundColor: selectedShade }}
+            />
+          </p>
         </div>
       )}
     </div>
   );
 };
+
 
 
 
