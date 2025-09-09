@@ -1,4 +1,6 @@
+import { ArrowLeft } from 'lucide-react';
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Model - Data layer
 const RevenueDataModel = {
@@ -138,7 +140,9 @@ const EmptyState = () => (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
       </svg>
+     <Link to="/upload-products"> 
       <span>Add Product</span>
+      </Link>
     </button>
   </div>
 );
@@ -200,6 +204,7 @@ const TotalRevenueController = () => {
   const stats = RevenueDataModel.getStats();
   const chartData = RevenueDataModel.getChartData();
   const products = hasProducts ? RevenueDataModel.getProducts() : [];
+  const navigate=useNavigate()
 
   const handlePeriodChange = (period) => {
     setSelectedPeriod(period);
@@ -209,6 +214,11 @@ const TotalRevenueController = () => {
   const toggleProductState = () => {
     setHasProducts(!hasProducts);
   };
+  
+  const handleBack = () => {
+    navigate(-1);
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
@@ -224,9 +234,16 @@ const TotalRevenueController = () => {
 
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Page Title */}
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">Total Revenue</h1>
-        </div>
+     <div className="max-w-7xl mx-auto mt-7 mb-4 flex items-center space-x-2">
+      <button
+        onClick={handleBack}
+        aria-label="Go Back"
+        className="p-2 rounded hover:bg-gray-200 transition"
+      >
+        <ArrowLeft size={24} />
+      </button>
+      <h1 className="text-black text-xl font-bold text-start">Total Revenue</h1>
+    </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">

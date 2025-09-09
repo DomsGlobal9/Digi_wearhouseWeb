@@ -1,74 +1,76 @@
+import { ArrowLeft } from 'lucide-react';
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Model - Data layer
 const InventoryDataModel = {
   // Static data - replace with API calls later
   getLowStockProducts: () => [
-    {
-      id: 1,
-      name: "Kala Lehenga",
-      color: "Black",
-      stock: 2,
-      image: "/api/placeholder/60/60",
-      category: "Lehenga"
-    },
-    {
-      id: 2,
-      name: "Blue Lehenga",
-      color: "Blue", 
-      stock: 1,
-      image: "/api/placeholder/60/60",
-      category: "Lehenga"
-    }
+    // {
+    //   id: 1,
+    //   name: "Kala Lehenga",
+    //   color: "Black",
+    //   stock: 2,
+    //   image: "/api/placeholder/60/60",
+    //   category: "Lehenga"
+    // },
+    // {
+    //   id: 2,
+    //   name: "Blue Lehenga",
+    //   color: "Blue", 
+    //   stock: 1,
+    //   image: "/api/placeholder/60/60",
+    //   category: "Lehenga"
+    // }
   ],
 
   getOutOfStockProducts: () => [
-    {
-      id: 3,
-      name: "Cotton saree",
-      color: "Multicolor",
-      stock: 0,
-      image: "/api/placeholder/60/60",
-      category: "Saree"
-    },
-    {
-      id: 4,
-      name: "Cotton saree",
-      color: "Red",
-      stock: 0,
-      image: "/api/placeholder/60/60", 
-      category: "Saree"
-    }
+    // {
+    //   id: 3,
+    //   name: "Cotton saree",
+    //   color: "Multicolor",
+    //   stock: 0,
+    //   image: "/api/placeholder/60/60",
+    //   category: "Saree"
+    // },
+    // {
+    //   id: 4,
+    //   name: "Cotton saree",
+    //   color: "Red",
+    //   stock: 0,
+    //   image: "/api/placeholder/60/60", 
+    //   category: "Saree"
+    // }
   ],
 
   getInventoryByCategory: () => [
-    {
-      category: "Lehenga",
-      items: [
-        { id: 1, name: "Blue Lehenga", stock: 15, image: "/api/placeholder/60/60" },
-        { id: 2, name: "Red Lehenga", stock: 8, image: "/api/placeholder/60/60" },
-        { id: 3, name: "Pink Lehenga", stock: 12, image: "/api/placeholder/60/60" },
-        { id: 4, name: "Green Lehenga", stock: 6, image: "/api/placeholder/60/60" }
-      ]
-    },
-    {
-      category: "Saree", 
-      items: [
-        { id: 5, name: "Silk Saree", stock: 10, image: "/api/placeholder/60/60" },
-        { id: 6, name: "Cotton Saree", stock: 14, image: "/api/placeholder/60/60" },
-        { id: 7, name: "Designer Saree", stock: 7, image: "/api/placeholder/60/60" },
-        { id: 8, name: "Party Saree", stock: 9, image: "/api/placeholder/60/60" }
-      ]
-    },
-    {
-      category: "Kurti",
-      items: [
-        { id: 9, name: "Cotton Kurti", stock: 20, image: "/api/placeholder/60/60" },
-        { id: 10, name: "Silk Kurti", stock: 11, image: "/api/placeholder/60/60" },
-        { id: 11, name: "Designer Kurti", stock: 5, image: "/api/placeholder/60/60" },
-        { id: 12, name: "Casual Kurti", stock: 18, image: "/api/placeholder/60/60" }
-      ]
-    }
+    // {
+    //   category: "Lehenga",
+    //   items: [
+    //     { id: 1, name: "Blue Lehenga", stock: 15, image: "/api/placeholder/60/60" },
+    //     { id: 2, name: "Red Lehenga", stock: 8, image: "/api/placeholder/60/60" },
+    //     { id: 3, name: "Pink Lehenga", stock: 12, image: "/api/placeholder/60/60" },
+    //     { id: 4, name: "Green Lehenga", stock: 6, image: "/api/placeholder/60/60" }
+    //   ]
+    // },
+    // {
+    //   category: "Saree", 
+    //   items: [
+    //     { id: 5, name: "Silk Saree", stock: 10, image: "/api/placeholder/60/60" },
+    //     { id: 6, name: "Cotton Saree", stock: 14, image: "/api/placeholder/60/60" },
+    //     { id: 7, name: "Designer Saree", stock: 7, image: "/api/placeholder/60/60" },
+    //     { id: 8, name: "Party Saree", stock: 9, image: "/api/placeholder/60/60" }
+    //   ]
+    // },
+    // {
+    //   category: "Kurti",
+    //   items: [
+    //     { id: 9, name: "Cotton Kurti", stock: 20, image: "/api/placeholder/60/60" },
+    //     { id: 10, name: "Silk Kurti", stock: 11, image: "/api/placeholder/60/60" },
+    //     { id: 11, name: "Designer Kurti", stock: 5, image: "/api/placeholder/60/60" },
+    //     { id: 12, name: "Casual Kurti", stock: 18, image: "/api/placeholder/60/60" }
+    //   ]
+    // }
   ],
 
   getStats: () => ({
@@ -106,7 +108,9 @@ const EmptyState = () => (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
       </svg>
+      <Link to="/upload-products"> 
       <span>Add Product</span>
+      </Link>
     </button>
   </div>
 );
@@ -228,35 +232,53 @@ const InventoryContent = ({ hasProducts, lowStockProducts, outOfStockProducts, c
 
 // Controller Component
 const InventoryController = () => {
-  const [hasProducts, setHasProducts] = useState(true); // Toggle this to show empty/populated state
+  // const [hasProducts, setHasProducts] = useState(true); // Toggle this to show empty/populated state
+
+  // const stats = InventoryDataModel.getStats();
+  // const lowStockProducts = hasProducts ? InventoryDataModel.getLowStockProducts() : [];
+  // const outOfStockProducts = hasProducts ? InventoryDataModel.getOutOfStockProducts() : [];
+  // const categories = hasProducts ? InventoryDataModel.getInventoryByCategory() : [];
+    const [hasProducts, setHasProducts] = useState(false);
 
   const stats = InventoryDataModel.getStats();
   const lowStockProducts = hasProducts ? InventoryDataModel.getLowStockProducts() : [];
   const outOfStockProducts = hasProducts ? InventoryDataModel.getOutOfStockProducts() : [];
   const categories = hasProducts ? InventoryDataModel.getInventoryByCategory() : [];
+  const navigate=useNavigate()
 
-  const toggleProductState = () => {
-    setHasProducts(!hasProducts);
+  const handleBack = () => {
+    navigate(-1);
   };
+
+
+  // const toggleProductState = () => {
+  //   setHasProducts(!hasProducts);
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Debug Toggle Button - Remove in production */}
       <div className="mb-4">
-        <button 
+        {/* <button 
           onClick={toggleProductState}
           className="bg-purple-500 text-white px-4 py-2 rounded text-sm"
         >
           Toggle: {hasProducts ? 'Show Empty State' : 'Show Products'}
-        </button>
+        </button> */}
       </div>
 
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Page Title */}
-        <div>
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">Inventory</h1>
-        </div>
-
+         <div className="max-w-7xl mx-auto mt-7 mb-4 flex items-center space-x-2">
+      <button
+        onClick={handleBack}
+        aria-label="Go Back"
+        className="p-2 rounded hover:bg-gray-200 transition"
+      >
+        <ArrowLeft size={24} />
+      </button>
+      <h1 className="text-black text-xl font-bold text-start">Inventroy</h1>
+    </div>
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <StatsCard title="Total Items" value={stats.totalItems} />

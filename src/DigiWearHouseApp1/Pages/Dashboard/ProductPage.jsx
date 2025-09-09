@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/Context';
 import firebaseService from '../../../SERVICES/firebaseService';
-import { Plus, ArrowRight, Package } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Plus, ArrowRight, Package, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProductsPage = () => {
   const { currentUser } = useApp();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate=useNavigate()
   const [productStats, setProductStats] = useState({
     totalProducts: 0,
     lastAdded: null,
@@ -20,6 +21,11 @@ const ProductsPage = () => {
     topPerformingProducts: [],
     categoryWiseProducts: []
   });
+
+  
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   // Fetch user's products
   useEffect(() => {
@@ -187,6 +193,16 @@ const ProductsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+       <div className="max-w-7xl mx-auto mt-7 mb-4 flex items-center space-x-2">
+      <button
+        onClick={handleBack}
+        aria-label="Go Back"
+        className="p-2 rounded hover:bg-gray-200 transition"
+      >
+        <ArrowLeft size={24} />
+      </button>
+      <h1 className="text-black text-xl font-bold text-start">Products</h1>
+    </div>
       <div className="max-w-7xl mx-auto">
         {/* Top Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">

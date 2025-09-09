@@ -277,7 +277,8 @@ import React, { useState } from 'react';
 import img1 from "../../../assets/tailor4.png"
 import ic_product from "../../../assets/Ic_product.jpg"
 import right_arrow from "../../../assets/right_arrow.jpg"
-import { ArrowRight } from "lucide-react"; // optional if you want icons
+import { ArrowLeft, ArrowRight } from "lucide-react"; // optional if you want icons
+import { useNavigate } from 'react-router-dom';
 
 
 // Model - Data layer
@@ -362,7 +363,7 @@ const StatsCard = ({ title, value, variant = "dark", className = "" }) => {
 };
 
 const PeriodSelector = ({ periods, selectedPeriod, onPeriodChange }) => (
-  <div className="flex bg-gray-100 rounded-lg p-1 w-2/3 ">
+  <div className="flex bg-gray-100 rounded-lg p-1 w-2/3 sm:w-2/4">
     {periods.map((period) => (
       <button
         key={period}
@@ -542,6 +543,11 @@ const TotalUnitsSoldController = () => {
     setHasProducts(!hasProducts);
   };
 
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
 
   return (
@@ -557,8 +563,17 @@ const TotalUnitsSoldController = () => {
       </div> */}
  
  {/* <div> */}
-  <p className='text-black max-w-7xl mx-auto space-y-6 mt-7 md:space-y-8  text-start font-semi-bold font-medium  text-xl'>Total Units Sold</p>
- {/* </div> */}
+ <div className="max-w-7xl mx-auto mt-7 mb-4 flex items-center space-x-2">
+      <button
+        onClick={handleBack}
+        aria-label="Go Back"
+        className="p-2 rounded hover:bg-gray-200 transition"
+      >
+        <ArrowLeft size={24} />
+      </button>
+      <h1 className="text-black text-xl font-bold text-start">Total Units Sold</h1>
+    </div>
+     {/* </div> */}
       <div className="max-w-7xl mx-auto space-y-6 mt-7 md:space-y-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
