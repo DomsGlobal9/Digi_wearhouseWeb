@@ -4,48 +4,49 @@ import React, { useState } from 'react';
 const RevenueDataModel = {
   // Static data - replace with API calls later
   getProducts: () => [
-    {
-      id: 1,
-      name: "Trendy Plain Lehenga",
-      price: "₹2,500",
-      image: "/api/placeholder/120/120",
-      revenue: 15000
-    },
-    {
-      id: 2,
-      name: "Trendy Blue Lehenga",
-      price: "₹2,800",
-      image: "/api/placeholder/120/120", 
-      revenue: 12600
-    },
-    {
-      id: 3,
-      name: "Cotton saree",
-      price: "₹1,200",
-      image: "/api/placeholder/120/120",
-      revenue: 8400
-    },
-    {
-      id: 4,
-      name: "Kala Lehenga",
-      price: "₹3,200",
-      image: "/api/placeholder/120/120",
-      revenue: 9600
-    },
-    {
-      id: 5,
-      name: "Silky Lehenga",
-      price: "₹2,900",
-      image: "/api/placeholder/120/120",
-      revenue: 11600
-    },
-    {
-      id: 6,
-      name: "Kala Lehenga",
-      price: "₹3,200",
-      image: "/api/placeholder/120/120",
-      revenue: 9600
-    }
+    // {
+    //   id: 1,
+    //   name: "Trendy Plain Lehenga",
+    //   price: "₹2,500",
+    //   image: "/api/placeholder/120/120",
+    //   revenue: 15000
+    // },
+    // {
+    //   id: 2,
+    //   name: "Trendy Blue Lehenga",
+    //   price: "₹2,800",
+    //   image: "/api/placeholder/120/120", 
+    //   revenue: 12600
+    // },
+    // {
+    //   id: 3,
+    //   name: "Cotton saree",
+    //   price: "₹1,200",
+    //   image: "/api/placeholder/120/120",
+    //   revenue: 8400
+    // },
+    // {
+    //   id: 4,
+    //   name: "Kala Lehenga",
+    //   price: "₹3,200",
+    //   image: "/api/placeholder/120/120",
+    //   revenue: 9600
+    // },
+    // {
+    //   id: 5,
+    //   name: "Silky Lehenga",
+    //   price: "₹2,900",
+    //   image: "/api/placeholder/120/120",
+    //   revenue: 11600
+    // },
+    // {
+    //   id: 6,
+    //   name: "Kala Lehenga",
+    //   price: "₹3,200",
+    //   image: "/api/placeholder/120/120",
+    //   revenue: 9600
+    // }
+
   ],
 
   getChartData: () => [

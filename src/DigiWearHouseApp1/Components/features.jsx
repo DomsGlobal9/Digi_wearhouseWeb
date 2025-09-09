@@ -1,69 +1,261 @@
-import React from 'react';
 
-const FeatureCard = ({ title, description, buttonText, icon }) => (
-  <div className="bg-blue-200 rounded-lg p-6 shadow-md max-w-sm mx-auto text-center transform transition-all duration-500 ease-in-out group relative z-10">
-    <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
-    <p className="text-gray-600 mb-4">{description}</p>
-    <button className="bg-white text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 transition-colors">{buttonText}</button>
-  </div>
-);
+// import React from "react";
+// import { motion } from "framer-motion";
+// import { UsersRound, BarChartBig, Upload } from "lucide-react";
 
-const HiddenCard = ({ title, description, className,buttonText,icon }) => (
-  <div className={`bg-blue-300 rounded-lg p-6 shadow-md max-w-sm text-center absolute top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out opacity-0 ${className} group-hover:opacity-100 group-hover:translate-x-0 z-0`}>
-     <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-        <button className="bg-white text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 transition-colors">Try Feature</button>
-  </div>
-);
+// // This is a reusable component for the card's visual style.
+// const FeatureCard = ({ icon, title, description }) => {
+//   return (
+//     // The main card container with gradient, padding, shadow, and rounded corners.
+//     <div className="flex h-[300px] w-full flex-col items-start bg-gradient-to-br from-blue-100 to-blue-200 p-8 text-start rounded-2xl shadow-lg border border-white/40">
+//       <div className="mb-4 text-black bg-white p-2 text-start rounded-2xl">{icon}</div>
+//       <h3 className="mb-2 text-xl font-bold text-start">{title}</h3>
+//       <p className="mb-6 text-slate-600">{description}</p>
+//       <button className="mt-auto rounded-full border border-white px-6 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-white/50">
+//         Try Feature →
+//       </button>
+//     </div>
+//   );
+// };
+
+// // This is the main section component that orchestrates the animation.
+// const FeatureSection = () => {
+//   // Data for the three feature cards.
+//   const features = [
+//     {
+//       icon: <UsersRound size={36} strokeWidth={1.5} />,
+//       title: "Customer Management",
+//       description:
+//         "Build lasting relationships with customer profiles, purchase history.",
+//     },
+//     {
+//       icon: <BarChartBig size={36} strokeWidth={1.5} />,
+//       title: "Real-time Analytics",
+//       description:
+//         "Track sales, inventory levels, and profits in real-time with beautiful dashboards.",
+//     },
+//     {
+//       icon: <Upload size={36} strokeWidth={1.5} />,
+//       title: "Upload 1000+ Products",
+//       description:
+//         "Upload your entire inventory in minutes using Excel files or Upload images.",
+//     },
+//   ];
+
+//   // Animation variants for the central card. It just fades and scales in.
+//   const centerCardVariants = {
+//     hidden: { opacity: 0, scale: 0.8 },
+//     visible: {
+//       opacity: 1,
+//       scale: 1,
+//       transition: { duration: 0.5, ease: "easeOut" },
+//     },
+//   };
+
+//   // Animation variants for the side cards. They start centered and then move out.
+//   const sideCardVariants = (direction) => ({
+//     hidden: {
+//       opacity: 0,
+//       scale: 0.8,
+//       x: "-50%", // Start centered horizontally
+//       y: "-50%", // Start centered vertically
+//       zIndex: 10,
+//     },
+//     visible: {
+//       opacity: 1,
+//       scale: 1,
+//       x: direction === "left" ? "-165%" : "65%", // Final position (left or right)
+//       y: "-50%",
+//       zIndex: 20,
+//       transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }, // A smooth ease-out curve
+//     },
+//   });
+
+//   return (
+//     <>
+//       <div>
+//         <div className="text-center my-8">
+//           <h2 className="text-4xl md:text-5xl font-bold text-[#1F335C] mb-3">
+//             Powerful Features for Indian Businesses
+//           </h2>
+//           <p className="text-gray-500 text-base md:text-lg leading-relaxed">
+//             Everything you need to digitize and grow your business, designed
+//             specifically for
+//             <br />
+//             Indian market needs
+//           </p>
+//         </div>
+//       </div>
+//       <div className="flex w-full flex-wrap items-center justify-center pb-10">
+//         <motion.div
+//           className="relative h-[380px] w-[320px]" // Container to position the cards
+//           initial="hidden" // Initial animation state
+//           whileInView="visible" // Animate when this element is in the viewport
+//           viewport={{ once: true, amount: 0.6 }} // Trigger animation once, when 60% of it is visible
+//         >
+//           {/* Left Card */}
+//           <motion.div
+//             className="absolute left-1/2 top-1/2"
+//             variants={sideCardVariants("left")}
+//           >
+//             <div className="h-[380px] w-[320px]">
+//               <FeatureCard {...features[0]} />
+//             </div>
+//           </motion.div>
+
+//           {/* Center Card */}
+//           <motion.div className="relative z-30" variants={centerCardVariants}>
+//             <div className="h-[380px] w-[320px]">
+//               <FeatureCard {...features[1]} />
+//             </div>
+//           </motion.div>
+
+//           {/* Right Card */}
+//           <motion.div
+//             className="absolute left-1/2 top-1/2"
+//             variants={sideCardVariants("right")}
+//           >
+//             <div className="h-[380px] w-[320px]">
+//               <FeatureCard {...features[2]} />
+//             </div>
+//           </motion.div>
+//         </motion.div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default FeatureSection;
+
+
+import React from "react";
+import { motion } from "framer-motion";
+import { UsersRound, BarChartBig, Upload } from "lucide-react";
+
+// This is a reusable component for the card's visual style.
+const FeatureCard = ({ icon, title, description }) => {
+  return (
+    <div className="flex h-[300px] w-full flex-col items-start bg-gradient-to-br from-blue-100 to-blue-200 p-8 text-start rounded-2xl shadow-lg border border-white/40">
+      <div className="mb-4 text-black bg-white p-2 text-start rounded-2xl">{icon}</div>
+      <h3 className="mb-2 text-xl font-bold text-start">{title}</h3>
+      <p className="mb-6 text-slate-600">{description}</p>
+      <button className="mt-auto rounded-full border border-white px-6 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-white/50">
+        Try Feature →
+      </button>
+    </div>
+  );
+};
 
 const FeatureSection = () => {
+  const features = [
+    {
+      icon: <UsersRound size={36} strokeWidth={1.5} />,
+      title: "Customer Management",
+      description:
+        "Build lasting relationships with customer profiles, purchase history.",
+    },
+    {
+      icon: <BarChartBig size={36} strokeWidth={1.5} />,
+      title: "Real-time Analytics",
+      description:
+        "Track sales, inventory levels, and profits in real-time with beautiful dashboards.",
+    },
+    {
+      icon: <Upload size={36} strokeWidth={1.5} />,
+      title: "Upload 1000+ Products",
+      description:
+        "Upload your entire inventory in minutes using Excel files or Upload images.",
+    },
+  ];
+
+  const centerCardVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  const sideCardVariants = (direction) => ({
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+      x: "-50%", 
+      y: "-50%", 
+      zIndex: 10,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      x: direction === "left" ? "-165%" : "65%",
+      y: "-50%",
+      zIndex: 20,
+      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+    },
+  });
+
   return (
-    <div className="container mx-auto p-6 text-center">
-      <h2 className="text-3xl font-bold text-blue-900 mb-2">Powerful Features for Indian Businesses</h2>
-      <p className="text-gray-600 mb-8">Everything you need to digitize and grow your business, designed specifically for Indian market needs.</p>
-      <div className="relative">
-        <div className="relative inline-block group">
-          <FeatureCard
-            title="Real-time Analytics"
-            description="Track sales, inventory levels, and profits in real-time with beautiful dashboards"
-            buttonText="Try Feature"
-            icon={<span className="text-2xl">📊</span>}
-          />
-          <HiddenCard
-            title="Inventory Management"
-            description="Efficiently manage your stock with real-time updates"
-            className="left-0 -translate-x-full opacity-0 group-hover:opacity-100 group-hover:left-[-110%] group-hover:z-20"
-              icon={<span className="text-2xl">📊</span>}
-          />
-          <HiddenCard
-            title="Customer Insights"
-            description="Gain deep insights into customer behavior and preferences"
-            className="right-0 translate-x-full opacity-0 group-hover:opacity-100 group-hover:right-[-110%] group-hover:z-20"
-              icon={<span className="text-2xl">📊</span>}
-          />
+    <>
+      <div>
+        <div className="text-center my-8">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1F335C] mb-3">
+            Powerful Features for Indian Businesses
+          </h2>
+          <p className="text-gray-500 text-base md:text-lg leading-relaxed">
+            Everything you need to digitize and grow your business, designed
+            specifically for
+            <br />
+            Indian market needs
+          </p>
         </div>
       </div>
-      <div className="mt-12">
-        <h3 className="text-xl font-semibold text-blue-900 mb-2">Why Vendors Love DVYB</h3>
-        <p className="text-gray-600 mb-4">Join thousands of successful vendors who've transformed their business</p>
-        <div className="flex justify-center space-x-6">
-          <div className="bg-blue-100 p-4 rounded-lg">
-            <p className="text-2xl font-bold text-blue-800">3,157+</p>
-            <p className="text-gray-600">Active Vendors</p>
-          </div>
-          <div className="bg-blue-100 p-4 rounded-lg">
-            <p className="text-2xl font-bold text-blue-800">₹47Cr+</p>
-            <p className="text-gray-600">Monthly Sales</p>
-          </div>
-          <div className="bg-blue-100 p-4 rounded-lg">
-            <p className="text-2xl font-bold text-blue-800">4.8/5</p>
-            <p className="text-gray-600">App Rating</p>
-          </div>
+
+      {/* Wrapper container flex with mobile column and desktop relative */}
+      <div className="flex flex-col md:flex-wrap md:flex-row md:justify-center md:items-center md:pb-10 md:relative md:h-[380px] md:w-full">
+        {/* Mobile stacked cards */}
+        <div className="flex flex-col gap-6 md:hidden">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} {...feature} />
+          ))}
         </div>
+
+        {/* Desktop animated cards */}
+        <motion.div
+          className="hidden md:block relative h-[380px] w-[320px]"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.6 }}
+        >
+          {/* Left Card */}
+          <motion.div
+            className="absolute left-1/2 top-1/2"
+            variants={sideCardVariants("left")}
+          >
+            <div className="h-[380px] w-[320px]">
+              <FeatureCard {...features[0]} />
+            </div>
+          </motion.div>
+
+          {/* Center Card */}
+          <motion.div className="relative z-30" variants={centerCardVariants}>
+            <div className="h-[380px] w-[320px]">
+              <FeatureCard {...features[1]} />
+            </div>
+          </motion.div>
+
+          {/* Right Card */}
+          <motion.div
+            className="absolute left-1/2 top-1/2"
+            variants={sideCardVariants("right")}
+          >
+            <div className="h-[380px] w-[320px]">
+              <FeatureCard {...features[2]} />
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </>
   );
 };
 
