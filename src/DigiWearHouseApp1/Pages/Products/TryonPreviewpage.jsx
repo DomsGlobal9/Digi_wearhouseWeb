@@ -200,7 +200,7 @@ const response = await fetch("/api/tryon", {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center mb-6">
-          <ArrowLeft className="w-5 h-5 mr-2 text-gray-600" />
+          <ArrowLeft  className="w-5 h-5 mr-2 text-gray-600" />
           <span className="text-gray-800 font-medium">Product Overview</span>
           {currentUser && (
             <span className="ml-auto text-sm text-gray-500">
@@ -472,7 +472,7 @@ const response = await fetch("/api/tryon", {
               
               <div className="space-y-2">
                 <div className="text-2xl font-bold text-gray-900">
-                  ${productData.price || '0'}
+                  ₹{productData.price || '0'}
                 </div>
                 <div className="text-sm text-gray-500">Base Price</div>
                 <div className="text-sm text-blue-600">
