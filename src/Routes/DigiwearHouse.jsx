@@ -22,6 +22,7 @@ import ContactUs from '../DigiWearHouseApp1/Pages/contactus.jsx';
 import TermsAndConditions from '../DigiWearHouseApp1/Pages/TermsAndConditions.jsx';
 import PrivacyAndPolicy from '../DigiWearHouseApp1/Pages/PrivacyPolicy.jsx';
 import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
+import SizeChart from '../DigiWearHouseApp1/Components/SizeChart.jsx';
 
 function DigiwearHouse() {
    const location = useLocation();
@@ -59,6 +60,7 @@ function DigiwearHouse() {
         <Route path='/recenltyproducts' element={<RecentlyAddedProductsPage/>}/>
         <Route path="/upload-products" element={<UploadProducts/>} />
         <Route path="/tryon-preview" element={<TryonPreview/>} />
+        <Route path="/size-chart" element={<SizeChart/>} />
           {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
 
         {/* Redirect to login if no route matches */}

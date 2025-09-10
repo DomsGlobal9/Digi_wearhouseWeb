@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../context/Context'; // Adjust import path as needed
+// import { useNavigate  } from 'react-router-dom';
+
 
 // Model - Data layer
 const ProductDataModel = {
@@ -289,15 +291,20 @@ const GeneralTab = ({ formData, onChange, dressTypes, materialTypes, designTypes
   );
 };
 
-const SizeSelector = ({ sizes, selectedSizes, onChange }) => (
+const SizeSelector = ({ sizes, selectedSizes, onChange }) => {
+  
+const navigate = useNavigate();
+
+return (
+
   <div className="space-y-3">
     <div className="flex items-center justify-between">
       <label className="text-sm md:text-base font-medium text-gray-700">
         Select Sizes
       </label>
-      <button className="text-blue-500 text-sm hover:text-blue-600">
-        Size chart ?
-      </button>
+<button onClick={() => navigate('/size-chart')} className="text-blue-500 text-sm hover:text-blue-600">
+  Size chart ?
+</button>
     </div>
     <div className="flex flex-wrap gap-3">
       {sizes.map((size) => (
@@ -323,7 +330,8 @@ const SizeSelector = ({ sizes, selectedSizes, onChange }) => (
     </div>
     <p className="text-xs text-gray-500">You can select multiple sizes</p>
   </div>
-);
+)
+};
 
 // const ColorSelector = ({ colors, selectedColors, onChange,myselectedColor }) => {
 //   // Handle dropdown selection
@@ -432,7 +440,6 @@ const UnitsSection = ({ units, onChange }) => (
 const SizePricingTab = ({ formData, onChange, sizes, colors, myselectedColor }) => {
   // Check if the product is a Saree
   const isSaree = formData?.dressType?.toLowerCase().includes("saree");
-
   return (
     <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
       {/* Only show size selector if not a saree */}
