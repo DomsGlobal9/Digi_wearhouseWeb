@@ -74,27 +74,27 @@ const RevenueDataModel = {
 // View Components
 const StatsCard = ({ title, value, variant = "dark", className = "" }) => {
   const isDark = variant === "dark";
-  const bgClass = isDark ? "bg-slate-600 text-white" : "bg-white text-gray-900 border border-gray-200";
+  const bgClass = isDark ? "bg-[#284F5E] text-white" : "bg-white text-gray-900 border border-gray-200";
   
   return (
-    <div className={`${bgClass} p-4 md:p-6 rounded-lg ${className}`}>
-      <h3 className={`text-sm md:text-base font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-700'}`}>
+    <div className={`${bgClass} p-4 md:p-6 rounded-lg ${className}`}>  
+      <h3 className={` text-start font-bold text-2xl mb-2 ${isDark ? 'text-white' : 'text-[#284F5E]'}`}>
         {title}
       </h3>
-      <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{value}</div>
+      <div className="text-2xl md:text-3xl text-start lg:text-4xl font-bold">{value}</div>
     </div>
   );
 };
 
 const PeriodSelector = ({ periods, selectedPeriod, onPeriodChange }) => (
-  <div className="flex bg-gray-100 rounded-lg p-1 max-w-md">
+    <div className="flex bg-white border border-gray-400 md:w-full lg:w-[630px]  rounded-lg  ">
     {periods.map((period) => (
-      <button
+       <button
         key={period}
         onClick={() => onPeriodChange(period)}
-        className={`flex-1 px-4 py-2 text-sm md:text-base font-medium rounded-md transition-colors ${
+        className={`flex-1 px-4 py-2 text-sm md:text-base font-medium    rounded-md transition-colors ${
           selectedPeriod === period
-            ? 'bg-blue-400 text-white'
+            ? 'bg-[#7DBBD1] text-white'
             : 'text-gray-600 hover:text-gray-800'
         }`}
       >
@@ -136,7 +136,7 @@ const EmptyState = () => (
         </svg>
       </div>
     </div>
-    <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center space-x-2">
+    <button className="bg-[#4F9EBB] hover:bg-blue-600 text-white px-6 py-3  font-medium transition-colors flex items-center space-x-2">
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
       </svg>
@@ -242,7 +242,7 @@ const TotalRevenueController = () => {
       >
         <ArrowLeft size={24} />
       </button>
-      <h1 className="text-black text-xl font-bold text-start">Total Revenue</h1>
+          <h2 className="text-xl md:text-2xl font-bold text-start text-gray-900 mb-1">Total Revenue</h2>
     </div>
 
         {/* Stats Cards */}
@@ -262,11 +262,11 @@ const TotalRevenueController = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-2 md:space-y-0">
           <div>
             <span className="text-gray-600 text-sm md:text-base">High:</span>
-            <span className="font-semibold text-gray-900 ml-1">{stats.highPeriod}</span>
+                        <span className="font-semibold text-[#284F5E] ml-1">{stats.highPeriod}</span>
           </div>
           <div>
-            <span className="text-gray-600 text-sm md:text-base">Low:</span>
-            <span className="font-semibold text-gray-900 ml-1">{stats.lowPeriod}</span>
+            <span className="text-gray-600 text-sm md:text-base">Low:</span>        
+            <span className=" text-[#284F5E] ml-1">{stats.lowPeriod}</span>
           </div>
         </div>
 
