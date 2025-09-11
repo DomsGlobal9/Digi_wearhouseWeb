@@ -166,6 +166,27 @@ const response = await fetch("/api/tryon", {
     }
   };
 
+
+  const calculateTotalUnits = (units) => {
+    if (!units) return 0;
+
+    let total = 0;
+
+    Object.values(units).forEach((val) => {
+      if (typeof val === "object" && val !== null) {
+        // Nested structure: color -> { size: quantity }
+        Object.values(val).forEach((qty) => {
+          total += parseInt(qty) || 0;
+        });
+      } else {
+        // Direct structure: size -> quantity
+        total += parseInt(val) || 0;
+      }
+    });
+
+    return total;
+  };
+
   // Submit Status Component
   const SubmitStatusAlert = () => {
     if (!submitStatus) return null;
@@ -316,11 +337,11 @@ const response = await fetch("/api/tryon", {
             </div>
 
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="text-3xl font-bold text-gray-900 mb-1">
-                {Object.values(productData.units || {}).reduce((sum, val) => sum + val, 0)}
-              </div>
-              <div className="text-sm text-gray-500">Total Units</div>
-            </div>
+  <div className="text-3xl font-bold text-gray-900 mb-1">
+    {calculateTotalUnits(productData.units)}
+  </div>
+  <div className="text-sm text-gray-500">Total Units</div>
+</div>
 
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center mb-4">
