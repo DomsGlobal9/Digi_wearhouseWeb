@@ -3,8 +3,10 @@ import { ArrowLeft, Package, Edit, CheckCircle, AlertCircle } from 'lucide-react
 import { useApp } from '../../context/Context';
 import firebaseService from '../../../SERVICES/firebaseService';
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function TryonPreview() {
+  const navigate = useNavigate();
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [tryOnResult, setTryOnResult] = useState(null);
@@ -199,9 +201,9 @@ const response = await fetch("/api/tryon", {
       
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center mb-6">
+        <div onClick={() => navigate(-1)} className="flex items-center mb-6">
           <ArrowLeft  className="w-5 h-5 mr-2 text-gray-600" />
-          <span className="text-gray-800 font-medium">Product Overview</span>
+          <span onClick={() => navigate(-1)} className="text-gray-800 font-medium">Product Overview</span>
           {currentUser && (
             <span className="ml-auto text-sm text-gray-500">
               User: {currentUser.email}
