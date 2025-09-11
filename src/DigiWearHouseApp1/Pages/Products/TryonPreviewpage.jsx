@@ -237,29 +237,57 @@ const response = await fetch("/api/tryon", {
             </div>
 
             {/* Inventory by Color Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-gray-700 font-medium mb-4">Inventory by color</h3>
+<div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-gray-700 font-medium mb-4">
+                Inventory by color
+              </h3>
               <div className="space-y-3">
-                {productData.selectedColors && productData.selectedColors.length > 0 ? (
+                {productData.selectedColors &&
+                productData.selectedColors.length > 0 ? (
                   productData.selectedColors.map((colorCode) => {
+                    // Extract color name by splitting at '_' and taking the first part
+                    const colorName = colorCode.split("_")[0];
                     const colorMap = {
-                      'red': { name: 'Red', bg: 'bg-red-500' },
-                      'pink': { name: 'Pink', bg: 'bg-pink-500' },
-                      'blue': { name: 'Blue', bg: 'bg-blue-500' },
-                      'green': { name: 'Green', bg: 'bg-green-500' },
-                      'orange': { name: 'Orange', bg: 'bg-orange-500' },
-                      'purple': { name: 'Purple', bg: 'bg-purple-500' },
-                      'black': { name: 'Black', bg: 'bg-black' }
+                      red: { name: "Red", bg: "bg-red-500" },
+                      pink: { name: "Pink", bg: "bg-pink-500" },
+                      blue: { name: "Blue", bg: "bg-blue-500" },
+                      green: { name: "Green", bg: "bg-green-500" },
+                      orange: { name: "Orange", bg: "bg-orange-500" },
+                      purple: { name: "Purple", bg: "bg-purple-500" },
+                      black: { name: "Black", bg: "bg-black" },
                     };
-                    const color = colorMap[colorCode] || { name: colorCode, bg: 'bg-gray-500' };
-                    
+                    const color = colorMap[colorName.toLowerCase()] || {
+                      name:
+                        colorName.charAt(0).toUpperCase() + colorName.slice(1),
+                      bg: "bg-gray-500",
+                    };
+
+                    const totalUnits = productData.units[colorCode]
+                      ? Object.values(productData.units[colorCode]).reduce(
+                          (sum, quantity) => {
+                            const num = parseInt(quantity, 10);
+                            return sum + (isNaN(num) ? 0 : num);
+                          },
+                          0
+                        )
+                      : 0;
+
                     return (
-                      <div key={colorCode} className="flex items-center justify-between">
+                      <div
+                        key={colorCode}
+                        className="flex items-center justify-between"
+                      >
                         <div className="flex items-center">
-                          <div className={`w-3 h-3 rounded-full ${color.bg} mr-3`}></div>
-                          <span className="text-sm text-gray-700">{color.name}</span>
+                          <div
+                            className={`w-3 h-3 rounded-full ${color.bg} mr-3`}
+                          ></div>
+                          <span className="text-sm text-gray-700">
+                            {color.name}
+                          </span>
                         </div>
-                        <span className="text-sm text-gray-500">0 pcs</span>
+                        <span className="text-sm text-gray-500">
+                          {totalUnits} pcs
+                        </span>
                       </div>
                     );
                   })
@@ -267,10 +295,11 @@ const response = await fetch("/api/tryon", {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="w-3 h-3 rounded-full bg-gray-300 mr-3"></div>
-                      <span className="text-sm text-gray-700">No colors selected</span>
+                      <span className="text-sm text-gray-700">
+                        No colors selected
+                      </span>
                     </div>
                     <span className="text-sm text-gray-500">0 pcs</span>
-                    {/* <button className='bg-red-600'  > <a href="/recently-added">click</a> </button>  */}
                   </div>
                 )}
               </div>
