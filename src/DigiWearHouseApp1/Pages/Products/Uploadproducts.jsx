@@ -2027,24 +2027,47 @@ const ProductDataModel = {
     "Silk Dress",
     "Party Wear",
     "Casual Wear",
+    "Wedding Wear",
+    "Formal Wear"
   ],
 
   getMaterialTypes: () => [
     "Cotton",
     "Silk",
+    "Silk Cotton",
     "Georgette",
     "Chiffon",
     "Net",
     "Velvet",
+    "Crepe",
+    "Khadi",
+    "Tissue",
+    "Pure Linen",
+    "Kota",
+    "Viscose",
+    "Mulmul",
+    "Organza",
   ],
 
   getDesignTypes: () => [
     "Embroidered",
+    "Ajrakh",
+    "Block Printed",
+    "Batik",
+    "Sanganeri",
+    "Woven",
     "Printed",
     "Plain",
     "Sequined",
     "Beaded",
     "Mirror Work",
+    "Dabu",
+    "Shibori",
+    "Mukasish",
+    "Brocade",
+    "Cutout",
+    "Ikat",
+    "Chikankariul"
   ],
 
   getColors: () => [
@@ -2210,9 +2233,9 @@ const FormSelect = ({ label, value, onChange, options, placeholder }) => (
       onChange={onChange}
       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors appearance-none bg-white"
     >
-      <option value="">{placeholder}</option>
+      <option  value="">{placeholder}</option>
       {options.map((option, index) => (
-        <option key={index} value={option}>
+        <option key={index}  value={option}>
           {option}
         </option>
       ))}
