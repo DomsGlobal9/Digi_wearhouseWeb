@@ -334,7 +334,9 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   PhoneAuthProvider,
-  signInWithCredential
+  signInWithCredential,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import { 
   doc, 
@@ -685,6 +687,21 @@ const verifyOtp = async (otp) => {
   }
 };
 
+const googleSignIn = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    // Optional: Handle additional user data or profile completion here
+    // For example, check if user needs to complete registration (shop/bank/KYC)
+    // You can dispatch to update userData or redirect
+    return result;
+  } catch (error) {
+    console.error("Google Sign-In Error:", error);
+    setError(error.message || "Google sign-in failed");
+    throw error;
+  }
+};
+
   return (
     <AppContext.Provider
       value={{
@@ -695,6 +712,8 @@ const verifyOtp = async (otp) => {
         error,
         setError,
         clearError,
+
+        googleSignIn,
 
         // Email/password auth functions
         registerUser,

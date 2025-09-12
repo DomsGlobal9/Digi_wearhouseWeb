@@ -3,7 +3,7 @@ import { useApp } from "../context/Context";
 import digiLogoPoster from "../../assets/Digiware_logoPoster.png";
 import digi_logo from "../../assets/digi_logo.png";
 import { useNavigate } from "react-router-dom";
-
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const DigiWarehouseRegistration = () => {
   const navigate = useNavigate();
@@ -19,20 +19,21 @@ const DigiWarehouseRegistration = () => {
   //   setError,
   // } = useApp();
   // Add to your imports in DigiWarehouseRegistration.js
-const {
-  currentUser,
-  userData,
-  registerUser,
-  loginUser,
-  checkUserExists,
-  signOut,
-  clearError,
-  error: authError,
-  setError,
-  sendOtp,
-  verifyOtp,
-  confirmationResult
-} = useApp();
+  const {
+    currentUser,
+    userData,
+    registerUser,
+    loginUser,
+    checkUserExists,
+    signOut,
+    clearError,
+    error: authError,
+    setError,
+    sendOtp,
+    verifyOtp,
+    googleSignIn,
+    confirmationResult,
+  } = useApp();
 
   // Auth States
   const [currentStep, setCurrentStep] = useState("login");
@@ -43,7 +44,7 @@ const {
   // Login States
   const [loginData, setLoginData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   // Registration States
@@ -77,32 +78,31 @@ const {
 
   // KYC File States
   const [kycDetails, setKycDetails] = useState({
-  panNumber: '',
-  gstinNumber: '',
-  aadharNumber: '',
-});
+    panNumber: "",
+    gstinNumber: "",
+    aadharNumber: "",
+  });
 
-// Add these new states after your existing states
-const [otpData, setOtpData] = useState({
-  otp: ['', '', '', '', '', ''],
-  phoneNumber: '',
-  isOtpSent: false,
-  otpVerified: false,
-  resendCount: 0,
-  timer: 0
-});
+  // Add these new states after your existing states
+  const [otpData, setOtpData] = useState({
+    otp: ["", "", "", "", "", ""],
+    phoneNumber: "",
+    isOtpSent: false,
+    otpVerified: false,
+    resendCount: 0,
+    timer: 0,
+  });
 
-// Add timer effect
-useEffect(() => {
-  let interval = null;
-  if (otpData.timer > 0) {
-    interval = setInterval(() => {
-      setOtpData(prev => ({ ...prev, timer: prev.timer - 1 }));
-    }, 1000);
-  }
-  return () => clearInterval(interval);
-}, [otpData.timer]);
-
+  // Add timer effect
+  useEffect(() => {
+    let interval = null;
+    if (otpData.timer > 0) {
+      interval = setInterval(() => {
+        setOtpData((prev) => ({ ...prev, timer: prev.timer - 1 }));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpData.timer]);
 
   // Clear messages after 5 seconds
   useEffect(() => {
@@ -124,7 +124,7 @@ useEffect(() => {
     if (currentUser && userData) {
       console.log("User is logged in:", userData);
       // Add navigation to dashboard here
-        // navigate("/dashboard");
+      // navigate("/dashboard");
     }
   }, [currentUser, userData]);
 
@@ -163,7 +163,8 @@ useEffect(() => {
   const validateShopDetails = (data) => {
     const errors = {};
     if (!data.shopName.trim()) errors.shopName = "Shop name is required";
-    if (!data.shopAddress.trim()) errors.shopAddress = "Shop address is required";
+    if (!data.shopAddress.trim())
+      errors.shopAddress = "Shop address is required";
     if (!data.city.trim()) errors.city = "City is required";
     if (!data.state.trim()) errors.state = "State is required";
     if (!data.pincode || !/^\d{6}$/.test(data.pincode)) {
@@ -176,7 +177,8 @@ useEffect(() => {
     const errors = {};
     if (!data.bankName) errors.bankName = "Bank name is required";
     if (!data.branchName.trim()) errors.branchName = "Branch name is required";
-    if (!data.accountHolder.trim()) errors.accountHolder = "Account holder name is required";
+    if (!data.accountHolder.trim())
+      errors.accountHolder = "Account holder name is required";
     if (!data.accountNumber || !/^\d+$/.test(data.accountNumber)) {
       errors.accountNumber = "Valid account number is required";
     }
@@ -190,82 +192,83 @@ useEffect(() => {
   };
 
   const validatePAN = (pan) => {
-  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-  return panRegex.test(pan);
-};
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    return panRegex.test(pan);
+  };
 
-const validateGSTIN = (gstin) => {
-  const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-  return gstinRegex.test(gstin);
-};
+  const validateGSTIN = (gstin) => {
+    const gstinRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    return gstinRegex.test(gstin);
+  };
 
-const validateAadhar = (aadhar) => {
-  const aadharRegex = /^[0-9]{12}$/;
-  return aadharRegex.test(aadhar);
-};
+  const validateAadhar = (aadhar) => {
+    const aadharRegex = /^[0-9]{12}$/;
+    return aadharRegex.test(aadhar);
+  };
 
-// 3. Update validateKycDetails function (replace existing)
-const validateKycDetails = () => {
-  const errors = {};
-  
-  if (!kycDetails.panNumber.trim()) {
-    errors.panNumber = "PAN number is required";
-  } else if (!validatePAN(kycDetails.panNumber)) {
-    errors.panNumber = "Invalid PAN format (e.g., ABCDE1234F)";
-  }
-  
+  // 3. Update validateKycDetails function (replace existing)
+  const validateKycDetails = () => {
+    const errors = {};
+
+    if (!kycDetails.panNumber.trim()) {
+      errors.panNumber = "PAN number is required";
+    } else if (!validatePAN(kycDetails.panNumber)) {
+      errors.panNumber = "Invalid PAN format (e.g., ABCDE1234F)";
+    }
+
     if (kycDetails.gstinNumber.trim()) {
-    if (!validateGSTIN(kycDetails.gstinNumber)) {
-      errors.gstinNumber = "Invalid GSTIN format (15 characters)";
-    }
-  }
-  
-  if (!kycDetails.aadharNumber.trim()) {
-    errors.aadharNumber = "Aadhar number is required";
-  } else if (!validateAadhar(kycDetails.aadharNumber)) {
-    errors.aadharNumber = "Invalid Aadhar format (12 digits)";
-  }
-  
-  return { isValid: Object.keys(errors).length === 0, errors };
-};
-
-// Update the initializeRecaptcha function in your Context.js
-const initializeRecaptcha = () => {
-  try {
-    // Check if container exists first
-    const container = document.getElementById('recaptcha-container');
-    if (!container) {
-      throw new Error('reCAPTCHA container not found. Please ensure the OTP form is rendered first.');
+      if (!validateGSTIN(kycDetails.gstinNumber)) {
+        errors.gstinNumber = "Invalid GSTIN format (15 characters)";
+      }
     }
 
-    if (!recaptchaVerifier) {
-      const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        size: 'invisible',
-        callback: (response) => {
-          console.log('reCAPTCHA solved');
-        },
-        'expired-callback': () => {
-          console.log('reCAPTCHA expired');
-          setError('reCAPTCHA expired. Please try again.');
-        }
-      });
-      setRecaptchaVerifier(verifier);
-      return verifier;
+    if (!kycDetails.aadharNumber.trim()) {
+      errors.aadharNumber = "Aadhar number is required";
+    } else if (!validateAadhar(kycDetails.aadharNumber)) {
+      errors.aadharNumber = "Invalid Aadhar format (12 digits)";
     }
-    return recaptchaVerifier;
-  } catch (error) {
-    console.error('Error initializing reCAPTCHA:', error);
-    setError('Failed to initialize verification. Please try again.');
-    throw error;
-  }
-};
 
+    return { isValid: Object.keys(errors).length === 0, errors };
+  };
 
+  // Update the initializeRecaptcha function in your Context.js
+  const initializeRecaptcha = () => {
+    try {
+      // Check if container exists first
+      const container = document.getElementById("recaptcha-container");
+      if (!container) {
+        throw new Error(
+          "reCAPTCHA container not found. Please ensure the OTP form is rendered first."
+        );
+      }
+
+      if (!recaptchaVerifier) {
+        const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+          size: "invisible",
+          callback: (response) => {
+            console.log("reCAPTCHA solved");
+          },
+          "expired-callback": () => {
+            console.log("reCAPTCHA expired");
+            setError("reCAPTCHA expired. Please try again.");
+          },
+        });
+        setRecaptchaVerifier(verifier);
+        return verifier;
+      }
+      return recaptchaVerifier;
+    } catch (error) {
+      console.error("Error initializing reCAPTCHA:", error);
+      setError("Failed to initialize verification. Please try again.");
+      throw error;
+    }
+  };
 
   // Event Handlers
   const handleLogin = async () => {
     const validation = validateLoginForm(loginData);
-    
+
     if (!validation.isValid) {
       setErrors(validation.errors);
       return;
@@ -274,76 +277,75 @@ const initializeRecaptcha = () => {
     setIsLoading(true);
     setErrors({});
     clearError();
-try {
-  await loginUser(loginData.email, loginData.password);
-  setSuccessMessage("Login successful!");
-  // Add this line:
-  navigate("/dashboard");
-} catch (error) {
-  setErrors({ general: error.message });
-}
-    finally {
+    try {
+      await loginUser(loginData.email, loginData.password);
+      setSuccessMessage("Login successful!");
+      // Add this line:
+      navigate("/dashboard");
+    } catch (error) {
+      setErrors({ general: error.message });
+    } finally {
       setIsLoading(false);
     }
   };
 
   const handleLoginInputChange = (e) => {
     const { name, value } = e.target;
-    setLoginData(prev => ({ ...prev, [name]: value }));
+    setLoginData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleRegisterInputChange = (e) => {
     const { name, value } = e.target;
-    setRegisterData(prev => ({ ...prev, [name]: value }));
+    setRegisterData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleShopInputChange = (e) => {
     const { name, value } = e.target;
-    setShopData(prev => ({ ...prev, [name]: value }));
+    setShopData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleBankInputChange = (e) => {
     const { name, value } = e.target;
-    setBankData(prev => ({ ...prev, [name]: value }));
+    setBankData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
- // 4. Add KYC input change handler
-const handleKycInputChange = (e) => {
-  const { name, value } = e.target;
-  
-  // Auto-format inputs
-  let formattedValue = value;
-  if (name === 'panNumber' || name === 'gstinNumber') {
-    formattedValue = value.toUpperCase();
-  } else if (name === 'aadharNumber') {
-    formattedValue = value.replace(/\D/g, ''); // Only allow digits
-  }
-  
-  setKycDetails(prev => ({
-    ...prev,
-    [name]: formattedValue
-  }));
-  
-  // Clear specific field error when user starts typing
-  if (errors[name]) {
-    setErrors(prev => ({
+  // 4. Add KYC input change handler
+  const handleKycInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Auto-format inputs
+    let formattedValue = value;
+    if (name === "panNumber" || name === "gstinNumber") {
+      formattedValue = value.toUpperCase();
+    } else if (name === "aadharNumber") {
+      formattedValue = value.replace(/\D/g, ""); // Only allow digits
+    }
+
+    setKycDetails((prev) => ({
       ...prev,
-      [name]: ""
+      [name]: formattedValue,
     }));
-  }
-};
+
+    // Clear specific field error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
 
   const handleRegisterSubmit = async () => {
     const validation = validateRegistrationForm(registerData);
@@ -394,54 +396,65 @@ const handleKycInputChange = (e) => {
     setCurrentStep("kyc");
   };
 
-// Update handleKycSubmit in your Registration component
-const handleKycSubmit = async () => {
-  const validation = validateKycDetails();
+  // Update handleKycSubmit in your Registration component
+  const handleKycSubmit = async () => {
+    const validation = validateKycDetails();
 
-  if (!validation.isValid) {
-    setErrors(validation.errors);
-    return;
-  }
+    if (!validation.isValid) {
+      setErrors(validation.errors);
+      return;
+    }
 
-  setErrors({});
-  clearError();
+    setErrors({});
+    clearError();
 
-  // First, move to OTP verification step to render the reCAPTCHA container
-  setCurrentStep("otpVerification");
-  setOtpData(prev => ({
-    ...prev,
-    phoneNumber: registerData.contactNumber,
-    isOtpSent: false
-  }));
+    // First, move to OTP verification step to render the reCAPTCHA container
+    setCurrentStep("otpVerification");
+    setOtpData((prev) => ({
+      ...prev,
+      phoneNumber: registerData.contactNumber,
+      isOtpSent: false,
+    }));
 
-  // Then send OTP after a brief delay to ensure DOM is ready
-  setTimeout(async () => {
+    // Then send OTP after a brief delay to ensure DOM is ready
+    setTimeout(async () => {
+      setIsLoading(true);
+      try {
+        await sendOtp(registerData.contactNumber);
+
+        setOtpData((prev) => ({
+          ...prev,
+          isOtpSent: true,
+          timer: 60,
+        }));
+
+        setSuccessMessage(`OTP sent to +91${registerData.contactNumber}`);
+      } catch (error) {
+        setErrors({ general: error.message });
+        // Go back to KYC step if OTP sending fails
+        setCurrentStep("kyc");
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500); // 500ms delay to ensure DOM is ready
+  };
+
+  const handleGoogleSignIn = async () => {
     setIsLoading(true);
+    setErrors({});
+    clearError();
     try {
-      await sendOtp(registerData.contactNumber);
-      
-      setOtpData(prev => ({
-        ...prev,
-        isOtpSent: true,
-        timer: 60
-      }));
-      
-      setSuccessMessage(`OTP sent to +91${registerData.contactNumber}`);
-      
+      await googleSignIn();
+      setSuccessMessage("Google sign-in successful!");
+      // Navigate to dashboard or profile completion if needed
+      navigate("/dashboard");
     } catch (error) {
-      setErrors({ general: error.message });
-      // Go back to KYC step if OTP sending fails
-      setCurrentStep("kyc");
+      setErrors({
+        general: error.message || "Google sign-in failed. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
-  }, 500); // 500ms delay to ensure DOM is ready
-};
-
-
-  const handleGoogleSignIn = () => {
-    console.log("Google Sign-In clicked");
-    // Implement Google Sign-In if needed
   };
 
   const navigateToRegister = () => {
@@ -479,133 +492,138 @@ const handleKycSubmit = async () => {
 
   // Send OTP function (you'll need to implement your SMS service)
 
+  // Handle OTP input change
+  const handleOtpChange = (index, value) => {
+    if (value.length > 1) return;
 
-// Handle OTP input change
-const handleOtpChange = (index, value) => {
-  if (value.length > 1) return;
-  
-  const newOtp = [...otpData.otp];
-  newOtp[index] = value.replace(/[^0-9]/g, '');
-  
-  setOtpData(prev => ({ ...prev, otp: newOtp }));
-  
-  if (value && index < 5) {
-    const nextInput = document.getElementById(`otp-${index + 1}`);
-    if (nextInput) nextInput.focus();
-  }
-  
-  if (errors.otp) {
-    setErrors(prev => ({ ...prev, otp: '' }));
-  }
-};
+    const newOtp = [...otpData.otp];
+    newOtp[index] = value.replace(/[^0-9]/g, "");
 
-// Handle OTP submission
+    setOtpData((prev) => ({ ...prev, otp: newOtp }));
 
-const handleOtpSubmit = async () => {
-  const otpString = otpData.otp.join('');
-  
-  if (otpString.length !== 6) {
-    setErrors({ otp: 'Please enter complete 6-digit OTP' });
-    return;
-  }
-
-  setIsLoading(true);
-  setErrors({});
-
-  try {
-    await verifyOtp(otpString);
-    await completeRegistration();
-  } catch (error) {
-    setErrors({ otp: error.message });
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-// Complete registration after OTP verification
-const completeRegistration = async () => {
-  try {
-    const completeUserData = {
-      username: registerData.username,
-      firstName: registerData.firstName,
-      contactNumber: registerData.contactNumber,
-      shopDetails: shopData,
-      bankDetails: bankData,
-      kycDocuments: {
-        panNumber: kycDetails.panNumber,
-        gstinNumber: kycDetails.gstinNumber,
-        aadharNumber: kycDetails.aadharNumber,
-      },
-      phoneVerified: true,
-      registrationCompleted: true,
-    };
-
-    await registerUser(registerData.email, registerData.password, completeUserData);
-    setSuccessMessage("Registration completed successfully!");
-    
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 2000);
-    
-  } catch (error) {
-    setErrors({ general: error.message });
-  }
-};
-
-// Resend OTP
-// Update handleResendOtp in your Registration component
-const handleResendOtp = async () => {
-  if (otpData.resendCount >= 3) {
-    setErrors({ otp: 'Maximum resend attempts reached' });
-    return;
-  }
-
-  if (otpData.timer > 0) {
-    setErrors({ otp: `Please wait ${otpData.timer} seconds` });
-    return;
-  }
-
-  setIsLoading(true);
-  setErrors({});
-
-  try {
-    // Clear previous reCAPTCHA verifier
-    if (window.recaptchaVerifier) {
-      window.recaptchaVerifier.clear();
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
     }
-    
-    await sendOtp(registerData.contactNumber);
-    setOtpData(prev => ({
-      ...prev,
-      resendCount: prev.resendCount + 1,
-      timer: 60,
-      otp: ['', '', '', '', '', '']
-    }));
-    setSuccessMessage('OTP resent successfully');
-  } catch (error) {
-    setErrors({ otp: error.message });
-  } finally {
-    setIsLoading(false);
-  }
-};
 
-const handleOtpKeyDown = (e, index) => {
-  if (e.key === 'Backspace' && !otpData.otp[index] && index > 0) {
-    const prevInput = document.getElementById(`otp-${index - 1}`);
-    if (prevInput) {
-      prevInput.focus();
-      const newOtp = [...otpData.otp];
-      newOtp[index - 1] = '';
-      setOtpData(prev => ({ ...prev, otp: newOtp }));
+    if (errors.otp) {
+      setErrors((prev) => ({ ...prev, otp: "" }));
     }
-  }
-};
+  };
+
+  // Handle OTP submission
+
+  const handleOtpSubmit = async () => {
+    const otpString = otpData.otp.join("");
+
+    if (otpString.length !== 6) {
+      setErrors({ otp: "Please enter complete 6-digit OTP" });
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      await verifyOtp(otpString);
+      await completeRegistration();
+    } catch (error) {
+      setErrors({ otp: error.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Complete registration after OTP verification
+  const completeRegistration = async () => {
+    try {
+      const completeUserData = {
+        username: registerData.username,
+        firstName: registerData.firstName,
+        contactNumber: registerData.contactNumber,
+        shopDetails: shopData,
+        bankDetails: bankData,
+        kycDocuments: {
+          panNumber: kycDetails.panNumber,
+          gstinNumber: kycDetails.gstinNumber,
+          aadharNumber: kycDetails.aadharNumber,
+        },
+        phoneVerified: true,
+        registrationCompleted: true,
+      };
+
+      await registerUser(
+        registerData.email,
+        registerData.password,
+        completeUserData
+      );
+      setSuccessMessage("Registration completed successfully!");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    } catch (error) {
+      setErrors({ general: error.message });
+    }
+  };
+
+  // Resend OTP
+  // Update handleResendOtp in your Registration component
+  const handleResendOtp = async () => {
+    if (otpData.resendCount >= 3) {
+      setErrors({ otp: "Maximum resend attempts reached" });
+      return;
+    }
+
+    if (otpData.timer > 0) {
+      setErrors({ otp: `Please wait ${otpData.timer} seconds` });
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      // Clear previous reCAPTCHA verifier
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+      }
+
+      await sendOtp(registerData.contactNumber);
+      setOtpData((prev) => ({
+        ...prev,
+        resendCount: prev.resendCount + 1,
+        timer: 60,
+        otp: ["", "", "", "", "", ""],
+      }));
+      setSuccessMessage("OTP resent successfully");
+    } catch (error) {
+      setErrors({ otp: error.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOtpKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !otpData.otp[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) {
+        prevInput.focus();
+        const newOtp = [...otpData.otp];
+        newOtp[index - 1] = "";
+        setOtpData((prev) => ({ ...prev, otp: newOtp }));
+      }
+    }
+  };
 
   // Form Renderers
   const renderLoginForm = () => (
     <>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-slate-600 mb-2">
+        <label
+          htmlFor="email"
+          className="block text-sm text-start font-medium text-slate-600 mb-2"
+        >
           Email Address
         </label>
         <input
@@ -616,14 +634,21 @@ const handleOtpKeyDown = (e, index) => {
           onChange={handleLoginInputChange}
           placeholder="Enter your email"
           className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 text-slate-700 placeholder-slate-400 ${
-            errors.email ? "border-red-300 bg-red-50" : "border-slate-200 bg-slate-50"
+            errors.email
+              ? "border-red-300 bg-red-50"
+              : "border-slate-200 bg-slate-50"
           }`}
         />
-        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+        )}
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-slate-600 mb-2">
+        <label
+          htmlFor="password"
+          className="block text-sm text-start font-medium text-slate-600 mb-2"
+        >
           Password
         </label>
         <input
@@ -634,10 +659,14 @@ const handleOtpKeyDown = (e, index) => {
           onChange={handleLoginInputChange}
           placeholder="Enter your password"
           className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 text-slate-700 placeholder-slate-400 ${
-            errors.password ? "border-red-300 bg-red-50" : "border-slate-200 bg-slate-50"
+            errors.password
+              ? "border-red-300 bg-red-50"
+              : "border-slate-200 bg-slate-50"
           }`}
         />
-        {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+        {errors.password && (
+          <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+        )}
       </div>
 
       <button
@@ -664,9 +693,9 @@ const handleOtpKeyDown = (e, index) => {
         </div>
       </div>
 
-      <button
+      {/* <button
         onClick={handleGoogleSignIn}
-        className="w-full bg-white cursor-pointer hover:bg-slate-50 text-slate-700 font-medium py-3 px-4 rounded-xl border border-slate-200 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-3"
+        className="w-full bg-white cursor-pointer hover:bg-slate-50 text-slate-700 font-medium py-3 px-2 rounded-xl border border-slate-200 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-3"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -674,7 +703,45 @@ const handleOtpKeyDown = (e, index) => {
           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
         </svg>
-        Sign in with<span className="text-blue-600 font-semibold ">Google</span>
+        Sign in with<span className="text-blue-600 font-semibold">Google</span>
+      </button> */}
+      <button
+        onClick={handleGoogleSignIn}
+        disabled={isLoading}
+        className="w-full bg-white cursor-pointer hover:bg-slate-50 text-slate-700 font-medium py-3 px-2 rounded-xl border border-slate-200 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-3 disabled:opacity-50"
+      >
+        {isLoading ? (
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-slate-700 border-t-transparent mr-2"></div>
+            Signing in with Google...
+          </div>
+        ) : (
+          <>
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+            Sign in with{" "}
+            <span className="text-blue-600 font-semibold relative right-2">
+              Google
+            </span>
+            {/* <span className="text-blue-600 font-semibold">Google</span> */}
+          </>
+        )}
       </button>
     </>
   );
@@ -682,7 +749,7 @@ const handleOtpKeyDown = (e, index) => {
   const renderRegisterForm = () => (
     <>
       <div>
-        <label className="block text-sm text-start font-medium text-slate-600 mb-2">
+        <label className="block text-sm text-start font-medium text-slate-600 mb-2 text-start">
           Username
         </label>
         <input
@@ -695,12 +762,16 @@ const handleOtpKeyDown = (e, index) => {
             errors.username ? "border-red-300" : "border-slate-200"
           }`}
         />
-        {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
+        {errors.username && (
+          <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-start text-slate-600 mb-2">First Name</label>
+          <label className="block text-sm font-medium text-start text-slate-600 mb-2">
+            First Name
+          </label>
           <input
             type="text"
             name="firstName"
@@ -711,10 +782,14 @@ const handleOtpKeyDown = (e, index) => {
               errors.firstName ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+          {errors.firstName && (
+            <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+          )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-start text-slate-600 mb-2">Contact Number</label>
+          <label className="block text-sm font-medium text-start text-slate-600 mb-2">
+            Contact Number
+          </label>
           <input
             type="tel"
             name="contactNumber"
@@ -725,28 +800,37 @@ const handleOtpKeyDown = (e, index) => {
               errors.contactNumber ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.contactNumber && <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>}
+          {errors.contactNumber && (
+            <p className="text-red-500 text-xs mt-1">{errors.contactNumber}</p>
+          )}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-600 mb-2">Email Address</label>
+        <label className="block text-sm font-medium text-start text-slate-600 mb-2 text-start">
+          Email Address
+        </label>
         <input
           type="email"
           name="email"
           value={registerData.email}
           onChange={handleRegisterInputChange}
           placeholder="Enter your email"
+          text-start
           className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 text-slate-700 placeholder-slate-400 bg-slate-50 ${
             errors.email ? "border-red-300" : "border-slate-200"
           }`}
         />
-        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-600 mb-2">Password</label>
+          <label className="block text-sm text-start font-medium text-slate-600 mb-2 text-start">
+            Password
+          </label>
           <input
             type="password"
             name="password"
@@ -757,10 +841,14 @@ const handleOtpKeyDown = (e, index) => {
               errors.password ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+          )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-600 mb-2">Confirm Password</label>
+          <label className="block text-sm font-medium text-start text-slate-600 mb-2 text-start">
+            Confirm Password
+          </label>
           <input
             type="password"
             name="confirmPassword"
@@ -771,7 +859,11 @@ const handleOtpKeyDown = (e, index) => {
               errors.confirmPassword ? "border-red-300" : "border-slate-200"
             }`}
           />
-          {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.confirmPassword}
+            </p>
+          )}
         </div>
       </div>
 
@@ -805,7 +897,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.shopName ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.shopName && <p className="text-red-500 text-xs mt-1">{errors.shopName}</p>}
+        {errors.shopName && (
+          <p className="text-red-500 text-xs mt-1">{errors.shopName}</p>
+        )}
       </div>
 
       <div>
@@ -819,7 +913,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.shopAddress ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.shopAddress && <p className="text-red-500 text-xs mt-1">{errors.shopAddress}</p>}
+        {errors.shopAddress && (
+          <p className="text-red-500 text-xs mt-1">{errors.shopAddress}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -834,7 +930,9 @@ const handleOtpKeyDown = (e, index) => {
               errors.city ? "border-red-300" : "border-slate-300"
             }`}
           />
-          {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
+          {errors.city && (
+            <p className="text-red-500 text-xs mt-1">{errors.city}</p>
+          )}
         </div>
         <div>
           <input
@@ -847,7 +945,9 @@ const handleOtpKeyDown = (e, index) => {
               errors.state ? "border-red-300" : "border-slate-300"
             }`}
           />
-          {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state}</p>}
+          {errors.state && (
+            <p className="text-red-500 text-xs mt-1">{errors.state}</p>
+          )}
         </div>
       </div>
 
@@ -862,15 +962,25 @@ const handleOtpKeyDown = (e, index) => {
             errors.pincode ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.pincode && <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>}
+        {errors.pincode && (
+          <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>
+        )}
       </div>
 
-      <div className="flex justify-center mt-6">
+      {/* <div className="flex justify-center mt-6">
         <button
           onClick={handleShopDetailsSubmit}
           className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow"
         >
-          Next →
+          Next <ArrowRight/>
+        </button>
+      </div> */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handleShopDetailsSubmit}
+          className="flex cursor-pointer items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow"
+        >
+          Next <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </>
@@ -894,7 +1004,9 @@ const handleOtpKeyDown = (e, index) => {
           <option value="axis">Axis Bank</option>
           <option value="pnb">Punjab National Bank</option>
         </select>
-        {errors.bankName && <p className="text-red-500 text-xs mt-1">{errors.bankName}</p>}
+        {errors.bankName && (
+          <p className="text-red-500 text-xs mt-1">{errors.bankName}</p>
+        )}
       </div>
 
       <div>
@@ -908,7 +1020,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.branchName ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.branchName && <p className="text-red-500 text-xs mt-1">{errors.branchName}</p>}
+        {errors.branchName && (
+          <p className="text-red-500 text-xs mt-1">{errors.branchName}</p>
+        )}
       </div>
 
       <div>
@@ -922,7 +1036,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.accountHolder ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.accountHolder && <p className="text-red-500 text-xs mt-1">{errors.accountHolder}</p>}
+        {errors.accountHolder && (
+          <p className="text-red-500 text-xs mt-1">{errors.accountHolder}</p>
+        )}
       </div>
 
       <div>
@@ -936,7 +1052,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.accountNumber ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.accountNumber && <p className="text-red-500 text-xs mt-1">{errors.accountNumber}</p>}
+        {errors.accountNumber && (
+          <p className="text-red-500 text-xs mt-1">{errors.accountNumber}</p>
+        )}
       </div>
 
       <div>
@@ -950,7 +1068,9 @@ const handleOtpKeyDown = (e, index) => {
             errors.reAccountNumber ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.reAccountNumber && <p className="text-red-500 text-xs mt-1">{errors.reAccountNumber}</p>}
+        {errors.reAccountNumber && (
+          <p className="text-red-500 text-xs mt-1">{errors.reAccountNumber}</p>
+        )}
       </div>
 
       <div>
@@ -964,121 +1084,153 @@ const handleOtpKeyDown = (e, index) => {
             errors.ifscCode ? "border-red-300" : "border-slate-300"
           }`}
         />
-        {errors.ifscCode && <p className="text-red-500 text-xs mt-1">{errors.ifscCode}</p>}
+        {errors.ifscCode && (
+          <p className="text-red-500 text-xs mt-1">{errors.ifscCode}</p>
+        )}
       </div>
 
       <div className="flex justify-center mt-6">
         <button
           onClick={handleBankDetailsSubmit}
-          className="bg-cyan-600 cursor-pointer hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow"
+          className="flex items-center gap-2 bg-cyan-600 cursor-pointer hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow"
         >
-          Next 
+          Next <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </>
   );
 
   const renderKycForm = () => (
-  <>
-    <div className="space-y-4">
-      <p className="text-sm font-medium text-slate-700 mb-4">Upload Your Details</p>
-      <p className="text-xs text-slate-500 mb-6">
-        To complete your vendor verification, please provide the information for the following documents. 
-        Ensure all details are clear and match your registered information.
-      </p>
+    <>
+      <div className="space-y-4">
+        <p className="text-sm font-medium text-slate-700 mb-4">
+          Upload Your Details
+        </p>
+        <p className="text-xs text-slate-500 mb-6">
+          To complete your vendor verification, please provide the information
+          for the following documents. Ensure all details are clear and match
+          your registered information.
+        </p>
 
-      <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-600 mb-2 text-start">PAN Number</label>
-          <input
-            type="text"
-            name="panNumber"
-            value={kycDetails.panNumber}
-            onChange={handleKycInputChange}
-            placeholder="CBTPT5939C"
-            maxLength={10}
-            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
-              errors.panNumber ? "border-red-300" : "border-slate-300"
-            }`}
-          />
-          {errors.panNumber && <p className="text-red-500 text-xs mt-1">{errors.panNumber}</p>}
-        </div>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-2 text-start">
+              PAN Number
+            </label>
+            <input
+              type="text"
+              name="panNumber"
+              value={kycDetails.panNumber}
+              onChange={handleKycInputChange}
+              placeholder="CBTPT5939C"
+              maxLength={10}
+              className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+                errors.panNumber ? "border-red-300" : "border-slate-300"
+              }`}
+            />
+            {errors.panNumber && (
+              <p className="text-red-500 text-xs mt-1">{errors.panNumber}</p>
+            )}
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-600 mb-2 text-start">GSTIN Number</label>
-          <input
-            type="text"
-            name="gstinNumber"
-            value={kycDetails.gstinNumber}
-            onChange={handleKycInputChange}
-            placeholder="27ABCDE1234F1Z5"
-            maxLength={15}
-            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
-              errors.gstinNumber ? "border-red-300" : "border-slate-300"
-            }`}
-          />
-          {errors.gstinNumber && <p className="text-red-500 text-xs mt-1">{errors.gstinNumber}</p>}
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-2 text-start">
+              GSTIN Number
+            </label>
+            <input
+              type="text"
+              name="gstinNumber"
+              value={kycDetails.gstinNumber}
+              onChange={handleKycInputChange}
+              placeholder="27ABCDE1234F1Z5"
+              maxLength={15}
+              className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+                errors.gstinNumber ? "border-red-300" : "border-slate-300"
+              }`}
+            />
+            {errors.gstinNumber && (
+              <p className="text-red-500 text-xs mt-1">{errors.gstinNumber}</p>
+            )}
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-600 mb-2 text-start">Aadhar Number</label>
-          <input
-            type="text"
-            name="aadharNumber"
-            value={kycDetails.aadharNumber}
-            onChange={handleKycInputChange}
-            placeholder="9806 4765 5643"
-            maxLength={12}
-            pattern="[0-9]*"
-            className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
-              errors.aadharNumber ? "border-red-300" : "border-slate-300"
-            }`}
-          />
-          {errors.aadharNumber && <p className="text-red-500 text-xs mt-1">{errors.aadharNumber}</p>}
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-2 text-start">
+              Aadhar Number
+            </label>
+            <input
+              type="text"
+              name="aadharNumber"
+              value={kycDetails.aadharNumber}
+              onChange={handleKycInputChange}
+              placeholder="9806 4765 5643"
+              maxLength={12}
+              pattern="[0-9]*"
+              className={`w-full border-b py-3 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500 ${
+                errors.aadharNumber ? "border-red-300" : "border-slate-300"
+              }`}
+            />
+            {errors.aadharNumber && (
+              <p className="text-red-500 text-xs mt-1">{errors.aadharNumber}</p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div className="flex justify-center mt-6">
-      <button
-        onClick={handleKycSubmit}
-        disabled={isLoading}
-        className="bg-cyan-600 cursor-pointer hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? (
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-            Next
-          </div>
-        ) : (
-          "Next "
-        )}
-      </button>
-    </div>
-  </>
-);
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handleKycSubmit}
+          disabled={isLoading}
+          className="bg-cyan-600 cursor-pointer hover:bg-cyan-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+              <span>Next</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          ) : (
+            "Next "
+          )}
+        </button>
+      </div>
+    </>
+  );
 
   const getFormTitle = () => {
     switch (currentStep) {
-      case "login": return "Log in";
-      case "register": return "Register";
-      case "shopDetails": return "Shop details";
-      case "bankDetails": return "Bank details";
-      case "kyc": return "KYC Verification";
-       case "otpVerification": return "Verify Phone Number";
-      default: return "Log in";
+      case "login":
+        return "Log in";
+      case "register":
+        return "Register";
+      case "shopDetails":
+        return "Shop details";
+      case "bankDetails":
+        return "Bank details";
+      case "kyc":
+        return "KYC Verification";
+      case "otpVerification":
+        return "Verify Phone Number";
+      default:
+        return "Log in";
     }
   };
 
   const getCurrentForm = () => {
     switch (currentStep) {
-      case "login": return renderLoginForm();
-      case "register": return renderRegisterForm();
-      case "shopDetails": return renderShopDetailsForm();
-      case "bankDetails": return renderBankDetailsForm();
-      case "kyc": return renderKycForm();
-      case "otpVerification": return renderOtpForm();
-      default: return renderLoginForm();
+      case "login":
+        return renderLoginForm();
+      case "register":
+        return renderRegisterForm();
+      case "shopDetails":
+        return renderShopDetailsForm();
+      case "bankDetails":
+        return renderBankDetailsForm();
+      case "kyc":
+        return renderKycForm();
+      case "otpVerification":
+        return renderOtpForm();
+      default:
+        return renderLoginForm();
     }
   };
 
@@ -1087,79 +1239,87 @@ const handleOtpKeyDown = (e, index) => {
   };
 
   const showLoginLink = () => {
-    return currentStep === "register" || currentStep === "shopDetails" || currentStep === "bankDetails" || currentStep === "kyc" || currentStep === "otpVerification";;
+    return (
+      currentStep === "register" ||
+      currentStep === "shopDetails" ||
+      currentStep === "bankDetails" ||
+      currentStep === "kyc" ||
+      currentStep === "otpVerification"
+    );
   };
 
-const renderOtpForm = () => (
-  <div className="space-y-6">
-    <div className="text-center space-y-2">
-      <h3 className="text-lg font-semibold text-slate-800">Phone Verification</h3>
-      {!otpData.isOtpSent ? (
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-cyan-500 border-t-transparent"></div>
-          <p className="text-sm text-slate-600">
-            Sending verification code to +91{otpData.phoneNumber}...
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <p className="text-sm text-slate-600">
-            Enter the 6-digit code sent to +91{otpData.phoneNumber}
-          </p>
-          
-          <div className="flex justify-center space-x-3">
-            {otpData.otp.map((digit, index) => (
-              <input
-                key={index}
-                id={`otp-${index}`}
-                type="text"
-                inputMode="numeric"
-                maxLength="1"
-                value={digit}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-                onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
-                  errors.otp ? 'border-red-300' : 'border-slate-300'
-                }`}
-              />
-            ))}
+  const renderOtpForm = () => (
+    <div className="space-y-6">
+      <div className="text-center space-y-2">
+        <h3 className="text-lg font-semibold text-slate-800">
+          Phone Verification
+        </h3>
+        {!otpData.isOtpSent ? (
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-cyan-500 border-t-transparent"></div>
+            <p className="text-sm text-slate-600">
+              Sending verification code to +91{otpData.phoneNumber}...
+            </p>
           </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-sm text-slate-600">
+              Enter the 6-digit code sent to +91{otpData.phoneNumber}
+            </p>
 
-          {errors.otp && (
-            <p className="text-red-500 text-sm text-center">{errors.otp}</p>
-          )}
+            <div className="flex justify-center space-x-3">
+              {otpData.otp.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`otp-${index}`}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength="1"
+                  value={digit}
+                  onChange={(e) => handleOtpChange(index, e.target.value)}
+                  onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                  className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+                    errors.otp ? "border-red-300" : "border-slate-300"
+                  }`}
+                />
+              ))}
+            </div>
 
-          <div className="text-center">
-            {otpData.timer > 0 ? (
-              <p className="text-sm text-slate-500">
-                Resend in {otpData.timer}s
-              </p>
-            ) : (
-              <button
-                onClick={handleResendOtp}
-                disabled={otpData.resendCount >= 3}
-                className="text-cyan-600 hover:text-cyan-700 text-sm font-medium"
-              >
-                Resend Code
-              </button>
+            {errors.otp && (
+              <p className="text-red-500 text-sm text-center">{errors.otp}</p>
             )}
+
+            <div className="text-center">
+              {otpData.timer > 0 ? (
+                <p className="text-sm text-slate-500">
+                  Resend in {otpData.timer}s
+                </p>
+              ) : (
+                <button
+                  onClick={handleResendOtp}
+                  disabled={otpData.resendCount >= 3}
+                  className="text-cyan-600 hover:text-cyan-700 text-sm font-medium"
+                >
+                  Resend Code
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={handleOtpSubmit}
+              disabled={isLoading || otpData.otp.join("").length !== 6}
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl disabled:opacity-50"
+            >
+              {isLoading ? "Verifying..." : "Verify & Complete"}
+            </button>
           </div>
+        )}
+      </div>
 
-          <button
-            onClick={handleOtpSubmit}
-            disabled={isLoading || otpData.otp.join('').length !== 6}
-            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl disabled:opacity-50"
-          >
-            {isLoading ? 'Verifying...' : 'Verify & Complete'}
-          </button>
-        </div>
-      )}
+      {/* reCAPTCHA container */}
+      <div id="recaptcha-container"></div>
     </div>
-
-    {/* reCAPTCHA container */}
-    <div id="recaptcha-container"></div>
-  </div>
-);
+  );
 
   return (
     <div className="flex w-screen overflow-hidden min-h-screen">
@@ -1192,13 +1352,13 @@ const renderOtpForm = () => (
               {/* Error Message */}
               {(authError || errors.general) && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-700 text-sm">{authError || errors.general}</p>
+                  <p className="text-red-700 text-sm">
+                    {authError || errors.general}
+                  </p>
                 </div>
               )}
 
-              <div className="space-y-6">
-                {getCurrentForm()}
-              </div>
+              <div className="space-y-6">{getCurrentForm()}</div>
             </div>
 
             {/* Footer Links */}
@@ -1227,13 +1387,18 @@ const renderOtpForm = () => (
                 </p>
               )}
 
-              {(currentStep === "shopDetails" || currentStep === "bankDetails" || currentStep === "kyc") && (
-                <button
-                  onClick={goBack}
-                  className="text-xs text-slate-500 hover:text-slate-700"
-                >
-                  ← Back
-                </button>
+              {(currentStep === "shopDetails" ||
+                currentStep === "bankDetails" ||
+                currentStep === "kyc") && (
+                <div className="flex items-center">
+                  <button
+                    onClick={goBack}
+                    className="flex items-center gap-1 text-xs ps-30 cursor-pointer text-slate-500 hover:text-slate-700"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back
+                  </button>
+                </div>
               )}
             </div>
           </div>

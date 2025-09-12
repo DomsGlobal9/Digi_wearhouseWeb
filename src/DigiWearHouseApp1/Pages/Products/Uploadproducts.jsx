@@ -2823,14 +2823,14 @@ const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
       />
 
       {/* Only show Units section if not a saree and both sizes and colors are selected */}
-      {isSaree && (
+      {/* {isSaree && ( */}
         <UnitsSection
           selectedSizes={formData.selectedSizes}
           selectedColors={formData.selectedColors}
           units={formData.units}
           onChange={(units) => onChange("units", units)}
         />
-      )}
+      {/* )} */}
     </div>
   );
 };

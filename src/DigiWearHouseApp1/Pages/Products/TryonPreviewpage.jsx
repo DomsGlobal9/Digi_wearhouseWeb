@@ -1329,6 +1329,7 @@ const navigate=useNavigate()
 
                 {/* Thumbnail Images - Vertical Stack */}
                 <div className="w-20 space-y-3">
+                  <span className="pb-2 font-bold">Try Preview</span>
                   {productData.images && productData.images.length > 0
                     ? productData.images.map((imageUrl, index) => (
                         <button
