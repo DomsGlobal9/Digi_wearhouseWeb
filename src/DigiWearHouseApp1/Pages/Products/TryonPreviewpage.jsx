@@ -810,6 +810,8 @@ const navigate=useNavigate()
         });
 
         console.log("Product saved successfully:", result);
+        setTimeout(() => setSubmitStatus(null), 20000);
+        navigate("/dashboard")
       } else {
         throw new Error(result.message || "Failed to save product");
       }

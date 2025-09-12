@@ -213,7 +213,7 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <div className="text-4xl text-start md:text-5xl font-bold text-gray-800">
-              {dashboardData.totalRevenue ? 5000 : 0 } 
+              {dashboardData.totalRevenue ? 0 : 0 } 
                 {/* {dashboardData.totalRevenue.toFixed(0)} */}
               </div>
               <div className="text-xs text-gray-500 mt-2">

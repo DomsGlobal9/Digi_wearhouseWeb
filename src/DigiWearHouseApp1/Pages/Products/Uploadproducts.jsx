@@ -2014,6 +2014,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/Context"; // Adjust import path as needed
+import { Link } from "react-router-dom";
 
 // Model - Data layer
 const ProductDataModel = {
@@ -2188,6 +2189,7 @@ const TabNavigation = ({ activeTab, onTabChange, tabs }) => (
         </button>
       ))}
     </nav>
+    
   </div>
 );
 
@@ -2384,15 +2386,19 @@ const GeneralTab = ({
   );
 };
 
+
 const SizeSelector = ({ sizes, selectedSizes, onChange }) => (
   <div className="space-y-3">
     <div className="flex items-center justify-between">
       <label className="text-sm md:text-base font-medium text-gray-700">
         Select Sizes
       </label>
-      <button className="text-blue-500 text-sm hover:text-blue-600">
+      <Link to={"/size-chart"}>
+        <button className="text-blue-500 text-sm hover:text-blue-600" >
         Size chart ?
       </button>
+      </Link>
+    
     </div>
     <div className="flex flex-wrap gap-3">
       {sizes.map((size) => (
@@ -2639,144 +2645,6 @@ const ColorSelector = ({ selectedColors, onChange }) => {
   );
 };
 
-// const UnitsSection = ({ sizes, selectedColors, units, onChange }) => {
-//   const { currentUser } = useApp(); // Get current user from context
-//   const [errorMessages, setErrorMessages] = useState({}); // Track input errors
-
-//   // Ensure selectedColors is an array
-//   const safeSelectedColors = Array.isArray(selectedColors) ? selectedColors : [];
-
-//   // Color mapping function
-//   const chooseColor = (colorName) => {
-//     const predefinedColors = {
-//       red: '#FF0000',
-//       blue: '#0000FF',
-//       green: '#008000',
-//       yellow: '#FFFF00',
-//       purple: '#800080',
-//       orange: '#FFA500',
-//       pink: '#FF69B4',
-//       black: '#000000',
-//       white: '#FFFFFF',
-//       gray: '#808080',
-//       cyan: '#00FFFF',
-//       magenta: '#FF00FF',
-//       brown: '#A52A2A',
-//       pastel: '#FFC1CC',
-//       dark: '#880808'
-//     };
-
-//     const normalizedColorName = colorName?.toLowerCase() || '';
-//     if (predefinedColors[normalizedColorName]) {
-//       return predefinedColors[normalizedColorName];
-//     }
-
-//     const hash = normalizedColorName.split('').reduce((acc, char) => {
-//       return char.charCodeAt(0) + ((acc << 5) - acc);
-//     }, 0);
-//     const r = (hash & 0xFF0000) >> 16;
-//     const g = (hash & 0x00FF00) >> 8;
-//     const b = hash & 0x0000FF;
-//     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
-//   };
-
-//   // Save units to Firebase
-//   const saveUnitsToFirebase = async (updatedUnits) => {
-//     if (!currentUser) {
-//       console.error('No user logged in');
-//       return;
-//     }
-
-//     try {
-//       const unitsDocRef = doc(db, 'users', currentUser.uid, 'selections', 'units');
-//       await setDoc(unitsDocRef, {
-//         units: updatedUnits,
-//         timestamp: new Date().toISOString()
-//       });
-//       console.log('Units saved to Firebase:', updatedUnits);
-//     } catch (error) {
-//       console.error('Error saving units to Firebase:', error);
-//       alert('Failed to save units. Please try again.');
-//     }
-//   };
-
-//   // Handle unit input change
-//   const handleUnitChange = (size, color, value) => {
-//     const key = `${size}-${color}`;
-//     if (value === '' || /^[0-9]*$/.test(value)) {
-//       const updatedUnits = {
-//         ...units,
-//         [color]: {
-//           ...(units[color] || {}),
-//           [size]: value
-//         }
-//       };
-//       onChange(updatedUnits);
-//       saveUnitsToFirebase(updatedUnits);
-//       setErrorMessages((prev) => ({ ...prev, [key]: null }));
-//     } else {
-//       setErrorMessages((prev) => ({
-//         ...prev,
-//         [key]: 'Please enter a valid number'
-//       }));
-//     }
-//   };
-
-//   return (
-//     <div className="space-y-4">
-//       <label className="text-sm md:text-base font-medium text-gray-700">Units</label>
-//       {safeSelectedColors.length === 0 || sizes.length === 0 ? (
-//         <p className="text-sm text-gray-500">Please select sizes and colors to input units.</p>
-//       ) : (
-//         <div className="space-y-3">
-//           {/* Header Row */}
-//           <div className="grid grid-cols-3 gap-4 font-medium text-gray-700 text-sm">
-//             <div>Size</div>
-//             <div>Color</div>
-//             <div>Units</div>
-//           </div>
-
-//           {/* Size-Color Rows */}
-//           {safeSelectedColors.flatMap((color) =>
-//             sizes.map((size) => (
-//               <div key={`${size}-${color}`} className="grid grid-cols-3 gap-4 items-center">
-//                 {/* Size Column */}
-//                 <div className="bg-gray-100 rounded-md p-3 text-center text-sm font-medium text-gray-700">
-//                   {size}
-//                 </div>
-
-//                 {/* Color Column */}
-//                 <div
-//                   className="rounded-md p-3 text-center text-sm font-medium text-white"
-//                   style={{ backgroundColor: chooseColor(color) }}
-//                 >
-//                   {color.charAt(0).toUpperCase() + color.slice(1)}
-//                 </div>
-
-//                 {/* Units Input */}
-//                 <div className="relative">
-//                   <input
-//                     type="text"
-//                     value={units[color]?.[size] || ''}
-//                     onChange={(e) => handleUnitChange(size, color, e.target.value)}
-//                     placeholder="e.g. 22"
-//                     className={`w-full h-9 text-center border rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-//                       errorMessages[`${size}-${color}`] ? 'border-red-500' : 'border-gray-300'
-//                     }`}
-//                   />
-//                   {errorMessages[`${size}-${color}`] && (
-//                     <p className="text-xs text-red-500 mt-1">{errorMessages[`${size}-${color}`]}</p>
-//                   )}
-//                 </div>
-//               </div>
-//             ))
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
 // Updated UnitsSection with simplified data handling
 const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
   const [errorMessages, setErrorMessages] = useState({});
@@ -2955,7 +2823,7 @@ const SizePricingTab = ({ formData, onChange, sizes, colors }) => {
       />
 
       {/* Only show Units section if not a saree and both sizes and colors are selected */}
-      {!isSaree && (
+      {isSaree && (
         <UnitsSection
           selectedSizes={formData.selectedSizes}
           selectedColors={formData.selectedColors}
@@ -3940,7 +3808,6 @@ const AddProductForm = ({ onBack }) => {
     { id: "upload", label: "Upload" },
   ];
   const [myselectedColor, setMyselectedColor] = useState("select color");
-
   const dressTypes = ProductDataModel.getDressTypes();
   const materialTypes = ProductDataModel.getMaterialTypes();
   const designTypes = ProductDataModel.getDesignTypes();
