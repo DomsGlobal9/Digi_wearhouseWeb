@@ -73,94 +73,31 @@ class FirebaseService {
   }
 
   // Save product to user's subcollection with enhanced debugging
-  async saveProduct(formData, userId, imageFiles = null) {
+  async saveProduct(productData, userId) {
     try {
-      console.log('🔍 Starting saveProduct...');
-      console.log('📋 Input params:', { 
-        hasFormData: !!formData, 
-        userId: userId, 
-        hasImageFiles: !!imageFiles && imageFiles.length > 0 
+      const productRef = await addDoc(collection(db, 'users', userId, 'products'), {
+        title: productData.title || 'Untitled Product',
+        name: productData.title || 'Untitled Product', // Alias for B2C
+        description: productData.description || '',
+        category: productData.category?.toUpperCase() || '', // e.g., WOMEN
+        productType: productData.productType || '',
+        dressType: productData.dressType || '',
+        fabric: productData.fabric || '',
+        craft: productData.craft || '',
+        price: parseFloat(productData.price) || 0,
+        selectedSizes: productData.selectedSizes || [],
+        selectedColors: productData.selectedColors || [],
+        units: productData.units || {}, // { [color]: { [size]: quantity } }
+        imageUrls: productData.imageUrls || [],
+        userId,
+        timestamp: serverTimestamp(),
+        createdAt: new Date().toISOString(),
       });
-
-      if (!userId) {
-        throw new Error('User ID is required to save product');
-      }
-
-      let imageUrls = formData.images || [];
-      
-      // Upload new images if provided
-      if (imageFiles && imageFiles.length > 0) {
-        console.log('📁 Uploading new images...');
-        const uploadedUrls = await this.uploadImages(imageFiles);
-        imageUrls = [...imageUrls, ...uploadedUrls];
-        console.log('✅ Images uploaded successfully');
-      }
-
-      // Format data for Firebase
-      const productData = this.formatProductData(formData, imageUrls, userId);
-      
-      console.log('📝 Formatted product data:');
-      console.log('   - Title:', productData.title);
-      console.log('   - User ID:', productData.userId);
-      console.log('   - Image count:', productData.imageUrls.length);
-      console.log('   - Price:', productData.price);
-      
-      // Create collection reference
-      const collectionPath = `users/${userId}/products`;
-      console.log('📍 Collection path:', collectionPath);
-      
-      const userProductsCollection = collection(db, "users", userId, "products");
-      
-      // Save to user's products subcollection
-      console.log('💾 Attempting to save to Firestore...');
-      const docRef = await addDoc(userProductsCollection, productData);
-      
-      console.log('✅ SUCCESS! Product saved with ID:', docRef.id);
-      console.log('🔗 Full document path: users/' + userId + '/products/' + docRef.id);
-      
-      // Verify the document exists by reading it back
-      console.log('🔍 Verifying document was saved...');
-      try {
-        const verification = await getDoc(docRef);
-        if (verification.exists()) {
-          console.log('✅ VERIFICATION SUCCESS: Document exists in Firestore');
-          console.log('📊 Saved data sample:', {
-            title: verification.data().title,
-            userId: verification.data().userId,
-            timestamp: verification.data().timestamp
-          });
-        } else {
-          console.error('❌ VERIFICATION FAILED: Document does not exist after save');
-        }
-      } catch (verifyError) {
-        console.error('❌ VERIFICATION ERROR:', verifyError);
-      }
-      
-      return {
-        success: true,
-        productId: docRef.id,
-        message: 'Product saved successfully!',
-        path: collectionPath + '/' + docRef.id
-      };
-      
+      console.log(`Product saved: ${productRef.id}`);
+      return { success: true, productId: productRef.id };
     } catch (error) {
-      console.error('💥 ERROR in saveProduct:', error);
-      console.error('📋 Error details:', {
-        name: error.name,
-        message: error.message,
-        code: error.code,
-        stack: error.stack?.split('\n').slice(0, 3)
-      });
-      
-      // Check for specific Firebase errors
-      if (error.code === 'permission-denied') {
-        console.error('🚫 PERMISSION DENIED - Check Firestore security rules');
-        console.error('   Required rule: match /users/{userId}/{document=**} { allow read, write: if request.auth != null && request.auth.uid == userId; }');
-      } else if (error.code === 'unauthenticated') {
-        console.error('🔐 UNAUTHENTICATED - User is not logged in');
-      }
-      
-      throw new Error(`Failed to save product: ${error.message}`);
+      console.error('Error saving product:', error);
+      return { success: false, message: error.message };
     }
   }
 
@@ -226,78 +163,41 @@ class FirebaseService {
 
   
 
-  // Update existing product in user's subcollection
-  async updateProduct(productId, userId, formData, imageFiles = null) {
+async updateProduct(userId, productId, productData) {
     try {
-      if (!userId) {
-        throw new Error('User ID is required to update product');
-      }
-
-      let imageUrls = formData.images || [];
-      
-      // Upload new images if provided
-      if (imageFiles && imageFiles.length > 0) {
-        const uploadedUrls = await this.uploadImages(imageFiles);
-        imageUrls = [...imageUrls, ...uploadedUrls];
-      }
-
-      // Format data for Firebase
-      const productData = this.formatProductData(formData, imageUrls, userId);
-      productData.updatedAt = new Date().toISOString();
-      
-      // Update in user's products subcollection
-      const docRef = doc(db, "users", userId, "products", productId);
-      await updateDoc(docRef, productData);
-      
-      return {
-        success: true,
-        productId: productId,
-        message: 'Product updated successfully!'
-      };
-      
+      const productRef = doc(db, 'users', userId, 'products', productId);
+      await updateDoc(productRef, {
+        title: productData.title || 'Untitled Product',
+        name: productData.title || 'Untitled Product',
+        description: productData.description || '',
+        category: productData.category?.toUpperCase() || '',
+        productType: productData.productType || '',
+        dressType: productData.dressType || '',
+        fabric: productData.fabric || '',
+        craft: productData.craft || '',
+        price: parseFloat(productData.price) || 0,
+        selectedSizes: productData.selectedSizes || [],
+        selectedColors: productData.selectedColors || [],
+        units: productData.units || {},
+        imageUrls: productData.imageUrls || [],
+      });
+      console.log(`Product updated: ${productId}`);
+      return { success: true };
     } catch (error) {
       console.error('Error updating product:', error);
-      throw new Error(`Failed to update product: ${error.message}`);
+      return { success: false, message: error.message };
     }
   }
 
   // Get all products for a specific user
-  async getUserProducts(userId) {
+ async getUserProducts(userId) {
     try {
-      console.log('📖 Fetching products for user:', userId);
-      
-      if (!userId) {
-        throw new Error('User ID is required to fetch products');
-      }
-
-      const q = query(
-        collection(db, "users", userId, "products"),
-        orderBy('timestamp', 'desc')
-      );
-      
+      const q = collection(db, 'users', userId, 'products');
       const querySnapshot = await getDocs(q);
-      const products = [];
-      
-      querySnapshot.forEach((doc) => {
-        products.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
-      
-      console.log(`✅ Found ${products.length} products for user ${userId}`);
-      if (products.length > 0) {
-        console.log('📋 First product sample:', {
-          id: products[0].id,
-          title: products[0].title,
-          userId: products[0].userId
-        });
-      }
-      
-      return products;
+      return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
       console.error('Error fetching user products:', error);
-      throw new Error(`Failed to fetch products: ${error.message}`);
+      throw error;
     }
   }
 
@@ -326,65 +226,27 @@ class FirebaseService {
   }
 
   // Delete product from user's subcollection
-  async deleteUserProduct(userId, productId) {
+ async deleteProduct(userId, productId) {
     try {
-      if (!userId || !productId) {
-        throw new Error('User ID and Product ID are required');
-      }
-
-      // Get product data first to delete associated images
-      const product = await this.getUserProduct(userId, productId);
-      
-      // Delete associated images from storage
-      if (product.imageUrls && product.imageUrls.length > 0) {
-        const deletePromises = product.imageUrls.map(async (imageUrl) => {
-          try {
-            const imageRef = ref(storage, imageUrl);
-            await deleteObject(imageRef);
-          } catch (error) {
-            console.warn('Error deleting image:', error);
-          }
-        });
-        
-        await Promise.all(deletePromises);
-      }
-      
-      // Delete product document from user's subcollection
-      const docRef = doc(db, "users", userId, "products", productId);
-      await deleteDoc(docRef);
-      
-      return {
-        success: true,
-        message: 'Product deleted successfully!'
-      };
-      
+      const productRef = doc(db, 'users', userId, 'products', productId);
+      await deleteDoc(productRef);
+      console.log(`Product deleted: ${productId}`);
+      return { success: true };
     } catch (error) {
       console.error('Error deleting product:', error);
-      throw new Error(`Failed to delete product: ${error.message}`);
+      return { success: false, message: error.message };
     }
   }
 
   // Toggle product status in user's subcollection
-  async toggleUserProductStatus(userId, productId, isPublished) {
+  async testFirestoreConnection(userId) {
     try {
-      if (!userId || !productId) {
-        throw new Error('User ID and Product ID are required');
-      }
-
-      const docRef = doc(db, "users", userId, "products", productId);
-      await updateDoc(docRef, {
-        isPublished: isPublished,
-        updatedAt: new Date().toISOString()
-      });
-      
-      return {
-        success: true,
-        message: `Product ${isPublished ? 'published' : 'unpublished'} successfully!`
-      };
-      
+      const testDocRef = doc(db, 'users', userId, 'test', 'connectionTest');
+      await setDoc(testDocRef, { test: true, timestamp: serverTimestamp() });
+      return { success: true, message: 'Firestore connection successful' };
     } catch (error) {
-      console.error('Error updating product status:', error);
-      throw new Error(`Failed to update product status: ${error.message}`);
+      console.error('Firestore connection test failed:', error);
+      return { success: false, error: error.message };
     }
   }
 

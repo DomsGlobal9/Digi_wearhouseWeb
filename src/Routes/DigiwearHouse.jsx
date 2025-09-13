@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Routes, Route,  useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 // import otpPage from './pages/DigiOtp.jsx'
 import Navbar from '../DigiWearHouseApp1/Components/Navbar.jsx';
 // import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
@@ -14,7 +14,7 @@ import RecentlyAddedProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/Rece
 import ProductsPage from '../DigiWearHouseApp1/Pages/Dashboard/ProductPage.jsx';
 import UploadProducts from '../DigiWearHouseApp1/Pages/Products/Uploadproducts.jsx';
 import TryonPreview from '../DigiWearHouseApp1/Pages/Products/TryonPreviewpage.jsx';
-import  { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
+import { AppProvider } from "../DigiWearHouseApp1/context/Context.jsx"
 import UserProductsList from '../DigiWearHouseApp1/Pages/Products/productList.jsx';
 import HomePage from '../DigiWearHouseApp1/Pages/HomePage.jsx';
 import Whoweare from '../DigiWearHouseApp1/Pages/Whoweare.jsx';
@@ -25,7 +25,7 @@ import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementS
 import SizeChart from '../DigiWearHouseApp1/Components/SizeChart.jsx';
 
 function DigiwearHouse() {
-   const location = useLocation();
+  const location = useLocation();
 
   // Don't show Navbar on login or register pages
   const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
@@ -33,41 +33,41 @@ function DigiwearHouse() {
 
 
     <>
-         {!hideNavbar && <Navbar />}
-  <AppProvider>
-      <Routes>
-        {/* Default route */}
-        {/* <Route path="/login" element={< DigiWarehouseLogin/>} /> */}
-        {/* <Route path="/" element={<DigiwearHouse/>}/> */}
-                <Route path = "/register" element={<DigiWarehouseRegistration/>} />
-                 <Route path="/" element={<HomePage />} />
-                  <Route path = "/contact-us" element={<ContactUs />} /> 
-                <Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
-        {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
-        <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
-       
-        <Route path="/who-we-are" element={<Whoweare />} />
-        <Route path = "/orders" element={<OrdersManagementSystem />} />
-        <Route path = "/dashboard" element={<VendorDashboard />} />
-        <Route path = "/profile" element={<Profilepage />} />
-        <Route path = "/recenltyproducts" element={<UserProductsList />} />
-       
-        <Route path = "/total-units" element={<TotalUnitsSoldController />} />
-        <Route path = "/total-revenue" element={<TotalRevenueController />} />
-        <Route path = "/inventory" element={<InventoryController />} />
-        {/* <Route path="/commission" element={<CommissionPage/>} /> */}
-         <Route path='/products' element={<ProductsPage/>}/>
-        <Route path='/recenltyproducts' element={<RecentlyAddedProductsPage/>}/>
-        <Route path="/upload-products" element={<UploadProducts/>} />
-        <Route path="/tryon-preview" element={<TryonPreview/>} />
-        <Route path="/size-chart" element={<SizeChart/>} />
+      {!hideNavbar && <Navbar />}
+      <AppProvider>
+        <Routes>
+          {/* Default route */}
+          {/* <Route path="/login" element={< DigiWarehouseLogin/>} /> */}
+          {/* <Route path="/" element={<DigiwearHouse/>}/> */}
+          <Route path="/register" element={<DigiWarehouseRegistration />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
+          <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
+
+          <Route path="/who-we-are" element={<Whoweare />} />
+          <Route path="/orders" element={<OrdersManagementSystem />} />
+          <Route path="/dashboard" element={<VendorDashboard />} />
+          <Route path="/profile" element={<Profilepage />} />
+          <Route path="/recenltyproducts" element={<UserProductsList />} />
+
+          <Route path="/total-units" element={<TotalUnitsSoldController />} />
+          <Route path="/total-revenue" element={<TotalRevenueController />} />
+          <Route path="/inventory" element={<InventoryController />} />
+          {/* <Route path="/commission" element={<CommissionPage/>} /> */}
+          <Route path='/products' element={<ProductsPage />} />
+          <Route path='/recenltyproducts' element={<RecentlyAddedProductsPage />} />
+          <Route path="/upload-products" element={<UploadProducts />} />
+          <Route path="/tryon-preview" element={<TryonPreview />} />
+          <Route path="/size-chart" element={<SizeChart />} />
           {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
 
-        {/* Redirect to login if no route matches */}
+          {/* Redirect to login if no route matches */}
 
-      </Routes>
-     </AppProvider>
-   
+        </Routes>
+      </AppProvider>
+
 
     </>
   );
