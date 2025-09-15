@@ -11,7 +11,11 @@ function HomePage (){
     <SetUp/>
     <FeatureSection/>
     <Testimonials/>
-    <FAQSection/>
+    {/* <FAQSection id="faq" /> */}
+    
+  <FAQSection />
+
+
     <Footer/>
     </>
 }

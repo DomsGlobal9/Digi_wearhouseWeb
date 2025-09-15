@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/Context"; 
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 // Model - Data layer
 const ProductDataModel = {
@@ -1651,8 +1651,18 @@ const AddProductForm = ({ onBack }) => {
 
 
 // Controller Component
+// Controller Component - FIXED VERSION
 const UploadProducts = () => {
-  const [showAddForm, setShowAddForm] = useState(false);
+  const { productData } = useApp(); 
+  const location = useLocation();
+  
+  // Check if user is returning from navigation and was in add product flow
+  const [showAddForm, setShowAddForm] = useState(() => {
+    // If coming back from navigation and there's form data, show the form
+    return location.state?.inAddFlow === true || 
+           (productData && Object.keys(productData).length > 0);
+  });
+  
   const [hasProducts] = useState(false);
 
   const handleAddProduct = () => setShowAddForm(true);

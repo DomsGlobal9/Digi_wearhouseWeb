@@ -221,15 +221,16 @@ const Navbar = () => {
     location.pathname === "/contact-us";
   const navItems = isHomeRoute
     ? [
-        { name: "Home", path: "/" },
-        { name: "About", path: "/who-we-are" },
-        { name: "FAQ", path: "/privacy-policy" },
-        { name: "Contact Us", path: "/contact-us" },
+        { name: "Home",type: "link", path: "/" }, 
+
+        { name: "About",type: "link", path: "/who-we-are" },
+        { name: "FAQ",type: "anchor", path: "/#faq" },    ///privacy-policy
+        { name: "Contact Us",type: "link", path: "/contact-us" },
       ]
     : [
-        { name: "Dashboard", path: "/dashboard" },
+        { name: "Dashboard",type: "link", path: "/dashboard" },
         // { name: "Categories", path: "/categories" },
-        { name: "Orders", path: "/orders" },
+        { name: "Orders", type: "link" ,path: "/orders" },
         // { name: "Commissions", path: "/commission" },
       ];
 
@@ -352,13 +353,30 @@ const Navbar = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Desktop Navigation Links - Centered */}
             <div className="hidden lg:flex items-center justify-center space-x-8 py-4">
-              {navItems.map((item) => (
+              {/* {navItems.map((item) => (
                 <Link key={item.name} to={item.path}>
                   <span className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
                     {item.name}
                   </span>
                 </Link>
-              ))}
+              ))} */}
+{navItems.map((item) =>
+  item.type === "link" ? (
+    <Link key={item.name} to={item.path}>
+      <span className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
+        {item.name}
+      </span>
+    </Link>
+  ) : (
+    <a key={item.name} href={item.path}>
+      <span className="cursor-pointer text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">
+        {item.name}
+      </span>
+    </a>
+  )
+)}
+
+
 
               {/* Categories Dropdown (only for non-home route) */}
               {!isHomeRoute && (
