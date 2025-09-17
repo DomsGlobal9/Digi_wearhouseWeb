@@ -33,9 +33,9 @@ const upload = multer({
 });
 
 // Function to upload image to Cloudinary
+// Function to upload image to Cloudinary
 async function uploadToCloudinary(fileBuffer, sareePart) {
-  try {
-    console.log(`Uploading ${sareePart} to Cloudinary`);
+  return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         resource_type: 'image',
@@ -46,20 +46,20 @@ async function uploadToCloudinary(fileBuffer, sareePart) {
         width: 512, // Reduced for Vercel
         height: 512,
         crop: 'limit'
+      },
+      (error, result) => {
+        if (error) {
+          console.error(`Cloudinary upload error for ${sareePart}:`, error);
+          return reject(error);
+        }
+        console.log(`Upload success for ${sareePart}: ${result.secure_url}`);
+        resolve(result);
       }
     );
-    
-    const stream = Readable.from(fileBuffer);
-    stream.pipe(uploadStream);
-    
-    return new Promise((resolve, reject) => {
-      uploadStream.on('finish', resolve);
-      uploadStream.on('error', reject);
-    });
-  } catch (error) {
-    console.error(`Cloudinary upload error for ${sareePart}:`, error);
-    throw new Error(`Failed to upload ${sareePart}: ${error.message}`);
-  }
+
+    // Pipe the buffer into the Cloudinary upload stream
+    Readable.from(fileBuffer).pipe(uploadStream);
+  });
 }
 
 // Function to download image from URL and convert to base64
