@@ -2,6 +2,7 @@ import { IncomingForm } from 'formidable';
 import axios from 'axios';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
+import path from 'path';
 
 // Cloudinary configuration
 cloudinary.config({
@@ -17,6 +18,7 @@ const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/
 // Function to upload image to Cloudinary
 async function uploadToCloudinary(filePath, sareePart) {
   try {
+    console.log(`Uploading ${sareePart} from ${filePath}`);
     const result = await cloudinary.uploader.upload(filePath, {
       resource_type: 'image',
       folder: `saree-parts/${sareePart}`,
@@ -27,9 +29,10 @@ async function uploadToCloudinary(filePath, sareePart) {
       height: 1024,
       crop: 'limit'
     });
+    console.log(`✅ ${sareePart} uploaded successfully`);
     return result;
   } catch (error) {
-    console.error(`Cloudinary upload error for ${sareePart}:`, error);
+    console.error(`❌ Cloudinary upload error for ${sareePart}:`, error);
     throw error;
   }
 }
@@ -37,6 +40,7 @@ async function uploadToCloudinary(filePath, sareePart) {
 // Function to download image from URL and convert to base64
 async function downloadImageAsBase64(imageUrl) {
   try {
+    console.log(`Downloading image: ${imageUrl}`);
     const response = await axios.get(imageUrl, {
       responseType: 'arraybuffer',
       timeout: 30000,
@@ -48,12 +52,13 @@ async function downloadImageAsBase64(imageUrl) {
     const base64Data = Buffer.from(response.data).toString('base64');
     const contentType = response.headers['content-type'] || 'image/jpeg';
     
+    console.log(`✅ Image downloaded and converted to base64`);
     return {
       data: base64Data,
       mimeType: contentType
     };
   } catch (error) {
-    console.error('Download image error:', error);
+    console.error('❌ Download image error:', error);
     throw new Error(`Failed to download image: ${error.message}`);
   }
 }
@@ -65,15 +70,17 @@ function parseForm(req) {
       maxFileSize: 10 * 1024 * 1024, // 10MB
       maxFiles: 4,
       allowEmptyFiles: false,
-      multiples: true
+      multiples: true,
+      uploadDir: '/tmp', // Vercel temp directory
+      keepExtensions: true
     });
 
     form.parse(req, (err, fields, files) => {
       if (err) {
-        console.error('Form parsing error:', err);
+        console.error('❌ Form parsing error:', err);
         reject(err);
       } else {
-        console.log('Form parsed successfully');
+        console.log('✅ Form parsed successfully');
         console.log('Files received:', Object.keys(files));
         resolve({ fields, files });
       }
@@ -106,20 +113,26 @@ export default async function handler(req, res) {
 
   try {
     console.log('🔄 Starting API request processing...');
+    console.log('Request method:', req.method);
+    console.log('Content-Type:', req.headers['content-type']);
 
     // Check environment variables
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.GEMINI_API_KEY) {
-      console.error('Missing environment variables');
+    const missingEnvs = [];
+    if (!process.env.CLOUDINARY_CLOUD_NAME) missingEnvs.push('CLOUDINARY_CLOUD_NAME');
+    if (!process.env.CLOUDINARY_API_KEY) missingEnvs.push('CLOUDINARY_API_KEY');
+    if (!process.env.CLOUDINARY_API_SECRET) missingEnvs.push('CLOUDINARY_API_SECRET');
+    if (!process.env.GEMINI_API_KEY) missingEnvs.push('GEMINI_API_KEY');
+
+    if (missingEnvs.length > 0) {
+      console.error('❌ Missing environment variables:', missingEnvs);
       return res.status(500).json({ 
         error: 'Server configuration error: Missing environment variables',
-        missing: [
-          !process.env.CLOUDINARY_CLOUD_NAME ? 'CLOUDINARY_CLOUD_NAME' : null,
-          !process.env.CLOUDINARY_API_KEY ? 'CLOUDINARY_API_KEY' : null,
-          !process.env.CLOUDINARY_API_SECRET ? 'CLOUDINARY_API_SECRET' : null,
-          !process.env.GEMINI_API_KEY ? 'GEMINI_API_KEY' : null,
-        ].filter(Boolean)
+        missing: missingEnvs,
+        help: 'Set these in Vercel Dashboard → Settings → Environment Variables'
       });
     }
+
+    console.log('✅ Environment variables check passed');
 
     // Parse form data
     console.log('📋 Parsing form data...');
@@ -127,8 +140,18 @@ export default async function handler(req, res) {
 
     // Check if all 4 parts are uploaded
     const requiredParts = ['blouse', 'pleats', 'pallu', 'shoulder'];
-    const receivedParts = Object.keys(files).filter(key => requiredParts.includes(key));
-    const missingParts = requiredParts.filter(part => !files[part]);
+    const receivedParts = [];
+    const missingParts = [];
+
+    requiredParts.forEach(part => {
+      if (files[part] && files[part].length > 0) {
+        receivedParts.push(part);
+      } else if (files[part] && files[part].filepath) {
+        receivedParts.push(part);
+      } else {
+        missingParts.push(part);
+      }
+    });
     
     console.log('Received parts:', receivedParts);
     console.log('Missing parts:', missingParts);
@@ -142,13 +165,15 @@ export default async function handler(req, res) {
     }
 
     // Store temp file paths for cleanup
-    Object.values(files).forEach(fileArray => {
-      if (Array.isArray(fileArray)) {
-        fileArray.forEach(file => tempFiles.push(file.filepath));
-      } else if (fileArray.filepath) {
-        tempFiles.push(fileArray.filepath);
+    requiredParts.forEach(partName => {
+      const fileArray = files[partName];
+      const file = Array.isArray(fileArray) ? fileArray[0] : fileArray;
+      if (file && file.filepath) {
+        tempFiles.push(file.filepath);
       }
     });
+
+    console.log('Temp files to cleanup:', tempFiles.length);
 
     // Step 1: Upload all parts to Cloudinary
     console.log('☁️ Uploading to Cloudinary...');
@@ -160,7 +185,7 @@ export default async function handler(req, res) {
         throw new Error(`No file found for ${partName}`);
       }
 
-      console.log(`Uploading ${partName}: ${file.originalFilename}`);
+      console.log(`Processing ${partName}: ${file.originalFilename} (${file.size} bytes)`);
       const result = await uploadToCloudinary(file.filepath, partName);
       return { partName, result };
     });
@@ -182,6 +207,7 @@ export default async function handler(req, res) {
     });
 
     const imageDataResults = await Promise.all(imageDataPromises);
+    console.log('✅ All images converted to base64');
     
     // Step 3: Prepare Gemini API request
     console.log('🤖 Preparing Gemini API request...');
@@ -235,6 +261,8 @@ The 4 saree parts are provided below in order:`
       maxContentLength: 100 * 1024 * 1024
     });
 
+    console.log('✅ Gemini API response received');
+
     // Extract the generated content from response
     const candidates = geminiResponse.data.candidates;
     
@@ -273,7 +301,7 @@ The 4 saree parts are provided below in order:`
       };
     });
 
-    console.log('✅ Successfully generated complete saree!');
+    console.log('🎉 Successfully generated complete saree!');
 
     res.json({
       success: true,
@@ -339,6 +367,7 @@ The 4 saree parts are provided below in order:`
       try {
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
+          console.log(`🧹 Cleaned up temp file: ${filePath}`);
         }
       } catch (cleanupError) {
         console.error('Failed to cleanup temp file:', filePath, cleanupError);
