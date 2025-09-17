@@ -1,4 +1,3 @@
-// components/products/upload/components/upload/SareePartsUploader.jsx
 import React, { useState, useEffect } from 'react';
 import { Upload, X, CheckCircle, Sparkles, AlertCircle } from 'lucide-react';
 import { uploadToCloudinary } from '../../utilities/cloudinary';
@@ -16,7 +15,6 @@ const SareePartsUploader = ({ formData, onChange }) => {
     shoulder: { name: 'Shoulder', description: 'The shoulder draping portion', icon: '💫' }
   };
 
-  // Initialize saree parts if not exists
   const sareeParts = formData.sareeParts || {
     blouse: { file: null, preview: null, url: null },
     pleats: { file: null, preview: null, url: null },
@@ -24,13 +22,12 @@ const SareePartsUploader = ({ formData, onChange }) => {
     shoulder: { file: null, preview: null, url: null }
   };
 
-  // Auto-generate complete saree when all 4 parts are uploaded
   useEffect(() => {
     const allPartsUploaded = Object.values(sareeParts).every(part => part.file);
     const noGeneratedImage = !formData.generatedSareeImage;
     
     if (allPartsUploaded && noGeneratedImage && !generatingComplete) {
-      console.log('🔄 All 4 parts uploaded, auto-generating complete saree...');
+      console.log('All 4 parts uploaded, auto-generating complete saree...');
       handleAutoGenerateCompleteSaree();
     }
   }, [sareeParts, formData.generatedSareeImage]);
@@ -66,15 +63,11 @@ const SareePartsUploader = ({ formData, onChange }) => {
     setError(null);
 
     try {
-      // Create preview URL
       const previewUrl = URL.createObjectURL(file);
-      
-      // Upload to Cloudinary immediately
-      console.log(`📤 Uploading ${partName} to Cloudinary...`);
+      console.log(`Uploading ${partName} to Cloudinary...`);
       const cloudinaryUrl = await uploadToCloudinary(file);
-      console.log(`✅ ${partName} uploaded:`, cloudinaryUrl);
+      console.log(`${partName} uploaded:`, cloudinaryUrl);
       
-      // Update the saree parts
       const updatedParts = {
         ...sareeParts,
         [partName]: { 
@@ -86,19 +79,16 @@ const SareePartsUploader = ({ formData, onChange }) => {
 
       onChange('sareeParts', updatedParts);
       
-      // Add individual part to imageUrls array for Firebase storage
       const currentImageUrls = formData.imageUrls || [];
       const partIndex = Object.keys(partLabels).indexOf(partName);
       const newImageUrls = [...currentImageUrls];
-      
-      // Reserve index 0 for generated image, parts go from index 1-4
       newImageUrls[partIndex + 1] = cloudinaryUrl;
       onChange('imageUrls', newImageUrls);
       
-      console.log(`💾 Updated imageUrls[${partIndex + 1}] with ${partName}:`, cloudinaryUrl);
+      console.log(`Updated imageUrls[${partIndex + 1}] with ${partName}:`, cloudinaryUrl);
       setError(null);
     } catch (err) {
-      console.error(`❌ Upload failed for ${partName}:`, err);
+      console.error(`Upload failed for ${partName}:`, err);
       setError(`Upload failed for ${partLabels[partName].name}: ${err.message}`);
     } finally {
       setUploading(false);
@@ -112,93 +102,82 @@ const SareePartsUploader = ({ formData, onChange }) => {
     }
   };
 
-  // Auto-generate function (no manual button needed)
-// Update this part in your SareePartsUploader component
-
-const handleAutoGenerateCompleteSaree = async () => {
-  if (!getAllPartsUploaded()) {
-    console.log('⚠️ Not all parts uploaded yet');
-    return;
-  }
-
-  setGeneratingComplete(true);
-  setError(null);
-  console.log('🎨 Starting AI saree generation...');
-
-  try {
-    const formDataToSend = new FormData();
-    
-    // Append all 4 parts to form data
-    Object.entries(sareeParts).forEach(([partName, partData]) => {
-      if (partData.file) {
-        formDataToSend.append(partName, partData.file);
-      }
-    });
-
-    console.log('📡 Sending 4 saree parts to AI backend...');
-    
-    // Updated URL for Vercel API route
-    const response = await fetch('/api/drape-saree-parts', {
-      method: 'POST',
-      body: formDataToSend,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+  const handleAutoGenerateCompleteSaree = async () => {
+    if (!getAllPartsUploaded()) {
+      console.log('Not all parts uploaded yet');
+      return;
     }
 
-    const data = await response.json();
+    setGeneratingComplete(true);
+    setError(null);
+    console.log('Starting AI saree generation...');
 
-    if (data.success) {
-      console.log('🎉 AI generation successful! Uploading to Cloudinary...');
+    try {
+      const formDataToSend = new FormData();
       
-      // Get the base64 generated image
-      const generatedImageBase64 = `data:${data.generatedImage.mimeType};base64,${data.generatedImage.data}`;
+      Object.entries(sareeParts).forEach(([partName, partData]) => {
+        if (partData.file) {
+          formDataToSend.append(partName, partData.file);
+        }
+      });
+
+      console.log('Sending 4 saree parts to AI backend...');
       
-      try {
-        // Convert base64 to blob and upload to Cloudinary
-        const blob = await base64ToBlob(generatedImageBase64);
-        const generatedImageFile = new File([blob], 'generated-complete-saree.png', { type: 'image/png' });
+      const response = await fetch('/api/drape-saree-parts', {
+        method: 'POST',
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log('AI generation successful! Uploading to Cloudinary...');
         
-        console.log('☁️ Uploading generated saree to Cloudinary...');
-        const cloudinaryUrl = await uploadToCloudinary(generatedImageFile);
-        console.log('✅ Generated saree uploaded:', cloudinaryUrl);
+        const generatedImageBase64 = `data:${data.generatedImage.mimeType};base64,${data.generatedImage.data}`;
         
-        // Update imageUrls array - generated image at index 0
-        const currentImageUrls = formData.imageUrls || [];
-        const updatedImageUrls = [cloudinaryUrl, ...currentImageUrls.slice(1)];
-        
-        // Update form data
-        onChange('generatedSareeImage', cloudinaryUrl);
-        onChange('imageUrls', updatedImageUrls);
-        
-        if (data.uploadedParts) {
-          onChange('uploadedParts', data.uploadedParts);
+        try {
+          const blob = await base64ToBlob(generatedImageBase64);
+          const generatedImageFile = new File([blob], 'generated-complete-saree.png', { type: 'image/png' });
+          
+          console.log('Uploading generated saree to Cloudinary...');
+          const cloudinaryUrl = await uploadToCloudinary(generatedImageFile);
+          console.log('Generated saree uploaded:', cloudinaryUrl);
+          
+          const currentImageUrls = formData.imageUrls || [];
+          const updatedImageUrls = [cloudinaryUrl, ...currentImageUrls.slice(1)];
+          
+          onChange('generatedSareeImage', cloudinaryUrl);
+          onChange('imageUrls', updatedImageUrls);
+          
+          if (data.uploadedParts) {
+            onChange('uploadedParts', data.uploadedParts);
+          }
+          
+          console.log('Complete saree process finished!');
+          console.log('Final imageUrls:', updatedImageUrls);
+          
+        } catch (uploadError) {
+          console.error('Cloudinary upload failed:', uploadError);
+          onChange('generatedSareeImage', generatedImageBase64);
+          setError('Generated saree created but upload failed. Saved temporarily.');
         }
         
-        console.log('🏆 Complete saree process finished!');
-        console.log('📊 Final imageUrls:', updatedImageUrls);
-        console.log('📊 Total images:', updatedImageUrls.length);
-        
-      } catch (uploadError) {
-        console.error('❌ Cloudinary upload failed:', uploadError);
-        // Fallback: store base64 temporarily
-        onChange('generatedSareeImage', generatedImageBase64);
-        setError('Generated saree created but upload failed. Saved temporarily.');
+      } else {
+        setError(data.error || 'Failed to generate complete saree from parts');
+        console.error('AI Backend error:', data);
       }
-      
-    } else {
-      setError(data.error || 'Failed to generate complete saree from parts');
-      console.error('❌ AI Backend error:', data);
+    } catch (err) {
+      console.error('Network/API error:', err);
+      setError(`API Error: ${err.message || 'Failed to connect to AI service'}`);
+    } finally {
+      setGeneratingComplete(false);
     }
-  } catch (err) {
-    console.error('❌ Network/API error:', err);
-    setError(`API Error: ${err.message || 'Failed to connect to AI service'}`);
-  } finally {
-    setGeneratingComplete(false);
-  }
-};
+  };
 
   const clearPart = (partName) => {
     if (sareeParts[partName].preview) {
@@ -212,23 +191,20 @@ const handleAutoGenerateCompleteSaree = async () => {
     
     onChange('sareeParts', updatedParts);
     
-    // Also remove from imageUrls array
     const currentImageUrls = formData.imageUrls || [];
     const partIndex = Object.keys(partLabels).indexOf(partName);
     const newImageUrls = [...currentImageUrls];
-    newImageUrls[partIndex + 1] = null; // Clear the specific part
+    newImageUrls[partIndex + 1] = null;
     onChange('imageUrls', newImageUrls);
   };
 
   const clearAllParts = () => {
-    // Revoke all preview URLs
     Object.keys(sareeParts).forEach(partName => {
       if (sareeParts[partName].preview) {
         URL.revokeObjectURL(sareeParts[partName].preview);
       }
     });
     
-    // Clear all saree data
     const clearedParts = {
       blouse: { file: null, preview: null, url: null },
       pleats: { file: null, preview: null, url: null },
@@ -238,7 +214,7 @@ const handleAutoGenerateCompleteSaree = async () => {
     
     onChange('sareeParts', clearedParts);
     onChange('generatedSareeImage', null);
-    onChange('imageUrls', []); // Clear entire imageUrls array
+    onChange('imageUrls', []);
     onChange('uploadedParts', null);
     setError(null);
   };
@@ -251,7 +227,6 @@ const handleAutoGenerateCompleteSaree = async () => {
     return Object.values(sareeParts).every(part => part.file);
   };
 
-  // Convert base64 to blob
   const base64ToBlob = async (base64String) => {
     const response = await fetch(base64String);
     return response.blob();
@@ -269,7 +244,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         </p>
       </div>
 
-      {/* Progress Indicator */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-700">
@@ -297,7 +271,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         </div>
       </div>
 
-      {/* AI Generation Status */}
       {generatingComplete && (
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
           <div className="flex items-center justify-center gap-3">
@@ -309,7 +282,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         </div>
       )}
 
-      {/* Upload Grid for 4 Parts */}
       <div className="grid md:grid-cols-2 gap-4 mb-6">
         {Object.entries(partLabels).map(([partName, partInfo]) => (
           <div key={partName} className="bg-white rounded-xl border border-gray-200 p-4">
@@ -372,7 +344,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         ))}
       </div>
 
-      {/* Error Display */}
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
           <AlertCircle className="text-red-500" size={20} />
@@ -380,7 +351,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         </div>
       )}
 
-      {/* Generated Image Display */}
       {formData.generatedSareeImage && (
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
           <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -417,7 +387,6 @@ const handleAutoGenerateCompleteSaree = async () => {
         </div>
       )}
 
-      {/* Instructions */}
       <SareeInstructions />
     </div>
   );

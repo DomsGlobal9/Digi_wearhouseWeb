@@ -1,8 +1,8 @@
-import { IncomingForm } from 'formidable';
-import axios from 'axios';
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
-import path from 'path';
+import axios from 'axios';
+import multer from 'multer';
+import { Readable } from 'stream';
+
 
 // Cloudinary configuration
 cloudinary.config({
@@ -15,25 +15,50 @@ cloudinary.config({
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent';
 
+// Multer configuration for memory storage
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit per file
+    files: 4 // Maximum 4 files
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
+
 // Function to upload image to Cloudinary
-async function uploadToCloudinary(filePath, sareePart) {
+async function uploadToCloudinary(fileBuffer, sareePart) {
   try {
-    console.log(`Uploading ${sareePart} from ${filePath}`);
-    const result = await cloudinary.uploader.upload(filePath, {
-      resource_type: 'image',
-      folder: `saree-parts/${sareePart}`,
-      public_id: `${sareePart}-${Date.now()}`,
-      format: 'jpg',
-      quality: 'auto:good',
-      width: 1024,
-      height: 1024,
-      crop: 'limit'
+    console.log(`Uploading ${sareePart} to Cloudinary`);
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: 'image',
+        folder: `saree-parts/${sareePart}`,
+        public_id: `${sareePart}-${Date.now()}`,
+        format: 'jpg',
+        quality: 'auto:good',
+        width: 512, // Reduced for Vercel
+        height: 512,
+        crop: 'limit'
+      }
+    );
+    
+    const stream = Readable.from(fileBuffer);
+    stream.pipe(uploadStream);
+    
+    return new Promise((resolve, reject) => {
+      uploadStream.on('finish', resolve);
+      uploadStream.on('error', reject);
     });
-    console.log(`✅ ${sareePart} uploaded successfully`);
-    return result;
   } catch (error) {
-    console.error(`❌ Cloudinary upload error for ${sareePart}:`, error);
-    throw error;
+    console.error(`Cloudinary upload error for ${sareePart}:`, error);
+    throw new Error(`Failed to upload ${sareePart}: ${error.message}`);
   }
 }
 
@@ -52,40 +77,15 @@ async function downloadImageAsBase64(imageUrl) {
     const base64Data = Buffer.from(response.data).toString('base64');
     const contentType = response.headers['content-type'] || 'image/jpeg';
     
-    console.log(`✅ Image downloaded and converted to base64`);
+    console.log(`Image downloaded and converted to base64`);
     return {
       data: base64Data,
       mimeType: contentType
     };
   } catch (error) {
-    console.error('❌ Download image error:', error);
+    console.error('Download image error:', error);
     throw new Error(`Failed to download image: ${error.message}`);
   }
-}
-
-// Parse form data
-function parseForm(req) {
-  return new Promise((resolve, reject) => {
-    const form = new IncomingForm({
-      maxFileSize: 10 * 1024 * 1024, // 10MB
-      maxFiles: 4,
-      allowEmptyFiles: false,
-      multiples: true,
-      uploadDir: '/tmp', // Vercel temp directory
-      keepExtensions: true
-    });
-
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        console.error('❌ Form parsing error:', err);
-        reject(err);
-      } else {
-        console.log('✅ Form parsed successfully');
-        console.log('Files received:', Object.keys(files));
-        resolve({ fields, files });
-      }
-    });
-  });
 }
 
 // Main API handler
@@ -108,13 +108,30 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const uploadMiddleware = upload.fields([
+    { name: 'blouse', maxCount: 1 },
+    { name: 'pleats', maxCount: 1 },
+    { name: 'pallu', maxCount: 1 },
+    { name: 'shoulder', maxCount: 1 }
+  ]);
+
   let cloudinaryResults = {};
-  let tempFiles = [];
 
   try {
-    console.log('🔄 Starting API request processing...');
-    console.log('Request method:', req.method);
-    console.log('Content-Type:', req.headers['content-type']);
+    // Process file uploads with Multer
+    await new Promise((resolve, reject) => {
+      uploadMiddleware(req, res, (err) => {
+        if (err) {
+          console.error('Multer error:', err);
+          reject(new Error(`File upload error: ${err.message}`));
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    console.log('Starting API request processing...');
+    const files = req.files;
 
     // Check environment variables
     const missingEnvs = [];
@@ -124,93 +141,55 @@ export default async function handler(req, res) {
     if (!process.env.GEMINI_API_KEY) missingEnvs.push('GEMINI_API_KEY');
 
     if (missingEnvs.length > 0) {
-      console.error('❌ Missing environment variables:', missingEnvs);
+      console.error('Missing environment variables:', missingEnvs);
       return res.status(500).json({ 
         error: 'Server configuration error: Missing environment variables',
-        missing: missingEnvs,
-        help: 'Set these in Vercel Dashboard → Settings → Environment Variables'
+        missing: missingEnvs
       });
     }
-
-    console.log('✅ Environment variables check passed');
-
-    // Parse form data
-    console.log('📋 Parsing form data...');
-    const { fields, files } = await parseForm(req);
 
     // Check if all 4 parts are uploaded
     const requiredParts = ['blouse', 'pleats', 'pallu', 'shoulder'];
-    const receivedParts = [];
-    const missingParts = [];
+    const missingParts = requiredParts.filter(part => !files[part] || files[part].length === 0);
 
-    requiredParts.forEach(part => {
-      if (files[part] && files[part].length > 0) {
-        receivedParts.push(part);
-      } else if (files[part] && files[part].filepath) {
-        receivedParts.push(part);
-      } else {
-        missingParts.push(part);
-      }
-    });
-    
-    console.log('Received parts:', receivedParts);
-    console.log('Missing parts:', missingParts);
-    
     if (missingParts.length > 0) {
       return res.status(400).json({ 
         error: `Missing saree parts: ${missingParts.join(', ')}. Please upload all 4 parts.`,
-        missingParts: missingParts,
-        receivedParts: receivedParts
+        missingParts: missingParts
       });
     }
 
-    // Store temp file paths for cleanup
-    requiredParts.forEach(partName => {
-      const fileArray = files[partName];
-      const file = Array.isArray(fileArray) ? fileArray[0] : fileArray;
-      if (file && file.filepath) {
-        tempFiles.push(file.filepath);
-      }
-    });
-
-    console.log('Temp files to cleanup:', tempFiles.length);
+    console.log('Processing parts:', Object.keys(files));
 
     // Step 1: Upload all parts to Cloudinary
-    console.log('☁️ Uploading to Cloudinary...');
+    console.log('Uploading to Cloudinary...');
     const uploadPromises = requiredParts.map(async (partName) => {
-      const fileArray = files[partName];
-      const file = Array.isArray(fileArray) ? fileArray[0] : fileArray;
-      
-      if (!file || !file.filepath) {
-        throw new Error(`No file found for ${partName}`);
-      }
-
-      console.log(`Processing ${partName}: ${file.originalFilename} (${file.size} bytes)`);
-      const result = await uploadToCloudinary(file.filepath, partName);
+      const file = files[partName][0];
+      console.log(`Processing ${partName}: ${file.originalname} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+      const result = await uploadToCloudinary(file.buffer, partName);
       return { partName, result };
     });
 
     const uploadResults = await Promise.all(uploadPromises);
     
-    // Store results
     uploadResults.forEach(({ partName, result }) => {
       cloudinaryResults[partName] = result;
     });
 
-    console.log('✅ All parts uploaded to Cloudinary');
+    console.log('All parts uploaded to Cloudinary');
 
     // Step 2: Download all images and convert to base64
-    console.log('🔄 Converting images to base64...');
+    console.log('Converting images to base64...');
     const imageDataPromises = uploadResults.map(async ({ partName, result }) => {
       const imageData = await downloadImageAsBase64(result.secure_url);
       return { partName, imageData };
     });
 
     const imageDataResults = await Promise.all(imageDataPromises);
-    console.log('✅ All images converted to base64');
-    
+    console.log('All images converted to base64');
+
     // Step 3: Prepare Gemini API request
-    console.log('🤖 Preparing Gemini API request...');
+    console.log('Preparing Gemini API request...');
     const parts = [
       {
         text: `Generate a beautiful and realistic image of a complete saree being elegantly worn by an Indian model. I'm providing you with 4 separate parts of a saree:
@@ -226,7 +205,6 @@ The 4 saree parts are provided below in order:`
       }
     ];
 
-    // Add each image part to the request
     imageDataResults.forEach(({ partName, imageData }) => {
       parts.push({
         text: `${partName.toUpperCase()} PART:`
@@ -250,22 +228,20 @@ The 4 saree parts are provided below in order:`
       }
     };
 
-    console.log('🚀 Calling Gemini API...');
+    console.log('Calling Gemini API...');
     const geminiResponse = await axios.post(GEMINI_API_URL, requestPayload, {
       headers: {
         'Content-Type': 'application/json',
         'x-goog-api-key': GEMINI_API_KEY
       },
-      timeout: 180000,
-      maxBodyLength: 100 * 1024 * 1024,
-      maxContentLength: 100 * 1024 * 1024
+      timeout: 300000, // 5 minutes
+      maxBodyLength: 50 * 1024 * 1024, // Reduced for Vercel
+      maxContentLength: 50 * 1024 * 1024
     });
 
-    console.log('✅ Gemini API response received');
+    console.log('Gemini API response received');
 
-    // Extract the generated content from response
     const candidates = geminiResponse.data.candidates;
-    
     if (!candidates || candidates.length === 0) {
       throw new Error('No candidates in Gemini response');
     }
@@ -275,7 +251,6 @@ The 4 saree parts are provided below in order:`
       throw new Error('No content parts in Gemini response');
     }
 
-    // Look for image data in the response
     let generatedImageData = null;
     let responseText = '';
     
@@ -292,7 +267,6 @@ The 4 saree parts are provided below in order:`
       throw new Error('No image data found in Gemini response');
     }
 
-    // Prepare response with all uploaded URLs
     const uploadedParts = {};
     Object.entries(cloudinaryResults).forEach(([partName, result]) => {
       uploadedParts[partName] = {
@@ -301,7 +275,7 @@ The 4 saree parts are provided below in order:`
       };
     });
 
-    console.log('🎉 Successfully generated complete saree!');
+    console.log('Successfully generated complete saree!');
 
     res.json({
       success: true,
@@ -316,24 +290,23 @@ The 4 saree parts are provided below in order:`
     });
 
   } catch (error) {
-    console.error('❌ API Error:', error);
-    
-    // Clean up Cloudinary uploads if something went wrong
+    console.error('API Error:', error);
+
     if (Object.keys(cloudinaryResults).length > 0) {
       try {
         const cleanupPromises = Object.values(cloudinaryResults).map(result => 
           cloudinary.uploader.destroy(result.public_id)
         );
         await Promise.all(cleanupPromises);
-        console.log('🧹 Cleaned up Cloudinary uploads');
+        console.log('Cleaned up Cloudinary uploads');
       } catch (cleanupError) {
         console.error('Failed to cleanup Cloudinary uploads:', cleanupError);
       }
     }
-    
+
     let errorMessage = 'Failed to process saree parts';
     let statusCode = 500;
-    
+
     if (error.message.includes('Missing saree parts')) {
       errorMessage = error.message;
       statusCode = 400;
@@ -345,14 +318,9 @@ The 4 saree parts are provided below in order:`
       statusCode = 500;
     } else if (error.response) {
       statusCode = error.response.status;
-      
-      if (error.response.status === 400) {
-        errorMessage = 'Invalid request to AI service';
-      } else if (error.response.status === 429) {
-        errorMessage = 'Rate limit exceeded - please try again later';
-      } else {
-        errorMessage = `AI service error: ${error.response.status}`;
-      }
+      errorMessage = error.response.status === 400 ? 'Invalid request to AI service' :
+                     error.response.status === 429 ? 'Rate limit exceeded - please try again later' :
+                     `AI service error: ${error.response.status}`;
     }
 
     res.status(statusCode).json({ 
@@ -361,24 +329,11 @@ The 4 saree parts are provided below in order:`
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       uploadedParts: Object.keys(cloudinaryResults)
     });
-  } finally {
-    // Clean up temporary files
-    tempFiles.forEach(filePath => {
-      try {
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-          console.log(`🧹 Cleaned up temp file: ${filePath}`);
-        }
-      } catch (cleanupError) {
-        console.error('Failed to cleanup temp file:', filePath, cleanupError);
-      }
-    });
   }
 }
 
-// Configure API route
 export const config = {
   api: {
-    bodyParser: false, // Disable body parsing for file uploads
+    bodyParser: false, // Required for multer
   },
 };
