@@ -113,84 +113,92 @@ const SareePartsUploader = ({ formData, onChange }) => {
   };
 
   // Auto-generate function (no manual button needed)
-  const handleAutoGenerateCompleteSaree = async () => {
-    if (!getAllPartsUploaded()) {
-      console.log('⚠️ Not all parts uploaded yet');
-      return;
-    }
+// Update this part in your SareePartsUploader component
 
-    setGeneratingComplete(true);
-    setError(null);
-    console.log('🎨 Starting AI saree generation...');
+const handleAutoGenerateCompleteSaree = async () => {
+  if (!getAllPartsUploaded()) {
+    console.log('⚠️ Not all parts uploaded yet');
+    return;
+  }
 
-    try {
-      const formDataToSend = new FormData();
-      
-      // Append all 4 parts to form data
-      Object.entries(sareeParts).forEach(([partName, partData]) => {
-        if (partData.file) {
-          formDataToSend.append(partName, partData.file);
-        }
-      });
+  setGeneratingComplete(true);
+  setError(null);
+  console.log('🎨 Starting AI saree generation...');
 
-      console.log('📡 Sending 4 saree parts to AI backend...');
-      
-      const response = await fetch('api/drape-saree-parts', {  //http://localhost:5000/
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        console.log('🎉 AI generation successful! Uploading to Cloudinary...');
-        
-        // Get the base64 generated image
-        const generatedImageBase64 = `data:${data.generatedImage.mimeType};base64,${data.generatedImage.data}`;
-        
-        try {
-          // Convert base64 to blob and upload to Cloudinary
-          const blob = await base64ToBlob(generatedImageBase64);
-          const generatedImageFile = new File([blob], 'generated-complete-saree.png', { type: 'image/png' });
-          
-          console.log('☁️ Uploading generated saree to Cloudinary...');
-          const cloudinaryUrl = await uploadToCloudinary(generatedImageFile);
-          console.log('✅ Generated saree uploaded:', cloudinaryUrl);
-          
-          // Update imageUrls array - generated image at index 0
-          const currentImageUrls = formData.imageUrls || [];
-          const updatedImageUrls = [cloudinaryUrl, ...currentImageUrls.slice(1)];
-          
-          // Update form data
-          onChange('generatedSareeImage', cloudinaryUrl);
-          onChange('imageUrls', updatedImageUrls);
-          
-          if (data.uploadedParts) {
-            onChange('uploadedParts', data.uploadedParts);
-          }
-          
-          console.log('🏆 Complete saree process finished!');
-          console.log('📊 Final imageUrls:', updatedImageUrls);
-          console.log('📊 Total images:', updatedImageUrls.length);
-          
-        } catch (uploadError) {
-          console.error('❌ Cloudinary upload failed:', uploadError);
-          // Fallback: store base64 temporarily
-          onChange('generatedSareeImage', generatedImageBase64);
-          setError('Generated saree created but upload failed. Saved temporarily.');
-        }
-        
-      } else {
-        setError(data.error || 'Failed to generate complete saree from parts');
-        console.error('❌ AI Backend error:', data);
+  try {
+    const formDataToSend = new FormData();
+    
+    // Append all 4 parts to form data
+    Object.entries(sareeParts).forEach(([partName, partData]) => {
+      if (partData.file) {
+        formDataToSend.append(partName, partData.file);
       }
-    } catch (err) {
-      console.error('❌ Network error:', err);
-      setError('Network error. Make sure AI backend server is running on localhost:5000');
-    } finally {
-      setGeneratingComplete(false);
+    });
+
+    console.log('📡 Sending 4 saree parts to AI backend...');
+    
+    // Updated URL for Vercel API route
+    const response = await fetch('/api/drape-saree-parts', {
+      method: 'POST',
+      body: formDataToSend,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
     }
-  };
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log('🎉 AI generation successful! Uploading to Cloudinary...');
+      
+      // Get the base64 generated image
+      const generatedImageBase64 = `data:${data.generatedImage.mimeType};base64,${data.generatedImage.data}`;
+      
+      try {
+        // Convert base64 to blob and upload to Cloudinary
+        const blob = await base64ToBlob(generatedImageBase64);
+        const generatedImageFile = new File([blob], 'generated-complete-saree.png', { type: 'image/png' });
+        
+        console.log('☁️ Uploading generated saree to Cloudinary...');
+        const cloudinaryUrl = await uploadToCloudinary(generatedImageFile);
+        console.log('✅ Generated saree uploaded:', cloudinaryUrl);
+        
+        // Update imageUrls array - generated image at index 0
+        const currentImageUrls = formData.imageUrls || [];
+        const updatedImageUrls = [cloudinaryUrl, ...currentImageUrls.slice(1)];
+        
+        // Update form data
+        onChange('generatedSareeImage', cloudinaryUrl);
+        onChange('imageUrls', updatedImageUrls);
+        
+        if (data.uploadedParts) {
+          onChange('uploadedParts', data.uploadedParts);
+        }
+        
+        console.log('🏆 Complete saree process finished!');
+        console.log('📊 Final imageUrls:', updatedImageUrls);
+        console.log('📊 Total images:', updatedImageUrls.length);
+        
+      } catch (uploadError) {
+        console.error('❌ Cloudinary upload failed:', uploadError);
+        // Fallback: store base64 temporarily
+        onChange('generatedSareeImage', generatedImageBase64);
+        setError('Generated saree created but upload failed. Saved temporarily.');
+      }
+      
+    } else {
+      setError(data.error || 'Failed to generate complete saree from parts');
+      console.error('❌ AI Backend error:', data);
+    }
+  } catch (err) {
+    console.error('❌ Network/API error:', err);
+    setError(`API Error: ${err.message || 'Failed to connect to AI service'}`);
+  } finally {
+    setGeneratingComplete(false);
+  }
+};
 
   const clearPart = (partName) => {
     if (sareeParts[partName].preview) {

@@ -1,14 +1,6 @@
-const express = require('express');
 const multer = require('multer');
-const cors = require('cors');
 const axios = require('axios');
 const cloudinary = require('cloudinary').v2;
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
 
 // Cloudinary configuration
 cloudinary.config({
@@ -88,16 +80,51 @@ async function downloadImageAsBase64(imageUrl) {
   }
 }
 
-// Route to handle multiple saree parts draping
-app.post('/drape-saree-parts', upload.fields([
-  { name: 'blouse', maxCount: 1 },
-  { name: 'pleats', maxCount: 1 },
-  { name: 'pallu', maxCount: 1 },
-  { name: 'shoulder', maxCount: 1 }
-]), async (req, res) => {
+// Multer middleware wrapper for Vercel
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
+// Main API handler for Vercel
+export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   let cloudinaryResults = {};
-  
+
   try {
+    // Run multer middleware
+    const uploadFields = upload.fields([
+      { name: 'blouse', maxCount: 1 },
+      { name: 'pleats', maxCount: 1 },
+      { name: 'pallu', maxCount: 1 },
+      { name: 'shoulder', maxCount: 1 }
+    ]);
+
+    await runMiddleware(req, res, uploadFields);
+
     const files = req.files;
     
     // Check if all 4 parts are uploaded
@@ -240,6 +267,8 @@ The 4 saree parts are provided below in order:`
     });
 
   } catch (error) {
+    console.error('API Error:', error);
+    
     // Clean up Cloudinary uploads if something went wrong
     if (Object.keys(cloudinaryResults).length > 0) {
       try {
@@ -279,132 +308,11 @@ The 4 saree parts are provided below in order:`
       uploadedParts: Object.keys(cloudinaryResults)
     });
   }
-});
+}
 
-// Keep original single image endpoint
-app.post('/drape-saree', upload.single('sareeImage'), async (req, res) => {
-  let cloudinaryResult = null;
-  
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No image file uploaded' });
-    }
-
-    cloudinaryResult = await uploadToCloudinary(req.file.buffer, req.file.originalname, 'complete-saree');
-    const imageData = await downloadImageAsBase64(cloudinaryResult.secure_url);
-    
-    const requestPayload = {
-      contents: [
-        {
-          parts: [
-            {
-              text: "Generate a beautiful image showing this saree being elegantly worn by an Indian model. The model should be gracefully posed, and the saree should be draped in traditional Indian style, showcasing its colors, patterns, and fabric beautifully. Make it look realistic and professional, like a fashion photograph."
-            },
-            {
-              inline_data: {
-                mime_type: imageData.mimeType,
-                data: imageData.data
-              }
-            }
-          ]
-        }
-      ],
-      generationConfig: {
-        responseModalities: ["TEXT", "IMAGE"],
-        temperature: 0.4,
-        topP: 0.8,
-        topK: 40,
-        maxOutputTokens: 8192
-      }
-    };
-
-    const geminiResponse = await axios.post(GEMINI_API_URL, requestPayload, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': GEMINI_API_KEY
-      },
-      timeout: 120000
-    });
-
-    const candidates = geminiResponse.data.candidates;
-    const content = candidates[0].content;
-    
-    let generatedImageData = null;
-    let responseText = '';
-    
-    for (const part of content.parts) {
-      if (part.inlineData || part.inline_data) {
-        generatedImageData = part.inlineData || part.inline_data;
-      }
-      if (part.text) {
-        responseText += part.text;
-      }
-    }
-
-    if (!generatedImageData) {
-      throw new Error('No image data found in Gemini response');
-    }
-
-    res.json({
-      success: true,
-      generatedImage: {
-        data: generatedImageData.data,
-        mimeType: generatedImageData.mime_type || generatedImageData.mimeType || 'image/png'
-      },
-      responseText: responseText,
-      message: 'Saree draped successfully!',
-      cloudinaryUrl: cloudinaryResult.secure_url
-    });
-
-  } catch (error) {
-    if (cloudinaryResult?.public_id) {
-      try {
-        await cloudinary.uploader.destroy(cloudinaryResult.public_id);
-      } catch (cleanupError) {
-        console.error('Failed to cleanup Cloudinary upload:', cleanupError);
-      }
-    }
-    
-    res.status(500).json({ 
-      error: 'Failed to process saree draping',
-      details: error.message
-    });
-  }
-});
-
-// Test Cloudinary connection
-app.get('/test-cloudinary', async (req, res) => {
-  try {
-    const result = await cloudinary.api.ping();
-    res.json({
-      success: true,
-      message: 'Cloudinary connection successful',
-      status: result.status
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'Cloudinary connection failed',
-      details: error.message
-    });
-  }
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'Server is running', 
-    timestamp: new Date().toISOString(),
-    model: 'gemini-2.5-flash-image-preview',
-    cloudinaryEnabled: !!(cloudinary.config().cloud_name),
-    endpoints: [
-      'POST /api/drape-saree-parts (4 parts: blouse, pleats, pallu, shoulder)',
-      'POST /api/drape-saree (single complete saree)',
-      'GET /api/test-cloudinary'
-    ],
-    sareeParts: ['blouse', 'pleats', 'pallu', 'shoulder']
-  });
-});
-
-// Export for Vercel serverless
-module.exports = app;
+// Configure API route for body parsing
+export const config = {
+  api: {
+    bodyParser: false, // Disable body parsing, consume as stream for multer
+  },
+};
