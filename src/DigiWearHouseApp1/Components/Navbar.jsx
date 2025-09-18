@@ -273,104 +273,52 @@ const Navbar = () => {
       <nav className="bg-white shadow-sm border-b  border-gray-100 sticky top-0 z-50">
         {/* Top section with logo and icons */}
         <div className="max-w-7xl mx-auto  px-4  sm:px-6  lg:px-8">
-          <div className="flex justify-between items-center gap-20 h-16">
-            {/* Centered Logo */}
-            <Link to={"/"}>
-              <div className="flex cursor-pointer items-center justify-center flex-1 lg:flex-none pt-2">
-                <img src={logo} alt="DVYB Logo" className="h-10" />
-              </div>
-            </Link>
+        <div className="flex justify-between items-center h-16 px-2 sm:px-4">
+  {/* Logo */}
+  <Link to={"/"}>
+    <div className="flex items-center justify-center pt-2">
+      <img src={logo} alt="DVYB Logo" className="h-10" />
+    </div>
+  </Link>
 
-            {/* Right side icons */}
-            <div className="flex items-center space-x-4 flex-1 justify-end lg:flex-none">
-              {/* Notification Icon */}
-              <div className="relative" ref={notifRef}>
-                <button
-                  className="p-2 cursor-pointer text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                >
-                  <img
-                    src={notificationIcon}
-                    alt="notifications"
-                    className="w-6 h-6"
-                  />
-                </button>
+  {/* Right side icons */}
+  <div className="flex items-center space-x-3">
+    {/* Notification Icon */}
+    <div className="relative" ref={notifRef}>
+      <button
+        className="p-2 cursor-pointer text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
+        onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+      >
+        <img src={notificationIcon} alt="notifications" className="w-6 h-6" />
+      </button>
+    </div>
 
-                {isNotificationOpen && (
-                  <div className="absolute right-0  w-80 bg-white backdrop-blur-lg rounded-2xl shadow-xl  text-center z-50 border border-gray-100">
-                    {/* Arrow */}
-                    <div className="absolute -top-2 right-5 w-4 h-4 bg-white rotate-45 shadow-md border-l border-t border-gray-100"></div>
+    {/* Profile Icon */}
+    <div className="relative" ref={profileRef}>
+      <button
+        onClick={() => setIsProfileOpen(!isProfileOpen)}
+        className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
+      >
+        <img src={user_icon} alt="profile" className="w-6 h-6" />
+      </button>
+    </div>
 
-                    {/* Close button */}
-                    <button
-                      onClick={() => setIsNotificationOpen(false)}
-                      className="absolute top-3 right-3 text-gray-500 hover:text-black transition-colors"
-                    >
-                      <X size={18} />
-                    </button>
+    {/* Mobile Menu Button */}
+    <div className="lg:hidden">
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
+      >
+        {isMobileMenuOpen ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <Menu className="w-6 h-6" />
+        )}
+      </button>
+    </div>
+  </div>
+</div>
 
-                    {/* Bell Icon */}
-                    <div className="flex justify-center mb-4">
-                      <span className="text-yellow-400 text-6xl">🔔</span>
-                    </div>
-
-                    {/* Message */}
-                    <p className="text-gray-700 font-medium mb-4">
-                      No Notification yet
-                    </p>
-
-                    {/* Button */}
-                    <button className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
-                      Explore Categories
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Profile Icon */}
-              <div className="relative" ref={profileRef}>
-                <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                >
-                  <img src={user_icon} alt="profile" className="w-6 h-6" />
-                </button>
-
-                {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
-                    <div className="py-1">
-                      <Link to={"/profile"}>
-                        <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                          <Settings size={18} className="mr-3" />
-                          <span>Settings</span>
-                        </button>
-                      </Link>
-                      <Link to={"/register"}>
-                        <button className="cursor-pointer flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                          <LogOut size={18} className="mr-3" />
-                          <span>Logout</span>
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Mobile menu button */}
-              <div className="lg:hidden">
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
-                >
-                  {isMobileMenuOpen ? (
-                    <X className="w-6 h-6" />
-                  ) : (
-                    <Menu className="w-6 h-6" />
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom section with navigation items */}
