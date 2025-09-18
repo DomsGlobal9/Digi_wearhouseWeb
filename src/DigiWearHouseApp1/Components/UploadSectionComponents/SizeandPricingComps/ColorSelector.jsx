@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { COLORS } from '../../../constants/productConstants';
+import React, { useState } from "react";
+import { COLORS } from "../../../constants/productConstants";
 
 const ColorSelector = ({ selectedColors, onChange }) => {
   const [selectedColor, setSelectedColor] = useState(null);
@@ -26,26 +26,26 @@ const ColorSelector = ({ selectedColors, onChange }) => {
 
   const getSelectedColorInfo = () => {
     if (!selectedColors || selectedColors.length === 0) return null;
-    
+
     const selected = selectedColors[0];
-    const baseColor = COLORS.find(c => c.code === selected);
-    
+    const baseColor = COLORS.find((c) => c.code === selected);
+
     if (baseColor) {
       return { name: baseColor.name, value: baseColor.value };
     }
-    
+
     for (const color of COLORS) {
-      const shadeIndex = color.shades.findIndex(shade => 
-        selected === `${color.name.toLowerCase()}_${shade}`
+      const shadeIndex = color.shades.findIndex(
+        (shade) => selected === `${color.name.toLowerCase()}_${shade}`
       );
       if (shadeIndex !== -1) {
-        return { 
-          name: `${color.name} Shade`, 
-          value: color.shades[shadeIndex] 
+        return {
+          name: `${color.name} Shade`,
+          value: color.shades[shadeIndex],
         };
       }
     }
-    
+
     return null;
   };
 
@@ -58,7 +58,7 @@ const ColorSelector = ({ selectedColors, onChange }) => {
       </h3>
 
       {/* Main colors */}
-      <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+      {/* <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
         {COLORS.map((color) => (
           <button
             key={color.code}
@@ -85,8 +85,49 @@ const ColorSelector = ({ selectedColors, onChange }) => {
             </div>
           </button>
         ))}
+      </div> */}
+      <div className="grid grid-cols-7 gap-3 max-w-md mx-auto">
+        {COLORS.map((color) => (
+          <button
+            key={color.code}
+            type="button"
+            onClick={() => {
+              setSelectedColor(color);
+              setSelectedShade(null);
+            }}
+            onDoubleClick={() => handleBaseColorSelection(color)}
+            className="relative group rounded-lg p-3 cursor-pointer hover:shadow-md transition-all
+                 sm:p-2 xs:p-1 mobile:p-1"
+          >
+            <div
+              className={`w-8 h-8 rounded-full border-2 transition-all
+                   sm:w-8 sm:h-8
+                   xs:w-6 xs:h-6
+                   mobile:w-5 mobile:h-5
+                   ${
+                     selectedColor?.code === color.code
+                       ? "border-gray-800 scale-110"
+                       : isBaseColorSelected(color.code)
+                       ? "border-blue-500 scale-110"
+                       : "border-gray-300 hover:scale-105"
+                   }`}
+              style={{ backgroundColor: color.value }}
+            />
+            <div
+              className="text-[10px] text-center mt-1 text-gray-600
+                     sm:text-xs sm:block
+                     xs:text-[10px] xs:leading-tight
+                     mobile:text-[8px] mobile:leading-none mobile:mt-0.5
+                     max-[320px]:hidden"
+            >
+              <span className="sm:inline xs:block mobile:block">
+                {color.name}
+              </span>
+            </div>
+          </button>
+        ))}
       </div>
-      
+
       <div className="text-center text-xs text-gray-500">
         Click to see shades • Double-click to select base color
       </div>
