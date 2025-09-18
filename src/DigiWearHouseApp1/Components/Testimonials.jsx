@@ -104,20 +104,22 @@ const Testimonials = () => {
           </div>
         </div>
       </div>
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
       {testimonials.map((testimonial, index) => (
-        <motion.div
+        <motion.div 
           key={index}
           custom={index}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={cardVariants}
-          className={getRotateClass(index)}
+          className={getRotateClass(index)  }
         >
           <TestimonialCard {...testimonial} />
         </motion.div>
       ))}
+</div>
     </div>
   );
 };

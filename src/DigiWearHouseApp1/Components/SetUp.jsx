@@ -22,7 +22,7 @@ function SetUp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen  bg-gradient-to-br from-gray-50 to-white">
       {/* Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
         {/* <div
@@ -32,7 +32,7 @@ function SetUp() {
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+      <div className="max-w-7xl mx-auto  px-4 sm:px-6  lg:px-8 pt-8 pb-16 ">
         {/* Badges */}
         <div className="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start">
           <div className="bg-green-50 border border-green-200 rounded-full px-4 py-2 flex items-center gap-2">
@@ -55,13 +55,14 @@ function SetUp() {
           <div className="text-center lg:text-left">
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Manage Your{" "}
+                            <br />
               <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
                 Digi Warehouse
               </span>
-              <br />
-              <span className="text-gray-700">—Anywhere,</span>
-              <br />
-              <span className="text-gray-900">Anytime</span>
+              {/* <br /> */}
+              <span className="text-gray-700"> — Anywhere,Anytime</span>
+              {/* <br /> */}
+              {/* <span className="text-gray-900"></span> */}
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">

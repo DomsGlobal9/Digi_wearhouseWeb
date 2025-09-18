@@ -61,14 +61,14 @@ export default function TryonPreview() {
               <div className="w-3 h-3 rounded-full bg-green-500 mr-3"></div>
               <span className="text-green-800 font-medium">Ready to Publish</span>
             </div>
-            <p className="text-sm text-green-700 mt-1">
+            <p className="text-sm text-start text-green-700 mt-1">
               This product will be saved to your account and can be made live for customers to purchase.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setIsPreviewMode(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              className="bg-[#7DBBD1]  text-white px-6 py-2 rounded-lg font-medium transition-colors"
               disabled={submissionLogic.isSubmitting}
             >
               Preview
@@ -142,7 +142,7 @@ export default function TryonPreview() {
                   </div>
                   <span className="text-gray-700 font-medium">Product Details</span>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 text-start p-3">
                   <div className="text-lg font-semibold text-gray-900">{productData.title || "Untitled Product"}</div>
                   <div className="text-sm text-gray-600">{productData.category || "No Category"}</div>
                   <div className="text-sm text-gray-600">{productData.dressType || "No Type"}</div>
@@ -158,7 +158,7 @@ export default function TryonPreview() {
                   </div>
                   <span className="text-gray-700 font-medium">Pricing & Inventory</span>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 text-start p-5">
                   <div className="text-2xl font-bold text-gray-900">₹{productData.price || "0"}</div>
                   <div className="text-sm text-gray-500">Base Price</div>
                   {!isSaree && (
@@ -188,7 +188,7 @@ export default function TryonPreview() {
               onClick={() => submissionLogic.handleSubmit(productData)}
               disabled={submissionLogic.isSubmitting || !currentUser}
               className={`w-full px-6 py-3 rounded-lg font-medium transition-colors ${
-                submissionLogic.isSubmitting || !currentUser ? "bg-gray-400 text-gray-700 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white"
+                submissionLogic.isSubmitting || !currentUser ? "bg-gray-400 text-gray-700 cursor-not-allowed" : "bg-[#7DBBD1] text-white"
               }`}
             >
               {submissionLogic.isSubmitting ? (

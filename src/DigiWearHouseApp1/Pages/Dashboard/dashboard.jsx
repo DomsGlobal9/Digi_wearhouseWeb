@@ -319,16 +319,16 @@ const VendorDashboard = () => {
           </div>
 
           {/* Period Selector */}
-          <div className="mb-6 md:mb-8">
-            <div className="flex bg-gray-100 rounded-lg p-1 max-w-xs">
+          <div className="mb-6 md:mb-8 flex   justify-center   ">
+            <div className="flex bg-gray-100 w-auto   rounded-lg ">
               {periods.map((period) => (
                 <button
                   key={period}
                   onClick={() => setSelectedPeriod(period)}
-                  className={`flex-1 px-4 py-2 text-sm md:text-base font-medium rounded-md transition-colors ${
+                  className={`flex-1  px-4 py-2 text-sm md:text-base lg:w-72 sm:w-56  w-auto  font-medium rounded-md transition-colors ${
                     selectedPeriod === period
-                      ? 'bg-blue-400 text-white'
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-[#7DBBD1] text-white'
+                      : 'text-gray-600 hover:text-gray-800' 
                   }`}
                 >
                   {period}

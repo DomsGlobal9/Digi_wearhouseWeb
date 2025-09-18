@@ -44,7 +44,7 @@ export const TryOnViewer = ({
         </div>
         
         <div className="w-20 space-y-3">
-          <span className="pb-2 font-bold">Try Preview</span>
+          {/* <span className="pb-2 font-bold">Try Preview</span> */}
           {displayImages.length > 0 ? (
             displayImages.map((imageData, index) => (
               <div key={`${imageData.type}-${imageData.name}`} className="relative">

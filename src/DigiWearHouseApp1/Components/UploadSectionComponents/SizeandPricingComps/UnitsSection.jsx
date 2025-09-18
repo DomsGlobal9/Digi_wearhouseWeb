@@ -17,7 +17,7 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
     };
 
     if (colorMap[colorCode]) return colorMap[colorCode];
-    
+
     if (colorCode.includes('_')) {
       const [baseColorName, hexValue] = colorCode.split('_');
       if (colorMap[baseColorName]) {
@@ -27,13 +27,13 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
         };
       }
     }
-    
+
     return { name: colorCode, value: '#808080' };
   };
 
   const handleUnitChange = (size, colorCode, value) => {
     const key = `${size}-${colorCode}`;
-    
+
     if (value === '' || /^[0-9]*$/.test(value)) {
       const updatedUnits = {
         ...units,
@@ -52,12 +52,13 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
     }
   };
 
-  if (safeSizes.length === 0 || safeColors.length === 0) {
+  // Case: No colors chosen → show message
+  if (safeColors.length === 0) {
     return (
       <div className="space-y-4">
         <label className="text-sm md:text-base font-medium text-gray-700">Units</label>
         <p className="text-sm text-gray-500">
-          Please select sizes and colors to input units.
+          Please select colors to input units.
         </p>
       </div>
     );
@@ -66,27 +67,31 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
   return (
     <div className="space-y-4">
       <label className="text-sm md:text-base font-medium text-gray-700">
-        Units (Stock for each size and color combination)
+        Units {safeSizes.length > 0 ? "(Stock for each size and color combination)" : "(Stock for each color)"}
       </label>
-      
+
       <div className="space-y-4">
+        {/* Header */}
         <div className="grid grid-cols-3 gap-4 font-medium text-gray-700 text-sm bg-gray-50 p-3 rounded-lg">
-          <div>Size</div>
+          {safeSizes.length > 0 && <div>Size</div>}
           <div>Color</div>
           <div>Units</div>
         </div>
-        
+
+        {/* Rows */}
         <div className="space-y-3">
           {safeColors.map((colorCode) => {
             const colorDisplay = getColorDisplay(colorCode);
-            return safeSizes.map((size) => {
-              const key = `${size}-${colorCode}`;
+
+            // If no sizes → only one row per color
+            if (safeSizes.length === 0) {
+              const key = `nosize-${colorCode}`;
               return (
                 <div key={key} className="grid grid-cols-3 gap-4 items-center">
-                  <div className="bg-gray-100 rounded-md p-3 text-center text-sm font-medium text-gray-700">
-                    {size}
-                  </div>
-                  
+                  {/* Empty Size Cell */}
+                  <div className="text-center text-sm font-medium text-gray-400">—</div>
+
+                  {/* Color */}
                   <div
                     className="rounded-md p-3 text-center text-sm font-medium shadow-sm"
                     style={{
@@ -97,7 +102,48 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
                   >
                     {colorDisplay.name}
                   </div>
-                  
+
+                  {/* Input */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={units[colorCode]?.['nosize'] || ''}
+                      onChange={(e) => handleUnitChange('nosize', colorCode, e.target.value)}
+                      placeholder="e.g. 22"
+                      className={`w-full h-12 text-center border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium ${
+                        errorMessages[key] ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                    />
+                    {errorMessages[key] && (
+                      <p className="text-xs text-red-500 mt-1 absolute">
+                        {errorMessages[key]}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            }
+
+            // Normal case: sizes × colors
+            return safeSizes.map((size) => {
+              const key = `${size}-${colorCode}`;
+              return (
+                <div key={key} className="grid grid-cols-3 gap-4 items-center">
+                  <div className="bg-gray-100 rounded-md p-3 text-center text-sm font-medium text-gray-700">
+                    {size}
+                  </div>
+
+                  <div
+                    className="rounded-md p-3 text-center text-sm font-medium shadow-sm"
+                    style={{
+                      backgroundColor: colorDisplay.value,
+                      color: (colorDisplay.value === '#FFFFFF' || colorDisplay.value === '#F5F5F5' || colorDisplay.value === '#FFFF00') 
+                        ? '#000000' : '#FFFFFF'
+                    }}
+                  >
+                    {colorDisplay.name}
+                  </div>
+
                   <div className="relative">
                     <input
                       type="text"
@@ -119,10 +165,19 @@ const UnitsSection = ({ selectedSizes, selectedColors, units, onChange }) => {
             });
           })}
         </div>
-        
+
+        {/* Summary */}
         <div className="mt-4 p-3 bg-blue-50 rounded-lg">
           <div className="text-sm text-blue-800">
-            <strong>Total combinations:</strong> {safeSizes.length} sizes × {safeColors.length} colors = {safeSizes.length * safeColors.length} variants
+            {safeSizes.length > 0 ? (
+              <>
+                <strong>Total combinations:</strong> {safeSizes.length} sizes × {safeColors.length} colors = {safeSizes.length * safeColors.length} variants
+              </>
+            ) : (
+              <>
+                <strong>Total combinations:</strong> {safeColors.length} colors = {safeColors.length} variants
+              </>
+            )}
           </div>
         </div>
       </div>
