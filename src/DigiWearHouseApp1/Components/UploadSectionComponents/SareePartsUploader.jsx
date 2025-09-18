@@ -9,10 +9,10 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
   const [generatingComplete, setGeneratingComplete] = useState(false);
 
   const partLabels = {
-    blouse: { name: 'Upload front view of saree', description: 'The fitted upper garment/top part', icon: '👚' },
-    pleats: { name: 'Upload Back view of saree', description: 'The folded front portion of the saree', icon: '📏' },
-    pallu: { name: 'Upload Blouse view of saree', description: 'The decorative end piece over shoulder', icon: '🎨' },
-    shoulder: { name: 'Upload Blouse view of saree', description: 'The shoulder draping portion', icon: '💫' }
+    blouse: { name: 'Blouse', description: 'The fitted upper garment/top part', icon: '👚' },
+    pleats: { name: 'pleates', description: 'The folded front portion of the saree', icon: '📏' },
+    pallu: { name: 'pallu', description: 'The decorative end piece over shoulder', icon: '🎨' },
+    shoulder: { name: 'shoulder', description: 'The shoulder draping portion', icon: '💫' }
   };
 
   const sareeParts = formData.sareeParts || {
@@ -233,7 +233,7 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="max-w-6xl mx-auto p-6 bg-gray-50 ">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Upload Photos</h1>
@@ -249,44 +249,8 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Progress: {getUploadedPartsCount()}/4 parts uploaded
-            {formData.generatedSareeImage && (
-              <span className="ml-2 text-green-600">
-                {generatingComplete ? '(Generating...)' : '(+ AI Complete Saree ✨)'}
-              </span>
-            )}
-          </span>
-          {getUploadedPartsCount() > 0 && (
-            <button
-              onClick={clearAllParts}
-              className="text-sm text-red-600 hover:text-red-800 font-medium"
-            >
-              Clear All
-            </button>
-          )}
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(getUploadedPartsCount() / 4) * 100}%` }}
-          />
-        </div>
-      </div>
+    
 
-      {/* Generation Status */}
-      {generatingComplete && (
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center justify-center gap-3">
-            <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>
-            <div className="text-blue-800 font-medium">
-              AI is creating your complete saree... This may take 30-60 seconds
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Upload Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -348,6 +312,33 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
             )}
           </div>
         ))}
+      </div>
+
+  <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-700">
+            Progress: {getUploadedPartsCount()}/4 parts uploaded
+            {formData.generatedSareeImage && (
+              <span className="ml-2 text-green-600">
+                {generatingComplete ? '(Generating...)' : '(+ AI Complete Saree ✨)'}
+              </span>
+            )}
+          </span>
+          {getUploadedPartsCount() > 0 && (
+            <button
+              onClick={clearAllParts}
+              className="text-sm text-red-600 hover:text-red-800 font-medium"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div 
+            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
+            style={{ width: `${(getUploadedPartsCount() / 4) * 100}%` }}
+          />
+        </div>
       </div>
 
       {/* Error Message */}
