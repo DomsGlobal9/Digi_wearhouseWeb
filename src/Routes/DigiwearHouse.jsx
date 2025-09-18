@@ -23,6 +23,7 @@ import TermsAndConditions from '../DigiWearHouseApp1/Pages/TermsAndConditions.js
 import PrivacyAndPolicy from '../DigiWearHouseApp1/Pages/PrivacyPolicy.jsx';
 import OrdersManagementSystem from '../DigiWearHouseApp1/Pages/OrdersManagementSystem.jsx';
 import SizeChart from '../DigiWearHouseApp1/Components/SizeChart.jsx';
+import ScrolltoTop from '../DigiWearHouseApp1/Components/ScrolltoTop.jsx'
 
 function DigiwearHouse() {
   const location = useLocation();
@@ -33,7 +34,9 @@ function DigiwearHouse() {
 
 
     <>
+    <ScrolltoTop/>
       {!hideNavbar && <Navbar />}
+    
       <AppProvider>
         <Routes>
           {/* Default route */}

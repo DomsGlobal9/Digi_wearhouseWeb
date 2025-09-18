@@ -6,12 +6,12 @@ import Footerlog3 from "../../assets/footerlog3.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-700 pt-8 pb-6">
+    <footer className="bg-white text-start text-gray-700 pt-8 pb-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between space-y-8 md:space-y-0 md:space-x-12">
           {/* SELL ONLINE */}
           <div className="flex flex-col space-y-3">
-            <h3 className="font-semibold text-gray-900 uppercase tracking-wide">
+            <h3 className=" font-semibold text-gray-900 uppercase tracking-wide">
               SELL ONLINE
             </h3>
             <a href="#" className="text-gray-600 hover:text-gray-900">
