@@ -88,4 +88,4 @@ export const getColorConfig = (colorCode) => {
   };
 };
 
-export const STATIC_MODEL_IMAGE = "https://res.cloudinary.com/doiezptnn/image/upload/v1754996630/qgxzm85zvkchgssliiww.png";
+export const STATIC_MODEL_IMAGE = "https://res.cloudinary.com/doiezptnn/image/upload/v1758107158/abafwo2sezyomhnw5wbw.png";
