@@ -9,7 +9,7 @@ const FormInput = ({
   className = "",
   error = null
 }) => (
-  <div className={`space-y-2 ${className}`}>
+  <div className={`space-y-2 text-start ${className}`}>
     <label className="block text-sm md:text-base font-medium text-gray-700">
       {label}
     </label>

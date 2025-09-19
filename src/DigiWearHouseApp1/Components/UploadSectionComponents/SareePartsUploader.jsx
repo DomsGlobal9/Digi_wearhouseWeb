@@ -232,6 +232,19 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
     return response.blob();
   };
 
+
+  const FashionLoader = () => {
+  return (
+    <div className="flex flex-col items-center justify-center p-6 animate-pulse">
+      <div className="w-20 h-20 rounded-full border-4 border-t-transparent border-pink-400 animate-spin mb-4"></div>
+      <p className="text-pink-600 font-medium text-sm tracking-wide">
+        Draping your Saree in style... ✨
+      </p>
+      <p className="text-gray-500 text-xs mt-1">AI is stitching the elegance</p>
+    </div>
+  );
+};
+
   return (
     <div className="max-w-6xl mx-auto p-6 bg-gray-50 ">
       {/* Header */}
@@ -249,7 +262,31 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
       </div>
 
       {/* Progress Bar */}
-    
+  
+  <div className="flex items-center justify-between mb-2">
+    <span className="text-sm font-medium text-gray-700">
+      Progress: {getUploadedPartsCount()}/4 parts uploaded
+      {formData.generatedSareeImage && (
+        <span className="ml-2 text-green-600">
+          (+ AI Complete Saree ✨)
+        </span>
+      )}
+    </span>
+
+    {getUploadedPartsCount() > 0 && (
+      <button
+        onClick={clearAllParts}
+        className="text-sm text-red-600 hover:text-red-800 font-medium"
+      >
+        Clear All
+      </button>
+    )}
+  </div>
+
+  {/* Progress Bar */}
+  
+
+
 
 
       {/* Upload Grid */}
@@ -348,6 +385,12 @@ const SareePartsUploader = ({ formData = {}, onChange = () => {} }) => {
           <p className="text-red-700">{error}</p>
         </div>
       )}
+{/* Loader only while AI is generating */}
+{generatingComplete && (
+  <div className="mt-4">
+    <FashionLoader />
+  </div>
+)}
 
       {/* Generated Saree Display */}
       {formData.generatedSareeImage && (

@@ -53,14 +53,13 @@ function SetUp() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text */}
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Manage Your{" "}
-              <br />
-              <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Manage Your <br />
+              <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent whitespace-nowrap text-xl sm:text-3xl lg:text-6xl">
                 Digi Warehouse
               </span>
               <span className="text-gray-700"> — Anywhere, Anytime</span>
-            </h1>
+            </h2>
 
             <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Join thousands of successful vendors who've digitized their

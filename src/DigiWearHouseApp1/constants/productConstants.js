@@ -1,15 +1,51 @@
 // constants/productConstants.js
 
-export const DRESS_TYPES = [
-  "Traditional Lehenga",
-  "Designer Saree",
-  "Cotton Kurti",
-  "Silk Dress",
-  "Party Wear",
-  "Casual Wear",
-  "Wedding Wear",
-  "Formal Wear"
-];
+// export const DRESS_TYPES = [
+//   "Traditional Lehenga",
+//   "Designer Saree",
+//   "Cotton Kurti",
+//   "Silk Dress",
+//   "Party Wear",
+//   "Casual Wear",
+//   "Wedding Wear",
+//   "Formal Wear"
+// ];
+export const DRESS_TYPES = {
+  "ETHNIC WEAR": [
+    "SAREE",
+    "SALWAR SUITS",
+    "LEHENGAS",
+    "ANARKALI",
+    "DUPATTAS",
+    "ETHNIC JACKET",
+  ],
+  "TOP WEAR": [
+    "T-SHIRTS",
+    "SHIRTS",
+    "BLOUSES",
+  ],
+  "BOTTOM WEAR": [
+    "JEANS",
+    "TROUSERS",
+    "SKIRTS",
+  ],
+  "DRESSES & JUMPSUITS": [
+    "MAXI DRESSES",
+    "JUMPSUITS",
+  ],
+  "LOUNGE & SLEEPWEAR": [
+    "NIGHT SUITS",
+    "PAJAMAS",
+  ],
+  "ACTIVE WEAR": [
+    "SPORTS BRAS",
+    "LEGGINGS",
+  ],
+  "WINTER WEAR": [
+    "SWEATERS",
+    "JACKETS",
+  ],
+};
 
 export const MATERIAL_TYPES = [
   "Cotton",

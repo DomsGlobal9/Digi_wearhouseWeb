@@ -3,7 +3,7 @@ import { PRODUCT_TYPES } from '../../../constants/productConstants';
 
 const ProductTypeToggle = ({ value, onChange }) => (
   <div className="space-y-2">
-    <label className="block text-sm md:text-base font-medium text-gray-700">
+    <label className="block text-start text-sm md:text-base font-medium text-gray-700">
       Product Type
     </label>
     <div className="flex space-x-4">
