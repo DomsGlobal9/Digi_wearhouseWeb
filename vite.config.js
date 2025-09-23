@@ -1,10 +1,3 @@
-// import { defineConfig } from 'vite'
-// import react from '@vitejs/plugin-react'
-
-// // https://vite.dev/config/
-// export default defineConfig({
-//   plugins: [react()],
-// })
 
 
 import { defineConfig } from 'vite'
@@ -21,12 +14,28 @@ export default defineConfig({
 })
 
 
-// import { defineConfig } from "vite";
 
+//localhost
+
+// import { defineConfig } from 'vite'
+// import react from "@vitejs/plugin-react";
+// import tailwindcss from '@tailwindcss/vite'
 
 // export default defineConfig({
-//   plugins: [react()],
+//   plugins: [
+//     tailwindcss(),
+//     react()
+//   ],
 //   build: {
 //     outDir: "dist"
-//   }
-// });
+//   },
+//   server: {
+//     proxy: {
+//       "/api": {
+//         target: "http://localhost:5000", // where your Node backend runs
+//         changeOrigin: true,
+//         secure: false,
+//       },
+//     },
+//   },
+// })

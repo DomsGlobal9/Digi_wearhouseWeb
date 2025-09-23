@@ -6,34 +6,69 @@ export const productUtils = {
     return dressType.includes('saree') || dressType.includes('sari');
   },
 
-  getSareeImages: (productData) => {
-    if (!productData.sareeParts) return [];
+  // getSareeImages: (productData) => {
+  //   if (!productData.sareeParts) return [];
     
-    const sareeImages = [];
+  //   const sareeImages = [];
     
-    if (productData.generatedSareeImage) {
-      sareeImages.push({
-        url: productData.generatedSareeImage,
+  //   if (productData.generatedSareeImage) {
+  //     sareeImages.push({
+  //       url: productData.generatedSareeImage,
+  //       type: 'generated',
+  //       name: 'complete_saree',
+  //       label: 'Complete Saree'
+  //     });
+  //   }
+
+  //   Object.entries(productData.sareeParts).forEach(([partName, partData]) => {
+  //     if (partData.preview || partData.url) {
+  //       sareeImages.push({
+  //         url: partData.preview || partData.url,
+  //         type: 'part',
+  //         name: partName,
+  //         label: partName.charAt(0).toUpperCase() + partName.slice(1)
+  //       });
+  //     }
+  //   });
+    
+  //   return sareeImages;
+  // },
+getSareeImages: (productData) => {
+  if (!productData.imageUrls || productData.imageUrls.length < 8) {
+    return []; // Fallback to old logic if needed
+  }
+  
+  // First 4 = generated views, Next 4 = uploaded parts
+  const images = [];
+  const viewLabels = ['Front View', 'Back View', 'Side View', 'Sitting View'];
+  const partLabels = ['Blouse', 'Pleats', 'Pallu', 'Shoulder'];
+  
+  // Add 4 generated views
+  for(let i = 0; i < 4; i++) {
+    if (productData.imageUrls[i]) {
+      images.push({
+        url: productData.imageUrls[i],
         type: 'generated',
-        name: 'complete_saree',
-        label: 'Complete Saree'
+        name: `generated_${i}`,
+        label: viewLabels[i]
       });
     }
-
-    Object.entries(productData.sareeParts).forEach(([partName, partData]) => {
-      if (partData.preview || partData.url) {
-        sareeImages.push({
-          url: partData.preview || partData.url,
-          type: 'part',
-          name: partName,
-          label: partName.charAt(0).toUpperCase() + partName.slice(1)
-        });
-      }
-    });
-    
-    return sareeImages;
-  },
-
+  }
+  
+  // Add 4 uploaded parts  
+  for(let i = 4; i < 8; i++) {
+    if (productData.imageUrls[i]) {
+      images.push({
+        url: productData.imageUrls[i],
+        type: 'part', 
+        name: `part_${i-4}`,
+        label: partLabels[i-4]
+      });
+    }
+  }
+  
+  return images;
+} ,
   getDisplayImages: (productData) => {
     if (productUtils.isSareeProduct(productData)) {
       return productUtils.getSareeImages(productData);

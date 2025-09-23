@@ -148,14 +148,12 @@ export const TryOnViewer = ({
               <div key={`${imageData.type}-${imageData.name}`} className="relative">
          <button
   onClick={() => {
-    if (index === 0) {
-      // ✅ Call API only for the first image
-      handleTryOn(index, imageData, productData);
-    } else {
-      // ✅ For 2nd+ images, just swap preview without API
-      setTryOnResult(imageData.url);
-    }
-  }}
+  if (index === 0) {
+    handleTryOn(index, imageData, productData); // API call for first generated image
+  } else {
+    setTryOnResult(imageData.url); // Just swap preview for others
+  }
+}}
   disabled={isProcessing || (isSaree && imageData.type === 'part')}
   className={`w-full aspect-square rounded-lg overflow-hidden border-2 transition-all ${
     selectedImageIndex === index
