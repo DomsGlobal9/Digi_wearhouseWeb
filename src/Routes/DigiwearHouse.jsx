@@ -46,6 +46,7 @@ function DigiwearHouse() {
           <Route path="/" element={<HomePage />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+         
           {/* <Route path="/digiwearhouse" element={<DigiwearHouse/>} /> */}
           <Route path="/privacy-policy" element={<PrivacyAndPolicy />} />
 

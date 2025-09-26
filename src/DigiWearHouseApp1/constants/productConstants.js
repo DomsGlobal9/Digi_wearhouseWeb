@@ -150,6 +150,7 @@ export const INITIAL_FORM_DATA = {
   selectedColors: [],
   units: {}, 
   imageUrls: [], // For regular products
+  premium: null,
   
   // Saree-specific fields
   sareeParts: {

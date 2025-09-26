@@ -122,7 +122,8 @@ import UploadTab from '../UploadTabs/UploadTab';
 const AddProductForm = ({ onBack }) => {
   const navigate = useNavigate();
   const { productData, updateProductData } = useApp();
-  
+const [errors, setErrors] = React.useState({});
+
   const { formData, updateField } = useProductForm(productData);
   const { 
     activeTab, 
@@ -139,7 +140,28 @@ const AddProductForm = ({ onBack }) => {
     }
   };
 
+  const clearError = (field) => {
+  setErrors((prev) => ({ ...prev, [field]: undefined }));
+};
+
+const handleNext = () => {
+  if (activeTab === "general") {
+    if (formData.premium === null || formData.premium === undefined) {
+      setErrors({ premium: "Please select one option." });
+      return; // stop navigation
+    }
+  }
+
+  // clear errors if valid
+  setErrors({});
+  goToNextTab();
+};
+
   const handleSubmit = () => {
+    if (formData.premium === null) {
+    alert("Please select if this product is premium (Yes/No).");
+    return;
+  }
     const dressType = formData?.dressType?.toLowerCase() || '';
     const isSaree = dressType.includes('saree') || dressType.includes('sari');
 
@@ -169,7 +191,8 @@ const AddProductForm = ({ onBack }) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralTab formData={formData} onChange={updateField} />;
+        return <GeneralTab formData={formData} onChange={updateField} errors={errors} clearError={clearError}
+ />;
       case "size-pricing":
         return <SizePricingTab formData={formData} onChange={updateField} />;
       case "upload":
@@ -203,7 +226,7 @@ const AddProductForm = ({ onBack }) => {
 
           <NavigationButtons
             onBack={handleBack}
-            onNext={goToNextTab}
+            onNext={handleNext}
             isLastTab={isLastTab}
             isFirstTab={isFirstTab}
             onSubmit={handleSubmit}
