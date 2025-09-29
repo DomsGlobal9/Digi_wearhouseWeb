@@ -291,6 +291,7 @@ const Navbar = () => {
     : [
         { name: "Dashboard", type: "link", path: "/dashboard" },
         { name: "Orders", type: "link", path: "/orders" },
+        {name:"Add Product", type:"link", path:"/upload-products"}
       ];
 
   return (

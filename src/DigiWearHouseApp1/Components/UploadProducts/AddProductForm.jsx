@@ -118,6 +118,7 @@ import NavigationButtons from '../UploadSectionComponents/NavigationButtons';
 import GeneralTab from '../UploadTabs/GeneralTab';
 import SizePricingTab from '../UploadTabs/SizePricingTab';
 import UploadTab from '../UploadTabs/UploadTab';
+import { ArrowLeft } from 'lucide-react';
 
 const AddProductForm = ({ onBack }) => {
   const navigate = useNavigate();
@@ -205,13 +206,23 @@ const handleNext = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 md:px-6 lg:px-8 py-4 md:py-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-900 text-center">
-            Add One Product
-          </h1>
-        </div>
+ <div className="bg-white border-b border-gray-200 px-4 md:px-6 lg:px-8 py-4 md:py-6">
+      <div className="max-w-4xl mx-auto relative flex items-center justify-center">
+        {/* Back Button (absolute left) */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-0 flex items-end text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          {/* <span className="hidden sm:inline ml-1">Back</span> */}
+        </button>
+
+        {/* Title (centered) */}
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 text-center">
+          Add One Product
+        </h1>
       </div>
+    </div>
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8">

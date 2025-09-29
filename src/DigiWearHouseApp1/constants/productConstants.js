@@ -1,15 +1,4 @@
-// constants/productConstants.js
 
-// export const DRESS_TYPES = [
-//   "Traditional Lehenga",
-//   "Designer Saree",
-//   "Cotton Kurti",
-//   "Silk Dress",
-//   "Party Wear",
-//   "Casual Wear",
-//   "Wedding Wear",
-//   "Formal Wear"
-// ];
 export const DRESS_TYPES = {
   "ETHNIC WEAR": [
     "SAREE",

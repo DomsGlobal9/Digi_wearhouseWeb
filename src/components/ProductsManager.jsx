@@ -12,7 +12,7 @@ const ProductsManager = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
-  const { isSubmitting, submitStatus, submitMessage, clearStatus } = useProductSubmission();
+  const {  submitStatus, submitMessage, clearStatus } = useProductSubmission();
 
   // Fetch all products
   const fetchProducts = async () => {
