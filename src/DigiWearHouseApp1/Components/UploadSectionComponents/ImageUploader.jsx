@@ -259,6 +259,7 @@
 
 import React, { useState } from 'react';
 import { uploadToCloudinary } from '../../utilities/cloudinary';
+import { useNavigate } from 'react-router-dom';
 
 const BLOUSE_TYPES = [
   "Round Neck Blouse",
@@ -280,7 +281,8 @@ const UPLOAD_SECTIONS = [
 const ImageUploader = ({ formData, onChange }) => {
   const [uploading, setUploading] = useState({});
   const [selectedBlouseType, setSelectedBlouseType] = useState('');
-  const [showInstructions, setShowInstructions] = useState(false);
+  // const [showInstructions, setShowInstructions] = useState(false);
+  const navigate=useNavigate()
   const [uploadedImages, setUploadedImages] = useState({
     neckline: null,
     backNeckline: null,
@@ -326,7 +328,7 @@ const ImageUploader = ({ formData, onChange }) => {
         <p className="text-gray-600 mb-4">Add a Photo of your product</p>
         
         <button
-          onClick={() => setShowInstructions(!showInstructions)}
+            onClick={() => navigate("/instructions")}
           className="text-blue-600 hover:text-blue-700 font-medium flex items-center space-x-2"
         >
           <span>View Instructions</span>
@@ -346,30 +348,7 @@ const ImageUploader = ({ formData, onChange }) => {
         </button>
       </div>
 
-      {/* Instructions Modal/Dropdown */}
-      {showInstructions && (
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-3">Capture Instructions</h3>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li className="flex items-start space-x-2">
-              <span className="text-orange-500">•</span>
-              <span>Click 'Upload Photo beside the product name.</span>
-            </li>
-            <li className="flex items-start space-x-2">
-              <span className="text-orange-500">•</span>
-              <span>Include Image details in the description.</span>
-            </li>
-            <li className="flex items-start space-x-2">
-              <span className="text-orange-500">•</span>
-              <span>Set the price before uploading the image</span>
-            </li>
-            <li className="flex items-start space-x-2">
-              <span className="text-orange-500">•</span>
-              <span>Select the right category for your image</span>
-            </li>
-          </ul>
-        </div>
-      )}
+    
 
       {/* Blouse Types Dropdown */}
       <div className="mb-6">
