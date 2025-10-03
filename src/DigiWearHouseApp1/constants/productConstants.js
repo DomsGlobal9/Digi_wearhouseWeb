@@ -13,27 +13,27 @@ export const DRESS_TYPES = {
     "SHIRTS",
     "BLOUSES",
   ],
-  "BOTTOM WEAR": [
-    "JEANS",
-    "TROUSERS",
-    "SKIRTS",
-  ],
-  "DRESSES & JUMPSUITS": [
-    "MAXI DRESSES",
-    "JUMPSUITS",
-  ],
-  "LOUNGE & SLEEPWEAR": [
-    "NIGHT SUITS",
-    "PAJAMAS",
-  ],
-  "ACTIVE WEAR": [
-    "SPORTS BRAS",
-    "LEGGINGS",
-  ],
-  "WINTER WEAR": [
-    "SWEATERS",
-    "JACKETS",
-  ],
+  // "BOTTOM WEAR": [
+  //   "JEANS",
+  //   "TROUSERS",
+  //   "SKIRTS",
+  // ],
+  // "DRESSES & JUMPSUITS": [
+  //   "MAXI DRESSES",
+  //   "JUMPSUITS",
+  // ],
+  // "LOUNGE & SLEEPWEAR": [
+  //   "NIGHT SUITS",
+  //   "PAJAMAS",
+  // ],
+  // "ACTIVE WEAR": [
+  //   "SPORTS BRAS",
+  //   "LEGGINGS",
+  // ],
+  // "WINTER WEAR": [
+  //   "SWEATERS",
+  //   "JACKETS",
+  // ],
 };
 
 export const MATERIAL_TYPES = [

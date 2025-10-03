@@ -19,20 +19,20 @@ export const womenCategories = {
       { name: "TROUSERS", img: EtImg },
       { name: "SKIRTS", img: EtImg },
     ],
-    "DRESSES & JUMPSUITS": [
-      { name: "MAXI DRESSES", img: EtImg },
-      { name: "JUMPSUITS", img: EtImg },
-    ],
-    "LOUNGE & SLEEPWEAR": [
-      { name: "NIGHT SUITS", img: EtImg },
-      { name: "PAJAMAS", img: EtImg },
-    ],
-    "ACTIVE WEAR": [
-      { name: "SPORTS BRAS", img: EtImg },
-      { name: "LEGGINGS", img: EtImg },
-    ],
-    "WINTER WEAR": [
-      { name: "SWEATERS", img: EtImg },
-      { name: "JACKETS", img: EtImg },
-    ],
+    // "DRESSES & JUMPSUITS": [
+    //   { name: "MAXI DRESSES", img: EtImg },
+    //   { name: "JUMPSUITS", img: EtImg },
+    // ],
+    // "LOUNGE & SLEEPWEAR": [
+    //   { name: "NIGHT SUITS", img: EtImg },
+    //   { name: "PAJAMAS", img: EtImg },
+    // ],
+    // "ACTIVE WEAR": [
+    //   { name: "SPORTS BRAS", img: EtImg },
+    //   { name: "LEGGINGS", img: EtImg },
+    // ],
+    // "WINTER WEAR": [
+    //   { name: "SWEATERS", img: EtImg },
+    //   { name: "JACKETS", img: EtImg },
+    // ],
   };
