@@ -362,33 +362,39 @@ export const AppProvider = ({ children }) => {
   const [recaptchaVerifier, setRecaptchaVerifier] = useState(null);
   const [confirmationResult, setConfirmationResult] = useState(null);
 
-  // Product data state (preserved from your original context)
-  const [productData, setProductData] = useState({
-    title: '',
-    description: '',
-    productType: 'Ready to Wear',
-    chooseType: '',
-    dressType: '',
-    materialType: '',
-    designType: '',
-    price: '',
-    selectedSizes: ['XS'],
-    selectedColors: [],
-    units: {
-      S: 22,
-      M: 22,
-      L: 22,
-    },
-    images: [],
-  });
+// inside AppProvider, above useEffect:
+const defaultProductData = {
+  title: '',
+  description: '',
+  productType: 'Ready to Wear',
+  chooseType: '',
+  dressType: '',
+  materialType: '',
+  designType: '',
+  price: '',
+  selectedSizes: ['XS'],
+  selectedColors: [],
+  units: { S: 22, M: 22, L: 22 },
+  images: [],
+  imageUrls: [],
+  sareeParts: {},      // keep if you support saree parts
+  generatedSareeImage: undefined,
+};
 
-  const updateProductData = (data) => {
-    setProductData((prev) => ({
-      ...prev,
-      ...data,
-    }));
-  };
+// state
+const [productData, setProductData] = useState(defaultProductData);
 
+// updaters
+const updateProductData = (data) => {
+  setProductData((prev) => ({ ...prev, ...data }));
+};
+
+// ✅ add this reset
+const resetProductData = () => setProductData(defaultProductData);
+
+
+
+  
   // Auth state listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -734,6 +740,7 @@ const googleSignIn = async () => {
         // Product data (preserved from your original context)
         productData,
         updateProductData,
+        resetProductData, 
       }}
     >
       {children}

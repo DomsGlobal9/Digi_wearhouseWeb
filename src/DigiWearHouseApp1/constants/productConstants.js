@@ -44,12 +44,12 @@ export const READY_TO_WEAR_DRESS_TYPES = {
     "Lehenga",
   ],
   "Top Wear": [
-    "T-Shirts",
-    "Shirts",
+    // "T-Shirts",
+    // "Shirts",
     "Blouses",
   ],
   "Bottom Wear": [
-    "Jeans",
+    // "Jeans",
     "Trousers",
     "Skirts",
   ],
@@ -184,6 +184,12 @@ export const COLORS = [
     name: "Black",
     value: "#000000",
     shades: ["#000000", "#2F2F2F", "#555555", "#808080", "#A9A9A9", "#C0C0C0", "#E0E0E0", "#F5F5F5"],
+  },
+   {
+    code: "White",
+    name: "White",
+    value: "#ffffffff",
+    shades: ["#ffffffff"],
   },
 ];
 
