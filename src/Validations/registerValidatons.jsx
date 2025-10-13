@@ -1,4 +1,5 @@
-  export const  validateLoginForm = (data) => {
+ 
+ export const  validateLoginForm = (data) => {
     const errors = {};
     if (!data.email.trim()) errors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
@@ -75,7 +76,7 @@
     return aadharRegex.test(aadhar);
   };
 
- export const validateKycDetails = () => {
+ export const validateKycDetails = (kycDetails) => {
     const errors = {};
 
     if (!kycDetails.panNumber.trim()) {
@@ -98,3 +99,7 @@
 
     return { isValid: Object.keys(errors).length === 0, errors };
   };
+
+
+
+  

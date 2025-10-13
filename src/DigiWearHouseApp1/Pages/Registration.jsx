@@ -69,11 +69,6 @@ const DigiWarehouseRegistration = () => {
     branchName: "",
   });
 
-  const [kycDetails, setKycDetails] = useState({
-    panNumber: "",
-    gstinNumber: "",
-    aadharNumber: "",
-  });
 
   const [otpData, setOtpData] = useState({
     otp: ["", "", "", "", "", ""],
@@ -83,16 +78,26 @@ const DigiWarehouseRegistration = () => {
     resendCount: 0,
     timer: 0,
   });
+  
+  const [kycDetails, setKycDetails] = useState({
+  panNumber: "",
+  gstinNumber: "",
+  aadharNumber: "",
+});
+
 
   useEffect(() => {
-    let interval = null;
-    if (otpData.timer > 0) {
-      interval = setInterval(() => {
-        setOtpData((prev) => ({ ...prev, timer: prev.timer - 1 }));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [otpData.timer]);
+  let interval = null;
+  if (otpData.timer > 0) {
+    interval = setInterval(() => {
+      setOtpData((prev) => ({ ...prev, timer: prev.timer - 1 }));
+    }, 1000);
+  } else if (interval) {
+    clearInterval(interval);
+  }
+  return () => clearInterval(interval);
+}, [otpData.timer]);
+
 
   useEffect(() => {
     if (successMessage) {
@@ -289,7 +294,7 @@ const DigiWarehouseRegistration = () => {
   };
 
   const handleKycSubmit = async () => {
-    const validation = validateKycDetails();
+    const validation = validateKycDetails(kycDetails);
 
     if (!validation.isValid) {
       setErrors(validation.errors);
