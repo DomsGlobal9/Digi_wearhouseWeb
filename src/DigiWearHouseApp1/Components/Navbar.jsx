@@ -1,7 +1,7 @@
 // Navbar.js
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, Settings, LogOut, Menu, X } from "lucide-react";
-import logo from "../../assets/digi_logo.svg";
+import logo from "../../assets//Logos/digi_logo.svg";
 import notificationIcon from "../../assets/notification-icon.svg";
 import user_icon from "../../assets/user-circle.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -118,119 +118,11 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/">
             <div className="flex items-center justify-center pt-2">
-              <img src={logo} alt="DVYB Logo" className="h-10" />
+              <img src={logo} alt="DVYB Logo" className="h-12" />
             </div>
           </Link>
 
-          {/* Right side icons */}
-          <div className="flex items-center space-x-3">
-            {userData ? (
-              <>
-                {/* Notification Icon */}
-                <div className="relative" ref={notifRef}>
-                  <button
-                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsNotificationOpen(!isNotificationOpen);
-                    }}
-                  >
-                    <img
-                      src={notificationIcon}
-                      alt="notifications"
-                      className="w-6 h-6"
-                    />
-                  </button>
-                  {isNotificationOpen && (
-                    <div
-                      className="absolute right-0 w-80 bg-white backdrop-blur-lg rounded-2xl shadow-xl text-center z-50 border border-gray-100"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="absolute -top-2 right-5 w-4 h-4 bg-white rotate-45 shadow-md border-l border-t border-gray-100"></div>
-                      <button
-                        onClick={() => setIsNotificationOpen(false)}
-                        className="absolute top-3 right-3 text-gray-500 hover:text-black transition-colors"
-                      >
-                        <X size={18} />
-                      </button>
-                      <div className="flex justify-center mb-4 pt-6">
-                        <span className="text-yellow-400 text-6xl">🔔</span>
-                      </div>
-                      <p className="text-gray-700 font-medium mb-4">
-                        No Notification yet
-                      </p>
-                      <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors mb-6">
-                        Explore Categories
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Profile Icon */}
-                <div className="relative" ref={profileRef}>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsProfileOpen(!isProfileOpen);
-                    }}
-                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                  >
-                    <img src={user_icon} alt="profile" className="w-6 h-6" />
-                  </button>
-                  {isProfileOpen && (
-                    <div
-                      className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="py-1">
-                        <Link to="/profile">
-                          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                            <Settings size={18} className="mr-3" />
-                            <span>Settings</span>
-                          </button>
-                        </Link>
-                        <button
-                          onClick={handleSignOut} // Fixed: Use handleSignOut function
-                          className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <LogOut size={18} className="mr-3" />
-                          <span>Logout</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <button
-                onClick={() => navigate("/register")}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-3 rounded-lg font-medium text-sm transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                Sign Up / Login
-              </button>
-            )}
-
-            {/* Mobile Menu Button */}
-            <div className="lg:hidden">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsMobileMenuOpen(!isMobileMenuOpen);
-                }}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom section with navigation items */}
+           {/* Bottom section with navigation items */}
       <div className="border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Navigation Links - Centered */}
@@ -389,6 +281,116 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+          {/* Right side icons */}
+          <div className="flex items-center space-x-3">
+            {userData ? (
+              <>
+                {/* Notification Icon */}
+                <div className="relative" ref={notifRef}>
+                  <button
+                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsNotificationOpen(!isNotificationOpen);
+                    }}
+                  >
+                    <img
+                      src={notificationIcon}
+                      alt="notifications"
+                      className="w-6 h-6"
+                    />
+                  </button>
+                  {isNotificationOpen && (
+                    <div
+                      className="absolute right-0 w-80 bg-white backdrop-blur-lg rounded-2xl shadow-xl text-center z-50 border border-gray-100"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="absolute -top-2 right-5 w-4 h-4 bg-white rotate-45 shadow-md border-l border-t border-gray-100"></div>
+                      <button
+                        onClick={() => setIsNotificationOpen(false)}
+                        className="absolute top-3 right-3 text-gray-500 hover:text-black transition-colors"
+                      >
+                        <X size={18} />
+                      </button>
+                      <div className="flex justify-center mb-4 pt-6">
+                        <span className="text-yellow-400 text-6xl">🔔</span>
+                      </div>
+                      <p className="text-gray-700 font-medium mb-4">
+                        No Notification yet
+                      </p>
+                      <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors mb-6">
+                        Explore Categories
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Profile Icon */}
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsProfileOpen(!isProfileOpen);
+                    }}
+                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                  >
+                    <img src={user_icon} alt="profile" className="w-6 h-6" />
+                  </button>
+                  {isProfileOpen && (
+                    <div
+                      className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="py-1">
+                        <Link to="/profile">
+                          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                            <Settings size={18} className="mr-3" />
+                            <span>Settings</span>
+                          </button>
+                        </Link>
+                        <button
+                          onClick={handleSignOut} // Fixed: Use handleSignOut function
+                          className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          <LogOut size={18} className="mr-3" />
+                          <span>Logout</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <button
+                onClick={() => navigate("/register")}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-3 rounded-lg font-medium text-sm transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Sign Up / Login
+              </button>
+            )}
+
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMobileMenuOpen(!isMobileMenuOpen);
+                }}
+                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
